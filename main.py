@@ -11,6 +11,30 @@ from PyQt5.Qsci import *
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
 from pathlib import Path
 
+class CustomCaretEditor(QsciScintilla):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setCaretWidth(0)  # Hide the default caret
+
+        self.caret_image = QLabel(self)
+        self.caret_image.setPixmap(QPixmap("./Icons/caret_image.svg"))  # Replace with your caret image path
+        self.caret_image.setFixedSize(self.caret_image.pixmap().size())
+        self.caret_image.show()
+
+        self.cursorPositionChanged.connect(self.update_custom_caret_position)
+        self.update_custom_caret_position()  # Initial position update
+
+    def update_custom_caret_position(self):
+        # Get current cursor position
+        line, index = self.getCursorPosition()
+
+        # Get cursor's pixel position
+        x = self.SendScintilla(QsciScintilla.SCI_POINTXFROMPOSITION, line, index)
+        y = self.SendScintilla(QsciScintilla.SCI_POINTYFROMPOSITION, line, index)
+
+        # Update the position of the custom caret image
+        self.caret_image.move(x, y - self.caret_image.height())
+
 class MainWindow(QMainWindow):
     # Initializing the Class
     def __init__(UwU):
@@ -98,6 +122,10 @@ class MainWindow(QMainWindow):
         OwOpen_fwiwe.setShortcut("Ctrl+O")
         OwOpen_fwiwe.triggered.connect(UwU.OwOpen_fwiwe)
 
+        OwOpen_fOwOlwer = fwiwe_menUwU.addAction("OwOpen fOwOlwer")
+        OwOpen_fOwOlwer.setShortcut("Ctrl+K")
+        OwOpen_fOwOlwer.triggered.connect(UwU.OwOpen_fOwOlwer)
+
         fwiwe_menUwU.addSeparator()
 
         Sa0v0e = fwiwe_menUwU.addAction("Sa0v0e")
@@ -107,10 +135,6 @@ class MainWindow(QMainWindow):
         Sa0v0e_as = fwiwe_menUwU.addAction("Sa0v0e As")
         Sa0v0e_as.setShortcut("Ctrl+Shift+S")
         Sa0v0e_as.triggered.connect(UwU.Sa0v0e_as)
-
-        OwOpen_fOwOlwer = fwiwe_menUwU.addAction("OwOpen fOwOlwer")
-        OwOpen_fOwOlwer.setShortcut("Ctrl+K")
-        OwOpen_fOwOlwer.triggered.connect(UwU.OwOpen_fOwOlwer)
 
         #Edit Menu
         ewit_menUwU = menUwU_baw.addMenu("Ewit")
@@ -174,10 +198,10 @@ class MainWindow(QMainWindow):
         ops = QFileDialog.Options()
         ops |= QFileDialog.DontUseNativeDialog
 
-        neUwU_fOwOlwer, _ = QFileDialog.getExistingDirectory(UwU, "Pix A FOwOlwer", "", options=ops)
+        neUwU_fOwOlwer = QFileDialog.getExistingDirectory(UwU, "Pix A FOwOlwer", "", options=ops)
         if neUwU_fOwOlwer:
             UwU.mOwOwel.setRootPath(neUwU_fOwOlwer)
-            UwU.twee_vieUwU.setRootIndex(UwU.mOwOwel.index[neUwU_fOwOlwer])
+            UwU.twee_vieUwU.setRootIndex(UwU.mOwOwel.index(neUwU_fOwOlwer))
             UwU.statusBar().showMessage(f"OwOpened {neUwU_fOwOlwer}", 2000)
     
     def cOwOpy(UwU):
@@ -200,14 +224,13 @@ class MainWindow(QMainWindow):
     
     
     def getw_ewitOwOr(UwU) -> QsciScintilla:
-        
         # Instance
-        ewitOwOr = QsciScintilla()
+        ewitOwOr = CustomCaretEditor()
         # UTF-8 is a character encoding standard that is used to encode all characters in the Unicode character set
-        #The goal of Unicode is to provide a consistent way to encode multilingual text
+        # The goal of Unicode is to provide a consistent way to encode multilingual text
         ewitOwOr.setUtf8(True)
         # Font
-        ewitOwOr.setFont(QFont("Five Nights at Freddy's", 14))
+        ewitOwOr.setFont(QFont("Five Nights at Freddy's", 16))
 
         # Brace Matching
         ewitOwOr.setBraceMatching(QsciScintilla.SloppyBraceMatch)
@@ -222,9 +245,9 @@ class MainWindow(QMainWindow):
         # TODO: add autocomplete next video
 
         # Caret
-        # TODO: ADD caret setting next video
+        ewitOwOr.setCaretForegroundColor(QColor("#FFDBE2"))
 
-        #EOL
+        # EOL
         ewitOwOr.setEolMode(QsciScintilla.EolWindows)
         ewitOwOr.setEolVisibility(False)
 
@@ -238,7 +261,7 @@ class MainWindow(QMainWindow):
         '''
         Check if fwiwe is binawy UwU x3
         '''
-        with open(path,'rb') as f:
+        with open(path, 'rb') as f:
             return b'\0' in f.read(1024)
 
     # A simple function to check if the file is binary or not ex: image file, exe, zip file that can't be opened using text ewitOwOrs
@@ -258,7 +281,8 @@ class MainWindow(QMainWindow):
             return
         # Checks if the file at the given path is binary 
         if UwU.is_binawy(path):
-            UwU.statusBar().showMessage("Can~not OwOpen Binawy Fwiwe", 2000)
+            UwU.statusBar().showMessage("Can_not OwOpen Binawy Fwiwe", 2000)
+            return
         # check if file already open
         for i in range(UwU.tabx3_vieUwU.count()):
             if UwU.tabx3_vieUwU.tabText(i) == path.name:
