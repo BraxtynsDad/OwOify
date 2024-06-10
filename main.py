@@ -1,4 +1,4 @@
-# TODO:If you can Figure out Dynamic text for different resolution
+# TODO: If you can Figure out Dynamic text for different resolution
 
 import os
 import sys
@@ -9,31 +9,10 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.Qsci import *
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
+
 from pathlib import Path
-
-class CustomCaretEditor(QsciScintilla):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setCaretWidth(0)  # Hide the default caret
-
-        self.caret_image = QLabel(self)
-        self.caret_image.setPixmap(QPixmap("./Icons/caret_image.svg"))  # Replace with your caret image path
-        self.caret_image.setFixedSize(self.caret_image.pixmap().size())
-        self.caret_image.show()
-
-        self.cursorPositionChanged.connect(self.update_custom_caret_position)
-        self.update_custom_caret_position()  # Initial position update
-
-    def update_custom_caret_position(self):
-        # Get current cursor position
-        line, index = self.getCursorPosition()
-
-        # Get cursor's pixel position
-        x = self.SendScintilla(QsciScintilla.SCI_POINTXFROMPOSITION, line, index)
-        y = self.SendScintilla(QsciScintilla.SCI_POINTYFROMPOSITION, line, index)
-
-        # Update the position of the custom caret image
-        self.caret_image.move(x, y - self.caret_image.height())
+import keyword
+import pkgutil
 
 class MainWindow(QMainWindow):
     # Initializing the Class
@@ -225,12 +204,12 @@ class MainWindow(QMainWindow):
     
     def getw_ewitOwOr(UwU) -> QsciScintilla:
         # Instance
-        ewitOwOr = CustomCaretEditor()
+        ewitOwOr = QsciScintilla()
         # UTF-8 is a character encoding standard that is used to encode all characters in the Unicode character set
         # The goal of Unicode is to provide a consistent way to encode multilingual text
         ewitOwOr.setUtf8(True)
         # Font
-        ewitOwOr.setFont(QFont("Five Nights at Freddy's", 16))
+        ewitOwOr.setFont(QFont("Five Nights at Freddy's", 72))
 
         # Brace Matching
         ewitOwOr.setBraceMatching(QsciScintilla.SloppyBraceMatch)
@@ -242,20 +221,58 @@ class MainWindow(QMainWindow):
         ewitOwOr.setAutoIndent(True)
 
         # Autocomplete
-        # TODO: add autocomplete next video
+        ewitOwOr.setAutoCompletionSource(QsciScintilla.AcsAll)
+        ewitOwOr.setAutoCompletionThreshold(1) # autocomplete will show after one character
+        ewitOwOr.setAutoCompletionCaseSensitivity(False)
+        ewitOwOr.setAutoCompletionUseSingle(QsciScintilla.AcusNever)
 
         # Caret
-        ewitOwOr.setCaretForegroundColor(QColor("#FFDBE2"))
+        ewitOwOr.setCaretForegroundColor(QColor("#C724B1"))
+        ewitOwOr.setCaretLineVisible(True)
+        ewitOwOr.setCaretLineBackgroundColor(QColor("#FFBCD9"))
+        ewitOwOr.setCaretWidth(1)
 
         # EOL
         ewitOwOr.setEolMode(QsciScintilla.EolWindows)
         ewitOwOr.setEolVisibility(False)
 
-        # Lexer 
-        # TODO: add lexer next video
-        ewitOwOr.setLexer(None)
+        # Lexer for syntax highlighting 
+        UwU.pylexer = QsciLexerPython()
+        UwU.pylexer.setDefaultFont(QFont(UwU.winwow_fownt))
+
+        # Api (you can add autocompletion using this)
+        UwU.API = QsciAPIs(UwU.pylexer)
+        for kys in keyword.kwlist + dir(__builtins__):
+            UwU.API.add(kys)
+
+        for _, name, _ in pkgutil.iter_modules():
+            UwU.API.add(name)
+
+        # for future refrence
+        # you can add custom function with its parametars and QSciScintilla will handle it for example
+        UwU.API.add("additon(a: int, b: int)")
+
+        UwU.API.prepare()
+
+        ewitOwOr.setLexer(UwU.pylexer)
+
+        #Line Numbers
+        ewitOwOr.setMarginType(0, QsciScintilla.NumberMargin)
+        ewitOwOr.setMarginWidth(0, "000")
+        ewitOwOr.setMarginsForegroundColor(QColor("#ff888888"))
+        ewitOwOr.setMarginsBackgroundColor(QColor("#282c34"))
+        ewitOwOr.setMarginsFont(UwU.winwow_fownt)
+
+        ewitOwOr.keyPressEvent = UwU.hARAndwe_ewitOwOr_pwess
 
         return ewitOwOr
+    
+    def hARAndwe_ewitOwOr_pwess(UwU, e: QKeyEvent):
+        ewitOwOr: QsciScintilla = UwU.tabx3_vieUwU.currentWidget()
+        if e.modifiers() == Qt.ControlModifier and e.key() == Qt.Key_Space:
+            ewitOwOr.autoCompleteFromAll()
+        else:
+            QsciScintilla.keyPressEvent(ewitOwOr, e)
 
     def is_binawy(UwU, path):
         '''
