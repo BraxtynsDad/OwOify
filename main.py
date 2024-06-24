@@ -11,8 +11,7 @@ from PyQt5.Qsci import *
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
 
 from pathlib import Path
-import keyword
-import pkgutil
+from ewitOwOr import EwitOwOr
 
 class MainWindow(QMainWindow):
     # Initializing the Class
@@ -35,7 +34,7 @@ class MainWindow(QMainWindow):
         # My Cool Font
         UwU.winwow_fownt = QFont("Edo SZ")
         UwU.winwow_fownt.setPointSize(16)
-        UwU.setFont(UwU.winwow_fownt)
+        QApplication.setFont(UwU.winwow_fownt)
         # The Style Sheet
         UwU.setStyleSheet(open("./css/style.qss", "r").read())
         # The Menu Bar Function we Define
@@ -90,48 +89,30 @@ class MainWindow(QMainWindow):
     def setx3_UwUp_menUwU(UwU):
         # Menu Bar
         menUwU_baw = UwU.menuBar()
+        menUwU_baw.setFont(UwU.winwow_fownt)
+        menu_font = QFont("Edo SZ", 10)
+
         # File Menu
         fwiwe_menUwU = menUwU_baw.addMenu("Fwiwe")
-        #Definining file actions
-        neUwU_fwiwe = fwiwe_menUwU.addAction("NeUwU Fwiwe")
-        neUwU_fwiwe.setShortcut("Ctrl+N")
-        neUwU_fwiwe.triggered.connect(UwU.neUwU_fwiwe)
-
-        OwOpen_fwiwe = fwiwe_menUwU.addAction("OwOpen Fwiwe")
-        OwOpen_fwiwe.setShortcut("Ctrl+O")
-        OwOpen_fwiwe.triggered.connect(UwU.OwOpen_fwiwe)
-
-        OwOpen_fOwOlwer = fwiwe_menUwU.addAction("OwOpen fOwOlwer")
-        OwOpen_fOwOlwer.setShortcut("Ctrl+K")
-        OwOpen_fOwOlwer.triggered.connect(UwU.OwOpen_fOwOlwer)
-
+        UwU.add_menu_action(fwiwe_menUwU, "NeUwU Fwiwe", "Ctrl+N", UwU.neUwU_fwiwe, menu_font)
+        UwU.add_menu_action(fwiwe_menUwU, "OwOpen Fwiwe", "Ctrl+O", UwU.OwOpen_fwiwe, menu_font)
+        UwU.add_menu_action(fwiwe_menUwU, "OwOpen fOwOlwer", "Ctrl+K", UwU.OwOpen_fOwOlwer, menu_font)
         fwiwe_menUwU.addSeparator()
+        UwU.add_menu_action(fwiwe_menUwU, "Sa0v0e", "Ctrl+S", UwU.Sa0v0e, menu_font)
+        UwU.add_menu_action(fwiwe_menUwU, "Sa0v0e As", "Ctrl+Shift+S", UwU.Sa0v0e_as, menu_font)
 
-        Sa0v0e = fwiwe_menUwU.addAction("Sa0v0e")
-        Sa0v0e.setShortcut("Ctrl+S")
-        Sa0v0e.triggered.connect(UwU.Sa0v0e)
-
-        Sa0v0e_as = fwiwe_menUwU.addAction("Sa0v0e As")
-        Sa0v0e_as.setShortcut("Ctrl+Shift+S")
-        Sa0v0e_as.triggered.connect(UwU.Sa0v0e_as)
-
-        #Edit Menu
+        # Edit Menu
         ewit_menUwU = menUwU_baw.addMenu("Ewit")
+        UwU.add_menu_action(ewit_menUwU, "COwOpy", "Ctrl+C", UwU.cOwOpy, menu_font)
+        UwU.add_menu_action(ewit_menUwU, "MUwUsyc StOwOp/Stawt", "Ctrl+P", UwU.MUwUsyc_StOwOp_Stawt, menu_font)
+        UwU.add_menu_action(ewit_menUwU, "MUwUsyc skyp", "Shift+N", UwU.MUwUsyc_skyp, menu_font)
 
-        #Defines Editing Actions
-        cOwOpy_awtiOwOn = ewit_menUwU.addAction("COwOpy")
-        cOwOpy_awtiOwOn.setShortcut("Ctrl+C")
-        cOwOpy_awtiOwOn.triggered.connect(UwU.cOwOpy)
-
-        MUwUsyc_buttOwOn = ewit_menUwU.addAction("MUwUsyc StOwOp/Stawt")
-        MUwUsyc_buttOwOn.setShortcut("Ctrl+P")
-        MUwUsyc_buttOwOn.triggered.connect(UwU.MUwUsyc_StOwOp_Stawt)
-
-        MUwUsyc_skyp = ewit_menUwU.addAction("MUwUsyc skyp")
-        MUwUsyc_skyp.setShortcut("Shift+N")
-        MUwUsyc_skyp.triggered.connect(UwU.MUwUsyc_skyp)
-
-        # TODO: I'll add More
+    def add_menu_action(UwU, menu, title, shortcut, handler, font):
+        action = QAction(title, UwU)
+        action.setShortcut(shortcut)
+        action.triggered.connect(handler)
+        action.setFont(font)  # Set font for the action
+        menu.addAction(action)
 
     def neUwU_fwiwe(UwU):
         UwU.setw_neUwU_tabx3(None, is_neUwU_fwiwe=True)
@@ -203,77 +184,9 @@ class MainWindow(QMainWindow):
     
     
     def getw_ewitOwOr(UwU) -> QsciScintilla:
-        # Instance
-        ewitOwOr = QsciScintilla()
-        # UTF-8 is a character encoding standard that is used to encode all characters in the Unicode character set
-        # The goal of Unicode is to provide a consistent way to encode multilingual text
-        ewitOwOr.setUtf8(True)
-        # Font
-        ewitOwOr.setFont(QFont("Five Nights at Freddy's", 72))
-
-        # Brace Matching
-        ewitOwOr.setBraceMatching(QsciScintilla.SloppyBraceMatch)
-
-        # Indentation
-        ewitOwOr.setIndentationGuides(True)
-        ewitOwOr.setTabWidth(4)
-        ewitOwOr.setIndentationsUseTabs(False)
-        ewitOwOr.setAutoIndent(True)
-
-        # Autocomplete
-        ewitOwOr.setAutoCompletionSource(QsciScintilla.AcsAll)
-        ewitOwOr.setAutoCompletionThreshold(1) # autocomplete will show after one character
-        ewitOwOr.setAutoCompletionCaseSensitivity(False)
-        ewitOwOr.setAutoCompletionUseSingle(QsciScintilla.AcusNever)
-
-        # Caret
-        ewitOwOr.setCaretForegroundColor(QColor("#C724B1"))
-        ewitOwOr.setCaretLineVisible(True)
-        ewitOwOr.setCaretLineBackgroundColor(QColor("#FFBCD9"))
-        ewitOwOr.setCaretWidth(1)
-
-        # EOL
-        ewitOwOr.setEolMode(QsciScintilla.EolWindows)
-        ewitOwOr.setEolVisibility(False)
-
-        # Lexer for syntax highlighting 
-        UwU.pylexer = QsciLexerPython()
-        UwU.pylexer.setDefaultFont(QFont(UwU.winwow_fownt))
-
-        # Api (you can add autocompletion using this)
-        UwU.API = QsciAPIs(UwU.pylexer)
-        for kys in keyword.kwlist + dir(__builtins__):
-            UwU.API.add(kys)
-
-        for _, name, _ in pkgutil.iter_modules():
-            UwU.API.add(name)
-
-        # for future refrence
-        # you can add custom function with its parametars and QSciScintilla will handle it for example
-        UwU.API.add("additon(a: int, b: int)")
-
-        UwU.API.prepare()
-
-        ewitOwOr.setLexer(UwU.pylexer)
-
-        #Line Numbers
-        ewitOwOr.setMarginType(0, QsciScintilla.NumberMargin)
-        ewitOwOr.setMarginWidth(0, "000")
-        ewitOwOr.setMarginsForegroundColor(QColor("#ff888888"))
-        ewitOwOr.setMarginsBackgroundColor(QColor("#282c34"))
-        ewitOwOr.setMarginsFont(UwU.winwow_fownt)
-
-        ewitOwOr.keyPressEvent = UwU.hARAndwe_ewitOwOr_pwess
-
+        ewitOwOr = EwitOwOr()
         return ewitOwOr
     
-    def hARAndwe_ewitOwOr_pwess(UwU, e: QKeyEvent):
-        ewitOwOr: QsciScintilla = UwU.tabx3_vieUwU.currentWidget()
-        if e.modifiers() == Qt.ControlModifier and e.key() == Qt.Key_Space:
-            ewitOwOr.autoCompleteFromAll()
-        else:
-            QsciScintilla.keyPressEvent(ewitOwOr, e)
-
     def is_binawy(UwU, path):
         '''
         Check if fwiwe is binawy UwU x3
@@ -392,7 +305,7 @@ class MainWindow(QMainWindow):
 
         # Tree view
         UwU.twee_vieUwU = QTreeView()
-        UwU.twee_vieUwU.setFont(QFont("Five Nights at Freddy's", 14))
+        UwU.twee_vieUwU.setFont(QFont("Five Nights at Freddy's", 18))
         UwU.twee_vieUwU.setModel(UwU.mOwOwel)
         UwU.twee_vieUwU.setRootIndex(UwU.mOwOwel.index(os.getcwd()))
         UwU.twee_vieUwU.setSelectionMode(QTreeView.SingleSelection)
@@ -453,3 +366,4 @@ if __name__ == '__main__':
     myGUI = MainWindow()
     #Starts the Event Loop that was Set Up and Terminate Script on Exit:
     sys.exit(app.exec_())
+    
