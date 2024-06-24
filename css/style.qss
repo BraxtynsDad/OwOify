@@ -1,0 +1,132 @@
+QMainWindow {
+    background-image: url("./Icons/bk.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #B97A95; /* Darker pastel pink */
+}
+
+QTabWidget {
+    background-color: #FFB6C1; /* Pastel pink */
+    color: #D4A5FF; /* Light pastel purple */
+}
+
+QTabBar::tab {
+    background-color: #FFB6C1; /* Pastel pink */
+    color: #7D5A89; /* Darker pastel purple */
+    min-width: 10ex;
+    min-height: 10ex;
+    padding: 2px 20px;
+    border-style: none;
+}
+
+QTabBar::tab::selected {
+    color: #FF7272; /* Reddish tone to pop out */
+    border-style: none;
+    background-color: #D4A5FF; /* Light pastel purple */
+    border-bottom: 4px solid #A5E8FF; /* Light pastel cyan */
+}
+
+QTabBar::close-button {
+    image: url("./Icons/close-icon.svg");
+}
+
+QSplitter {
+    background-image: url("./Icons/bk.jpg");
+}
+
+QSplitter::handle {
+    background-color: #FFB6C1; /* Pastel pink */
+    border: 1px solid #FF7272; /* Reddish tone border */
+    border-radius: 6px;
+}
+
+QSplitter::handle:hover {
+    background-color: #FF7272; /* Reddish tone on hover */
+    border-color: #FFB6C1; /* Pastel pink border on hover */
+}
+
+QScrollBar:vertical {
+    border: none;
+    width: 14px;
+    margin: 15px 0 15px 0;
+    background-color: #E3A2B1; /* Lighter pastel pink */
+    border-radius: 0px;
+}
+
+QScrollBar:handle:vertical {
+    background-color: #D4A5FF; /* Light pastel purple */
+}
+
+QScrollBar:handle:vertical:pressed {
+    background-color: #FFE6EB; /* Soft pastel pink */
+}
+
+QScrollBar::sub-line:vertical {
+    border: none;
+    background: none;
+    height: 15px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:vertical {
+    border: none;
+    background: none;
+    height: 15px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+
+QScrollBar:horizontal {
+    border: none;
+    height: 14px;
+    margin: 0 15px 0 15px;
+    background-color: #E3A2B1; /* Lighter pastel pink */
+    border-radius: 0px;
+}
+
+QScrollBar:handle:horizontal {
+    background-color: #D4A5FF; /* Light pastel purple */
+}
+
+QScrollBar:handle:horizontal:pressed {
+    background-color: #FFE6EB; /* Soft pastel pink */
+}
+
+QScrollBar::sub-line:horizontal {
+    border: none;
+    background: none;
+    width: 15px;
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:horizontal {
+    border: none;
+    background: none;
+    width: 15px;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: none;
+}
+
+QsciScintilla {
+    border: none;
+    background-color: #ebf0c1;
+    color: #C724B1;
+}
