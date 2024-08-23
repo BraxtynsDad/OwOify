@@ -2,14 +2,19 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.Qsci import *
-from PyQt5.QtWidgets import QWidget
-import keyword
+
+from Funny import *
 import pkgutil
+from lexer import OwOCustomLexer
 
 class EwitOwOr(QsciScintilla):
 
     def __init__(UwU, parent=None):
         super(EwitOwOr, UwU).__init__(parent)
+
+        palette = UwU.palette()
+        palette.setColor(UwU.backgroundRole(), QColor('#FF7272'))
+        UwU.setPalette(palette)
 
         # UTF-8 is a character encoding standard that is used to encode all characters in the Unicode character set
         # The goal of Unicode is to provide a consistent way to encode multilingual text
@@ -18,6 +23,19 @@ class EwitOwOr(QsciScintilla):
         UwU.winwow_fownt = QFont("Five Nights at Freddy's")
         UwU.winwow_fownt.setPointSize(18)
         UwU.setFont(UwU.winwow_fownt)
+
+        # Lexer for syntax highlighting 
+        UwU.OwOLexer = OwOCustomLexer(UwU)
+        UwU.OwOLexer.setDefaultFont(QFont(UwU.winwow_fownt))
+
+        # Api (you can add autocompletion using this)
+        UwU.API = QsciAPIs(UwU.OwOLexer)
+        for kys in KEYYWOwOWD_WIST + bUwUiwtin_fOwOnctwions_nyans:
+            UwU.API.add(kys)
+
+        UwU.API.prepare()
+
+        UwU.setLexer(UwU.OwOLexer)
 
         # Brace Matching
         UwU.setBraceMatching(QsciScintilla.SloppyBraceMatch)
@@ -29,7 +47,7 @@ class EwitOwOr(QsciScintilla):
         UwU.setAutoIndent(True)
 
         # Autocomplete
-        UwU.setAutoCompletionSource(QsciScintilla.AcsAll)
+        UwU.setAutoCompletionSource(QsciScintilla.AcsAPIs)  # Use APIs only
         UwU.setAutoCompletionThreshold(1) # autocomplete will show after one character
         UwU.setAutoCompletionCaseSensitivity(False)
         UwU.setAutoCompletionUseSingle(QsciScintilla.AcusNever)
@@ -37,33 +55,12 @@ class EwitOwOr(QsciScintilla):
         # Caret
         UwU.setCaretForegroundColor(QColor("#C724B1"))
         UwU.setCaretLineVisible(True)
-        UwU.setCaretLineBackgroundColor(QColor("#FFBCD9"))
+        UwU.setCaretLineBackgroundColor(QColor("#E6E6FA"))
         UwU.setCaretWidth(1)
 
         # EOL
         UwU.setEolMode(QsciScintilla.EolWindows)
         UwU.setEolVisibility(False)
-
-        # Lexer for syntax highlighting 
-        UwU.pylexer = QsciLexerPython()
-        UwU.pylexer.setFont(QFont(UwU.winwow_fownt))
-        UwU.pylexer.setDefaultFont(QFont(UwU.winwow_fownt))
-
-        # Api (you can add autocompletion using this)
-        UwU.API = QsciAPIs(UwU.pylexer)
-        for kys in keyword.kwlist + dir(__builtins__):
-            UwU.API.add(kys)
-
-        for _, name, _ in pkgutil.iter_modules():
-            UwU.API.add(name)
-
-        # for future refrence
-        # you can add custom function with its parametars and QSciScintilla will handle it for example
-        UwU.API.add("additon(a: int, b: int)")
-
-        UwU.API.prepare()
-
-        UwU.setLexer(UwU.pylexer)
 
         # Line Numbers
         UwU.setMarginType(0, QsciScintilla.NumberMargin)

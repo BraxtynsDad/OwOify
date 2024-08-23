@@ -3,7 +3,7 @@
 import os
 import sys
 
-from PyQt5.QtWidgets import QLabel
+from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -26,6 +26,7 @@ class MainWindow(QMainWindow):
 
         # File system
         UwU.cuwwwent_fwiwe = None
+        UwU.cuwwent_swide_baw = None
 
     # The function We use Up in the Initialization
     def init_ui(UwU):
@@ -90,22 +91,22 @@ class MainWindow(QMainWindow):
         # Menu Bar
         menUwU_baw = UwU.menuBar()
         menUwU_baw.setFont(UwU.winwow_fownt)
-        menu_font = QFont("Edo SZ", 10)
+        menUwU_fownt = QFont("Edo SZ", 10)
 
         # File Menu
         fwiwe_menUwU = menUwU_baw.addMenu("Fwiwe")
-        UwU.add_menu_action(fwiwe_menUwU, "NeUwU Fwiwe", "Ctrl+N", UwU.neUwU_fwiwe, menu_font)
-        UwU.add_menu_action(fwiwe_menUwU, "OwOpen Fwiwe", "Ctrl+O", UwU.OwOpen_fwiwe, menu_font)
-        UwU.add_menu_action(fwiwe_menUwU, "OwOpen fOwOlwer", "Ctrl+K", UwU.OwOpen_fOwOlwer, menu_font)
+        UwU.add_menu_action(fwiwe_menUwU, "NeUwU Fwiwe", "Ctrl+N", UwU.neUwU_fwiwe, menUwU_fownt)
+        UwU.add_menu_action(fwiwe_menUwU, "OwOpen Fwiwe", "Ctrl+O", UwU.OwOpen_fwiwe, menUwU_fownt)
+        UwU.add_menu_action(fwiwe_menUwU, "OwOpen fOwOlwer", "Ctrl+K", UwU.OwOpen_fOwOlwer, menUwU_fownt)
         fwiwe_menUwU.addSeparator()
-        UwU.add_menu_action(fwiwe_menUwU, "Sa0v0e", "Ctrl+S", UwU.Sa0v0e, menu_font)
-        UwU.add_menu_action(fwiwe_menUwU, "Sa0v0e As", "Ctrl+Shift+S", UwU.Sa0v0e_as, menu_font)
+        UwU.add_menu_action(fwiwe_menUwU, "Sa0v0e", "Ctrl+S", UwU.Sa0v0e, menUwU_fownt)
+        UwU.add_menu_action(fwiwe_menUwU, "Sa0v0e As", "Ctrl+Shift+S", UwU.Sa0v0e_as, menUwU_fownt)
 
         # Edit Menu
         ewit_menUwU = menUwU_baw.addMenu("Ewit")
-        UwU.add_menu_action(ewit_menUwU, "COwOpy", "Ctrl+C", UwU.cOwOpy, menu_font)
-        UwU.add_menu_action(ewit_menUwU, "MUwUsyc StOwOp/Stawt", "Ctrl+P", UwU.MUwUsyc_StOwOp_Stawt, menu_font)
-        UwU.add_menu_action(ewit_menUwU, "MUwUsyc skyp", "Shift+N", UwU.MUwUsyc_skyp, menu_font)
+        UwU.add_menu_action(ewit_menUwU, "COwOpy", "Ctrl+C", UwU.cOwOpy, menUwU_fownt)
+        UwU.add_menu_action(ewit_menUwU, "MUwUsyc StOwOp/Stawt", "Ctrl+P", UwU.MUwUsyc_StOwOp_Stawt, menUwU_fownt)
+        UwU.add_menu_action(ewit_menUwU, "MUwUsyc skyp", "Shift+N", UwU.MUwUsyc_skyp, menUwU_fownt)
 
     def add_menu_action(UwU, menu, title, shortcut, handler, font):
         action = QAction(title, UwU)
@@ -117,13 +118,22 @@ class MainWindow(QMainWindow):
     def neUwU_fwiwe(UwU):
         UwU.setw_neUwU_tabx3(None, is_neUwU_fwiwe=True)
 
+    def show_status_message(UwU, message):
+        UwU.statusBar().show()
+        UwU.statusBar().showMessage(message)
+        QTimer.singleShot(5000, UwU.hide_status_bar)
+
+    def hide_status_bar(UwU):
+        UwU.statusBar().clearMessage()
+        UwU.statusBar().hide()
+
     def Sa0v0e(UwU):
         if UwU.cuwwwent_fwiwe is None and UwU.tabx3_vieUwU.count() > 0:
             UwU.Sa0v0e_as()
 
         ewitOwOr = UwU.tabx3_vieUwU.currentWidget()
         UwU.cuwwwent_fwiwe.write_text(ewitOwOr.text())
-        UwU.statusBar().showMessage(f"Sa0v0ed {UwU.cuwwwent_fwiwe.name}", 2000)
+        UwU.show_status_message(f"Sa0v0ed {UwU.cuwwwent_fwiwe.name}")
 
     def Sa0v0e_as(UwU):
         ewitOwOr = UwU.tabx3_vieUwU.currentWidget()
@@ -132,12 +142,12 @@ class MainWindow(QMainWindow):
         
         fwiwe_pathx3 = QFileDialog.getSaveFileName(UwU, "Sa0v0e As", os.getcwd())[0]
         if fwiwe_pathx3 == '':
-            UwU.statusBar().showMessage("Cancelled", 2000)
+            UwU.show_status_message("Cancelled")
             return
         paht = Path(fwiwe_pathx3)
         paht.write_text(ewitOwOr.text())
         UwU.tabx3_vieUwU.setTabText(UwU.tabx3_vieUwU.currentIndex(), paht.name)
-        UwU.statusBar().showMessage(f"Sa0v0ed {paht.name}", 2000)
+        UwU.show_status_message(f"Sa0v0ed {paht.name}")
         UwU.cuwwwent_fwiwe = paht
     
     def OwOpen_fwiwe(UwU):
@@ -148,7 +158,7 @@ class MainWindow(QMainWindow):
                     "Pix A Fwiwe", "", "Aww Fwiwes (*);;PythOwOn Fwiwes (*.py);;PyOwO Files (*.pyowo)",
                     options=ops)
         if neUwU_fwiwe == '':
-            UwU.statusBar().showMessage("Cancewwed", 2000)
+            UwU.show_status_message("Cancewwed")
             return
         f = Path(neUwU_fwiwe)
         UwU.setw_neUwU_tabx3(f)
@@ -162,7 +172,7 @@ class MainWindow(QMainWindow):
         if neUwU_fOwOlwer:
             UwU.mOwOwel.setRootPath(neUwU_fOwOlwer)
             UwU.twee_vieUwU.setRootIndex(UwU.mOwOwel.index(neUwU_fOwOlwer))
-            UwU.statusBar().showMessage(f"OwOpened {neUwU_fOwOlwer}", 2000)
+            UwU.show_status_message(f"OwOpened {neUwU_fOwOlwer}")
     
     def cOwOpy(UwU):
         ewitOwOr = UwU.tabx3_vieUwU.currentWidget()
@@ -201,7 +211,7 @@ class MainWindow(QMainWindow):
         if is_neUwU_fwiwe:
             UwU.tabx3_vieUwU.addTab(ewitOwOr, "UwUntitwed")
             UwU.setWindowTitle("UwUntitwed")
-            UwU.statusBar().showMessage("OwOpened UwUntitwed")
+            UwU.show_status_message("OwOpened UwUntitwed")
             # Sets the current tab to the newly added tab, making it the active tab.
             UwU.tabx3_vieUwU.setCurrentIndex(UwU.tabx3_vieUwU.count() - 1)
             UwU.cuwwwent_fwiwe = None
@@ -211,7 +221,7 @@ class MainWindow(QMainWindow):
             return
         # Checks if the file at the given path is binary 
         if UwU.is_binawy(path):
-            UwU.statusBar().showMessage("Can_not OwOpen Binawy Fwiwe", 2000)
+            UwU.show_status_message("Can_not OwOpen Binawy Fwiwe")
             return
         # check if file already open
         for i in range(UwU.tabx3_vieUwU.count()):
@@ -225,8 +235,42 @@ class MainWindow(QMainWindow):
         UwU.setWindowTitle(path.name)
         UwU.cuwwwent_fwiwe = path
         UwU.tabx3_vieUwU.setCurrentIndex(UwU.tabx3_vieUwU.count() - 1)
-        UwU.statusBar().showMessage(f"Opened {path.name}", 2000)
+        UwU.show_status_message(f"Opened {path.name}")
 
+    def setw_cowsOwO_pointy_x3(UwU, e):
+        UwU.setCursor(Qt.PointingHandCursor)
+
+    def setw_cowsOwO_awwowOwO(UwU, e):
+        UwU.setCursor(Qt.ArrowCursor)
+
+    def getw_swide_baw_wabew(UwU, path, name):
+        wabew = QLabel()
+        wabew.setPixmap(QPixmap(path).scaled(QSize(100,70)))
+        wabew.setAlignment(Qt.AlignmentFlag.AlignTop)
+        wabew.setFont(UwU.winwow_fownt)
+        wabew.mousePressEvent = lambda e: UwU.shOwO_hide_tabx3(e, name)
+        wabew.enterEvent = UwU.setw_cowsOwO_pointy_x3
+        wabew.leaveEvent = UwU.setw_cowsOwO_awwowOwO
+        return wabew
+    
+    def getw_fwame(UwU) -> QFrame:
+        fwame = QFrame()
+        fwame.setFrameShape(QFrame.NoFrame)
+        fwame.setFrameShadow(QFrame.Plain)
+        fwame.setContentsMargins(0, 0, 0, 0)
+        fwame.setStyleSheet('''
+            QFrame {
+                background-color: #B662C5;
+                border-radius: 5px;
+                border: none;
+                padding: 5px;
+                color: White;
+            }
+            QFrame:hover {
+                color: #50B356;
+            }
+        ''')
+        return fwame
 
     def setx3_UwUp_bowdy(UwU):
         # Body
@@ -249,25 +293,22 @@ class MainWindow(QMainWindow):
         UwU.swide_baw.setStyleSheet(f'''
             background-color: {UwU.side_baw_coluwm};
         ''')
-        swide_baw_layout = QHBoxLayout()
-        swide_baw_layout.setContentsMargins(5, 10, 5, 0)
-        swide_baw_layout.setSpacing(0)
-        swide_baw_layout.setAlignment(Qt.AlignTop | Qt.AlignCenter)
+        swide_baw_wayout = QVBoxLayout()
+        swide_baw_wayout.setContentsMargins(5, 10, 5, 0)
+        swide_baw_wayout.setSpacing(0)
+        swide_baw_wayout.setAlignment(Qt.AlignTop | Qt.AlignCenter)
 
         # Setup Labels
-        fOwOlwer_wabew = QLabel()
-        fOwOlwer_wabew.setPixmap(QPixmap("./Icons/folder-icon-close.svg").scaled(QSize(50,35)))
-        fOwOlwer_wabew.setAlignment(Qt.AlignmentFlag.AlignTop)
-        fOwOlwer_wabew.setFont(UwU.winwow_fownt)
-        fOwOlwer_wabew.mousePressEvent = UwU.shOwO_hide_tabx3
+        fOwOlwer_wabew = UwU.getw_swide_baw_wabew("./Icons/folder-icon-close.svg", "FOwOlwer-Icon-UwU")
+        Seawch_Wabew = UwU.getw_swide_baw_wabew("./Icons/search-icon.svg", "Seawch-Icon-UwU")
 
         # Connect hover effects directly
-        fOwOlwer_wabew.enterEvent = lambda event: fOwOlwer_wabew.setPixmap(QPixmap("./Icons/folder-icon-open.svg").scaled(QSize(50, 35)))
-        fOwOlwer_wabew.leaveEvent = lambda event: fOwOlwer_wabew.setPixmap(QPixmap("./Icons/folder-icon-close.svg").scaled(QSize(50, 35)))
+        fOwOlwer_wabew.enterEvent = lambda event: fOwOlwer_wabew.setPixmap(QPixmap("./Icons/folder-icon-open.svg").scaled(QSize(100, 70)))
+        fOwOlwer_wabew.leaveEvent = lambda event: fOwOlwer_wabew.setPixmap(QPixmap("./Icons/folder-icon-close.svg").scaled(QSize(100, 70)))
 
-        swide_baw_layout.addWidget(fOwOlwer_wabew)
-
-        UwU.swide_baw.setLayout(swide_baw_layout)
+        swide_baw_wayout.addWidget(fOwOlwer_wabew)
+        swide_baw_wayout.addWidget(Seawch_Wabew)
+        UwU.swide_baw.setLayout(swide_baw_wayout)
 
         bowdy.addWidget(UwU.swide_baw)
         
@@ -275,28 +316,12 @@ class MainWindow(QMainWindow):
         UwU.OwOSpwit = QSplitter(Qt.Horizontal)
 
         # Tree frame
-        UwU.twee_fwame = QFrame()
-        UwU.twee_fwame.setLineWidth(1)
-        UwU.twee_fwame.setMaximumWidth(400)
-        UwU.twee_fwame.setMinimumWidth(200)
-        UwU.twee_fwame.setBaseSize(100, 0)
-        UwU.twee_fwame.setContentsMargins(0, 0, 0, 0)
-
+        UwU.fwiwe_manongew_fwame = UwU.getw_fwame()
+        UwU.fwiwe_manongew_fwame.setMaximumWidth(400)
+        UwU.fwiwe_manongew_fwame.setMinimumWidth(200)
         twee_fwame_layout = QVBoxLayout()
         twee_fwame_layout.setContentsMargins(0, 0, 0, 0)
         twee_fwame_layout.setSpacing(0)
-        UwU.twee_fwame.setStyleSheet('''
-            QFrame {
-                background-color: #B662C5;
-                border-radius: 5px;
-                border: none;
-                padding: 5px;
-                color: White;
-            }
-            QFrame:hover {
-                color: #50B356;
-            }
-        ''')
 
         # Create file system model
         UwU.mOwOwel = QFileSystemModel()
@@ -325,8 +350,37 @@ class MainWindow(QMainWindow):
         UwU.twee_vieUwU.setColumnHidden(2, True)
         UwU.twee_vieUwU.setColumnHidden(3, True)
 
+        # Search View
+        UwU.searchy_x3_fwame = UwU.getw_fwame()
+        UwU.searchy_x3_fwame.setMaximumWidth(400)
+        UwU.searchy_x3_fwame.setMinimumWidth(200)
+
+        searchy_x3_layout = QVBoxLayout()
+        searchy_x3_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        searchy_x3_layout.setContentsMargins(0, 10, 0, 0)
+        searchy_x3_layout.setSpacing(0)
+
+        searchy_x3_inpUwUt = QLineEdit()
+        searchy_x3_inpUwUt.setPlaceholderText("Search")
+        searchy_x3_inpUwUt.setFont(UwU.winwow_fownt)
+        searchy_x3_inpUwUt.setAlignment(Qt.AlignmentFlag.AlignTop)
+        searchy_x3_inpUwUt.setStyleSheet("""
+        QLineEdit {
+            background-color: #FFB6C1;
+            border-radius: 5px;
+            border: 1px solid #7D5A89;
+            padding: 5px;
+            color: #7D5A89
+        }
+                                         
+        QLineEdit:hover {
+            Color: White                                  
+        }
+        """)
+
+
         twee_fwame_layout.addWidget(UwU.twee_vieUwU)
-        UwU.twee_fwame.setLayout(twee_fwame_layout)
+        UwU.fwiwe_manongew_fwame.setLayout(twee_fwame_layout)
 
         UwU.tabx3_vieUwU = QTabWidget()
         UwU.tabx3_vieUwU.setContentsMargins(0, 0, 0, 0)
@@ -335,7 +389,7 @@ class MainWindow(QMainWindow):
         UwU.tabx3_vieUwU.setDocumentMode(True)
         UwU.tabx3_vieUwU.tabCloseRequested.connect(UwU.cwose_tabx3)
 
-        UwU.OwOSpwit.addWidget(UwU.twee_fwame)
+        UwU.OwOSpwit.addWidget(UwU.fwiwe_manongew_fwame)
         UwU.OwOSpwit.addWidget(UwU.tabx3_vieUwU)
 
         bowdy.addWidget(UwU.OwOSpwit)
@@ -346,8 +400,22 @@ class MainWindow(QMainWindow):
     def cwose_tabx3(UwU, index):
         UwU.tabx3_vieUwU.removeTab(index)
 
-    def shOwO_hide_tabx3(UwU):
-        pass
+    def shOwO_hide_tabx3(UwU, e, type_):
+        if type_ == "file-manager":
+            if not (UwU.fwiwe_manongew_fwame in UwU.hsplit.children()):
+                UwU.hsplit.replaceWidget(0, UwU.fwiwe_manongew_fwame)
+        elif type_ == "search":
+            if not (UwU.searchy_x3_fwame in UwU.hsplit.children()):
+                UwU.hsplit.replaceWidget(0, UwU.searchy_x3_fwame)
+        if UwU.cuwwent_swide_baw == type_:
+            fwame = UwU.hsplit.children()[0]
+            if fwame.isHidden():
+                fwame.show()
+            else:
+                fwame.hide()
+
+        UwU.cuwwent_swide_baw = type_
+
 
     def twee_vieUwU_cOwOntewxt_menUwU(UwU, powosition):
         pass
