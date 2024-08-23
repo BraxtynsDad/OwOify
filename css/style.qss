@@ -2,17 +2,17 @@ QMainWindow {
     background-image: url("./Icons/bk.jpg");
     background-position: center;
     background-repeat: no-repeat;
-    color: #B97A95; /* Darker pastel pink */
+    color: #B97A95;
 }
 
 QTabWidget {
-    background-color: #FFB6C1; /* Pastel pink */
-    color: #D4A5FF; /* Light pastel purple */
+    background-color: #FFB6C1;
+    color: #D4A5FF;
 }
 
 QTabBar::tab {
-    background-color: #FFB6C1; /* Pastel pink */
-    color: #7D5A89; /* Darker pastel purple */
+    background-color: #FFB6C1;
+    color: #7D5A89;
     min-width: 10ex;
     min-height: 10ex;
     padding: 2px 20px;
@@ -20,10 +20,10 @@ QTabBar::tab {
 }
 
 QTabBar::tab::selected {
-    color: #FF7272; /* Reddish tone to pop out */
+    color: #FF7272;
     border-style: none;
-    background-color: #D4A5FF; /* Light pastel purple */
-    border-bottom: 4px solid #A5E8FF; /* Light pastel cyan */
+    background-color: #D4A5FF;
+    border-bottom: 4px solid #A5E8FF;
 }
 
 QTabBar::close-button {
@@ -35,30 +35,30 @@ QSplitter {
 }
 
 QSplitter::handle {
-    background-color: #FFB6C1; /* Pastel pink */
-    border: 1px solid #FF7272; /* Reddish tone border */
+    background-color: #FFB6C1;
+    border: 1px solid #FF7272;
     border-radius: 6px;
 }
 
 QSplitter::handle:hover {
-    background-color: #FF7272; /* Reddish tone on hover */
-    border-color: #FFB6C1; /* Pastel pink border on hover */
+    background-color: #FF7272;
+    border-color: #FFB6C1;
 }
 
 QScrollBar:vertical {
     border: none;
     width: 14px;
     margin: 15px 0 15px 0;
-    background-color: #E3A2B1; /* Lighter pastel pink */
+    background-color: #E3A2B1;
     border-radius: 0px;
 }
 
 QScrollBar:handle:vertical {
-    background-color: #D4A5FF; /* Light pastel purple */
+    background-color: #D4A5FF;
 }
 
 QScrollBar:handle:vertical:pressed {
-    background-color: #FFE6EB; /* Soft pastel pink */
+    background-color: #FFE6EB;
 }
 
 QScrollBar::sub-line:vertical {
@@ -89,16 +89,16 @@ QScrollBar:horizontal {
     border: none;
     height: 14px;
     margin: 0 15px 0 15px;
-    background-color: #E3A2B1; /* Lighter pastel pink */
+    background-color: #E3A2B1;
     border-radius: 0px;
 }
 
 QScrollBar:handle:horizontal {
-    background-color: #D4A5FF; /* Light pastel purple */
+    background-color: #D4A5FF;
 }
 
 QScrollBar:handle:horizontal:pressed {
-    background-color: #FFE6EB; /* Soft pastel pink */
+    background-color: #FFE6EB;
 }
 
 QScrollBar::sub-line:horizontal {
