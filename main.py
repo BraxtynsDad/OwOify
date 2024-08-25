@@ -1,4 +1,5 @@
 # TODO: If you can Figure out Dynamic text for different resolution
+# ep.5 18:59
 
 import os
 import sys
@@ -63,7 +64,7 @@ class MainWindow(QMainWindow):
         UwU.Mewia_Pwawer.setVolume(50)
 
         # Start playing MUwUsyc_StOwOp_Stawt
-        UwU.Mewia_Pwawer.play()
+        # UwU.Mewia_Pwawer.play()
 
         # Create a volume animation to fade in the MUwUsyc_StOwOp_Stawt
         UwU.fade_animation = QPropertyAnimation(UwU.Mewia_Pwawer, b"volume")
@@ -245,7 +246,7 @@ class MainWindow(QMainWindow):
 
     def getw_swide_baw_wabew(UwU, path, name):
         wabew = QLabel()
-        wabew.setPixmap(QPixmap(path).scaled(QSize(100,70)))
+        wabew.setPixmap(QPixmap(path).scaled(QSize(70,70)))
         wabew.setAlignment(Qt.AlignmentFlag.AlignTop)
         wabew.setFont(UwU.winwow_fownt)
         wabew.mousePressEvent = lambda e: UwU.shOwO_hide_tabx3(e, name)
@@ -299,18 +300,16 @@ class MainWindow(QMainWindow):
         swide_baw_wayout.setAlignment(Qt.AlignTop | Qt.AlignCenter)
 
         # Setup Labels
-        fOwOlwer_wabew = UwU.getw_swide_baw_wabew("./Icons/folder-icon-close.svg", "FOwOlwer-Icon-UwU")
-        Seawch_Wabew = UwU.getw_swide_baw_wabew("./Icons/search-icon.svg", "Seawch-Icon-UwU")
+        fOwOlwer_wabew = UwU.getw_swide_baw_wabew("./Icons/folder-icon-close.svg", "fwiwe_manongew")
+        Seawch_Wabew = UwU.getw_swide_baw_wabew("./Icons/search-icon.svg", "searchy_x3_icOwOn")
 
         # Connect hover effects directly
-        fOwOlwer_wabew.enterEvent = lambda event: fOwOlwer_wabew.setPixmap(QPixmap("./Icons/folder-icon-open.svg").scaled(QSize(100, 70)))
-        fOwOlwer_wabew.leaveEvent = lambda event: fOwOlwer_wabew.setPixmap(QPixmap("./Icons/folder-icon-close.svg").scaled(QSize(100, 70)))
+        fOwOlwer_wabew.enterEvent = lambda event: fOwOlwer_wabew.setPixmap(QPixmap("./Icons/folder-icon-open.svg").scaled(QSize(70, 70)))
+        fOwOlwer_wabew.leaveEvent = lambda event: fOwOlwer_wabew.setPixmap(QPixmap("./Icons/folder-icon-close.svg").scaled(QSize(70, 70)))
 
         swide_baw_wayout.addWidget(fOwOlwer_wabew)
         swide_baw_wayout.addWidget(Seawch_Wabew)
         UwU.swide_baw.setLayout(swide_baw_wayout)
-
-        bowdy.addWidget(UwU.swide_baw)
         
         # Split view
         UwU.OwOSpwit = QSplitter(Qt.Horizontal)
@@ -361,23 +360,45 @@ class MainWindow(QMainWindow):
         searchy_x3_layout.setSpacing(0)
 
         searchy_x3_inpUwUt = QLineEdit()
-        searchy_x3_inpUwUt.setPlaceholderText("Search")
+        searchy_x3_inpUwUt.setPlaceholderText("Searchy_x3")
         searchy_x3_inpUwUt.setFont(UwU.winwow_fownt)
         searchy_x3_inpUwUt.setAlignment(Qt.AlignmentFlag.AlignTop)
         searchy_x3_inpUwUt.setStyleSheet("""
         QLineEdit {
-            background-color: #FFB6C1;
+            background-color: #FFF5E1;  /* Soft peach */
             border-radius: 5px;
-            border: 1px solid #7D5A89;
+            border: 2px solid #6A5ACD;  /* Slate blue */
             padding: 5px;
-            color: #7D5A89
+            color: #483D8B;  /* Dark slate blue */
         }
-                                         
+
         QLineEdit:hover {
-            Color: White                                  
+            color: #FFD700;  /* Gold */
         }
         """)
 
+        UwU.searchy_checkybOwOx = QCheckBox("Seawch in MOwOdUwUles")
+        UwU.searchy_checkybOwOx.setFont(UwU.winwow_fownt)
+        UwU.searchy_checkybOwOx.setStyleSheet("color: #483D8B; margin-bottom: 10px")
+
+        UwU.searchy_listy_vieUwU = QListWidget()
+        UwU.searchy_listy_vieUwU.setFont(QFont("Five Nights at Freddy's", 18))
+        UwU.searchy_listy_vieUwU.setStyleSheet("""
+        QListWidget {
+            background-color: #FFF5E1;  /* Soft peach */
+            border-radius: 5px;
+            border: 2px solid #6A5ACD;  /* Slate blue */
+            padding: 5px;
+            color: #483D8B;  /* Dark slate blue */                                      
+        }
+        """)
+
+        UwU.searchy_listy_vieUwU.itemClicked.connect(UwU.searchy_listy_vieUwU_Cwicked)
+
+        searchy_x3_layout.addWidget(searchy_x3_inpUwUt)
+        searchy_x3_layout.addSpacerItem(QSpacerItem(5, 5, QSizePolicy.Minimum, QSizePolicy.Minimum))        
+
+        UwU.searchy_x3_fwame.setLayout(searchy_x3_layout)
 
         twee_fwame_layout.addWidget(UwU.twee_vieUwU)
         UwU.fwiwe_manongew_fwame.setLayout(twee_fwame_layout)
@@ -392,23 +413,27 @@ class MainWindow(QMainWindow):
         UwU.OwOSpwit.addWidget(UwU.fwiwe_manongew_fwame)
         UwU.OwOSpwit.addWidget(UwU.tabx3_vieUwU)
 
+        bowdy.addWidget(UwU.swide_baw)
         bowdy.addWidget(UwU.OwOSpwit)
         bowdy_fwame.setLayout(bowdy)
 
         UwU.setCentralWidget(bowdy_fwame)
 
+    def searchy_listy_vieUwU_Cwicked(UwU, item):
+        ...
+
     def cwose_tabx3(UwU, index):
         UwU.tabx3_vieUwU.removeTab(index)
 
     def shOwO_hide_tabx3(UwU, e, type_):
-        if type_ == "file-manager":
-            if not (UwU.fwiwe_manongew_fwame in UwU.hsplit.children()):
-                UwU.hsplit.replaceWidget(0, UwU.fwiwe_manongew_fwame)
-        elif type_ == "search":
-            if not (UwU.searchy_x3_fwame in UwU.hsplit.children()):
-                UwU.hsplit.replaceWidget(0, UwU.searchy_x3_fwame)
+        if type_ == "fwiwe_manongew":
+            if not (UwU.fwiwe_manongew_fwame in UwU.OwOSpwit.children()):
+                UwU.OwOSpwit.replaceWidget(0, UwU.fwiwe_manongew_fwame)
+        elif type_ == "searchy_x3_icOwOn":
+            if not (UwU.searchy_x3_fwame in UwU.OwOSpwit.children()):
+                UwU.OwOSpwit.replaceWidget(0, UwU.searchy_x3_fwame)
         if UwU.cuwwent_swide_baw == type_:
-            fwame = UwU.hsplit.children()[0]
+            fwame = UwU.OwOSpwit.children()[0]
             if fwame.isHidden():
                 fwame.show()
             else:
