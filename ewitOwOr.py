@@ -3,7 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.Qsci import *
 
-from Funny import *
+from Funny import KEYYWOwOWD_WIST, bUwUiwtin_fOwOnctwions_nyans
 import pkgutil
 from lexer import OwOCustomLexer
 
