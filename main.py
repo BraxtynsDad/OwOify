@@ -22,7 +22,7 @@ class MainWindow(QMainWindow):
 
         # Add before init
         UwU.side_baw_coluwm = "#FFDBE2"
-        UwU.bowdy_fwame_img_x3 = "./css/bk.jpg"
+        UwU.bowdy_fwame_img_x3 = "./Icons/bk.jpg"
         UwU.init_ui()
 
         # File system
