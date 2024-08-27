@@ -30,6 +30,14 @@ QTabBar::close-button {
     image: url("./Icons/close-icon.svg");
 }
 
+QTabBar::close-button:hover {
+    background-color: #D4A5FF;
+}
+
+QTabBar::close-button::selected:hover{
+    background-color: #fac9ff;
+}
+
 QSplitter {
     background-image: url("./Icons/bk.jpg");
 }
