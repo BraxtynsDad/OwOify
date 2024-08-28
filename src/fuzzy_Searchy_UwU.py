@@ -2,7 +2,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtWidgets import QListWidgetItem
 
 import os
-from pathlib import pathlib
+from pathlib import Path
 import re
 
 class Searchy_Iwem_x3(QListWidgetItem):
@@ -65,9 +65,29 @@ class Searchy_WOwOrker(QThread):
                 try: 
                     with open(fUwUll_pathy_x3, 'r', encoding='utf8') as f:
                         try:
-                            
-                except:
-                    pass
+                            regw = re.compile(UwU.searchy_texty, re.IGNORECASE)
+                            for i, line in enumerate(f):
+                                if m := regw.search(line):
+                                    fd = Searchy_Iwem_x3(
+                                        file_,
+                                        fUwUll_pathy_x3,
+                                        i,
+                                        m.end(),
+                                        line[m.start():].strip()[:50], # limiting to 50 char
+                                    )
+                        except re.error as e:
+                            if debug: print(e)
+                except UnicodeDecodeError as e:
+                    if debug: print(e)
+                    continue 
 
-    def run(UwU):
-        ...
+        UwU.finished.emit(UwU.iwems)
+
+    def wun(UwU):
+        UwU.searchy()
+
+    def upwate(UwU, pattewn, pathy, searchy_pwoject):
+        UwU.searchy_texty = pattewn
+        UwU.searchy_pathy = pathy
+        UwU.searchy_prowject = searchy_pwoject
+        UwU.start()

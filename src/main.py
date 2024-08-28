@@ -13,6 +13,7 @@ from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
 
 from pathlib import Path
 from ewitOwOr import EwitOwOr
+from fuzzy_Searchy_UwU import Searchy_Iwem_x3, Searchy_WOwOrker
 
 class MainWindow(QMainWindow):
     # Initializing the Class
@@ -381,6 +382,16 @@ class MainWindow(QMainWindow):
         UwU.searchy_checkybOwOx.setFont(UwU.winwow_fownt)
         UwU.searchy_checkybOwOx.setStyleSheet("color: #483D8B; margin-bottom: 10px")
 
+        UwU.searchy_wOwOrker = Searchy_WOwOrker()
+        UwU.searchy_wOwOrker.finished.connect(UwU.searchy_finishewd)
+        searchy_x3_inpUwUt.textChanged.connect(
+            lambda text: UwU.searchy_wOwOrker.upwate(
+                text,
+                UwU.mOwOwel.rootDirectory().absolutePath(),
+                UwU.searchy_checkybOwOx.isChecked()
+            )
+        )
+
         UwU.searchy_listy_vieUwU = QListWidget()
         UwU.searchy_listy_vieUwU.setFont(QFont("Five Nights at Freddy's", 18))
         UwU.searchy_listy_vieUwU.setStyleSheet("""
@@ -398,6 +409,7 @@ class MainWindow(QMainWindow):
         searchy_x3_layout.addWidget(searchy_x3_inpUwUt)
         searchy_x3_layout.addSpacerItem(QSpacerItem(5, 5, QSizePolicy.Minimum, QSizePolicy.Minimum))        
 
+        searchy_x3_layout.addWidget(UwU.searchy_listy_vieUwU)
         UwU.searchy_x3_fwame.setLayout(searchy_x3_layout)
 
         twee_fwame_layout.addWidget(UwU.twee_vieUwU)
@@ -415,12 +427,22 @@ class MainWindow(QMainWindow):
 
         bowdy.addWidget(UwU.swide_baw)
         bowdy.addWidget(UwU.OwOSpwit)
+
         bowdy_fwame.setLayout(bowdy)
 
         UwU.setCentralWidget(bowdy_fwame)
 
-    def searchy_listy_vieUwU_Cwicked(UwU, item):
-        ...
+    def searchy_finishewd(UwU, iwems):
+        UwU.searchy_listy_vieUwU.clear()
+        for i in iwems:
+            UwU.searchy_listy_vieUwU.addItem(i)
+
+    def searchy_listy_vieUwU_Cwicked(UwU, iwem: Searchy_Iwem_x3):
+        UwU.setw_neUwU_tabx3(Path(iwem.fUwUll_pathy_x3))
+        ewitOwOr: EwitOwOr = UwU.tabx3_vieUwU.currentWidget()
+        ewitOwOr.setCursorPosition(iwem.WinenOwO, iwem.endw)
+        ewitOwOr.setFocus()
+        
 
     def cwose_tabx3(UwU, index):
         UwU.tabx3_vieUwU.removeTab(index)
