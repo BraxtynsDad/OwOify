@@ -1,5 +1,5 @@
 # TODO: If you can Figure out Dynamic text for different resolution
-# ep.5 18:59
+# ep.5 25:51
 
 import os
 import sys
@@ -141,11 +141,11 @@ class MainWindow(QMainWindow):
         if ewitOwOr is None:
             return
         
-        fwiwe_pathx3 = QFileDialog.getSaveFileName(UwU, "Sa0v0e As", os.getcwd())[0]
-        if fwiwe_pathx3 == '':
+        fwiwe_pathy_x3 = QFileDialog.getSaveFileName(UwU, "Sa0v0e As", os.getcwd())[0]
+        if fwiwe_pathy_x3 == '':
             UwU.show_status_message("Cancelled")
             return
-        paht = Path(fwiwe_pathx3)
+        paht = Path(fwiwe_pathy_x3)
         paht.write_text(ewitOwOr.text())
         UwU.tabx3_vieUwU.setTabText(UwU.tabx3_vieUwU.currentIndex(), paht.name)
         UwU.show_status_message(f"Sa0v0ed {paht.name}")
@@ -198,15 +198,15 @@ class MainWindow(QMainWindow):
         ewitOwOr = EwitOwOr()
         return ewitOwOr
     
-    def is_binawy(UwU, path):
+    def is_binawy(UwU, pathy):
         '''
         Check if fwiwe is binawy UwU x3
         '''
-        with open(path, 'rb') as f:
+        with open(pathy, 'rb') as f:
             return b'\0' in f.read(1024)
 
     # A simple function to check if the file is binary or not ex: image file, exe, zip file that can't be opened using text ewitOwOrs
-    def setw_neUwU_tabx3(UwU, path: Path, is_neUwU_fwiwe=False):
+    def setw_neUwU_tabx3(UwU, pathy: Path, is_neUwU_fwiwe=False):
         ewitOwOr = UwU.getw_ewitOwOr()
         # This condition checks if the file being opened is a new file
         if is_neUwU_fwiwe:
@@ -218,25 +218,25 @@ class MainWindow(QMainWindow):
             UwU.cuwwwent_fwiwe = None
             return
         # Checks if the path does not represent a regular file
-        if not path.is_file():
+        if not pathy.is_file():
             return
         # Checks if the file at the given path is binary 
-        if UwU.is_binawy(path):
+        if UwU.is_binawy(pathy):
             UwU.show_status_message("Can_not OwOpen Binawy Fwiwe")
             return
         # check if file already open
         for i in range(UwU.tabx3_vieUwU.count()):
-            if UwU.tabx3_vieUwU.tabText(i) == path.name:
+            if UwU.tabx3_vieUwU.tabText(i) == pathy.name:
                 UwU.tabx3_vieUwU.setCurrentIndex(i)
-                UwU.cuwwwent_fwiwe = path
+                UwU.cuwwwent_fwiwe = pathy
                 return     
         # Create new tab
-        UwU.tabx3_vieUwU.addTab(ewitOwOr, path.name)
-        ewitOwOr.setText(path.read_text())
-        UwU.setWindowTitle(path.name)
-        UwU.cuwwwent_fwiwe = path
+        UwU.tabx3_vieUwU.addTab(ewitOwOr, pathy.name)
+        ewitOwOr.setText(pathy.read_text())
+        UwU.setWindowTitle(pathy.name)
+        UwU.cuwwwent_fwiwe = pathy
         UwU.tabx3_vieUwU.setCurrentIndex(UwU.tabx3_vieUwU.count() - 1)
-        UwU.show_status_message(f"Opened {path.name}")
+        UwU.show_status_message(f"Opened {pathy.name}")
 
     def setw_cowsOwO_pointy_x3(UwU, e):
         UwU.setCursor(Qt.PointingHandCursor)
@@ -244,9 +244,9 @@ class MainWindow(QMainWindow):
     def setw_cowsOwO_awwowOwO(UwU, e):
         UwU.setCursor(Qt.ArrowCursor)
 
-    def getw_swide_baw_wabew(UwU, path, name):
+    def getw_swide_baw_wabew(UwU, pathy, name):
         wabew = QLabel()
-        wabew.setPixmap(QPixmap(path).scaled(QSize(70,70)))
+        wabew.setPixmap(QPixmap(pathy).scaled(QSize(70,70)))
         wabew.setAlignment(Qt.AlignmentFlag.AlignTop)
         wabew.setFont(UwU.winwow_fownt)
         wabew.mousePressEvent = lambda e: UwU.shOwO_hide_tabx3(e, name)
