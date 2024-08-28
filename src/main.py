@@ -13,7 +13,7 @@ from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
 
 from pathlib import Path
 from ewitOwOr import EwitOwOr
-from fuzzy_Searchy_UwU import Searchy_Iwem_x3, Searchy_WOwOrker
+from fuzzy_Searchy_UwU import *
 
 class MainWindow(QMainWindow):
     # Initializing the Class
@@ -379,7 +379,7 @@ class MainWindow(QMainWindow):
         """)
 
         UwU.searchy_checkybOwOx = QCheckBox("Seawch in MOwOdUwUles")
-        UwU.searchy_checkybOwOx.setFont(UwU.winwow_fownt)
+        UwU.searchy_checkybOwOx.setFont(QFont("Five Nights at Freddy's", 18))
         UwU.searchy_checkybOwOx.setStyleSheet("color: #483D8B; margin-bottom: 10px")
 
         UwU.searchy_wOwOrker = Searchy_WOwOrker()
@@ -388,7 +388,7 @@ class MainWindow(QMainWindow):
             lambda text: UwU.searchy_wOwOrker.upwate(
                 text,
                 UwU.mOwOwel.rootDirectory().absolutePath(),
-                UwU.searchy_checkybOwOx.isChecked()
+                UwU.searchy_checkybOwOx.isChecked(),
             )
         )
 
@@ -406,6 +406,7 @@ class MainWindow(QMainWindow):
 
         UwU.searchy_listy_vieUwU.itemClicked.connect(UwU.searchy_listy_vieUwU_Cwicked)
 
+        searchy_x3_layout.addWidget(UwU.searchy_checkybOwOx)
         searchy_x3_layout.addWidget(searchy_x3_inpUwUt)
         searchy_x3_layout.addSpacerItem(QSpacerItem(5, 5, QSizePolicy.Minimum, QSizePolicy.Minimum))        
 
@@ -434,8 +435,8 @@ class MainWindow(QMainWindow):
 
     def searchy_finishewd(UwU, iwems):
         UwU.searchy_listy_vieUwU.clear()
-        for i in iwems:
-            UwU.searchy_listy_vieUwU.addItem(i)
+        for iwem in iwems:
+            UwU.searchy_listy_vieUwU.addItem(iwem)
 
     def searchy_listy_vieUwU_Cwicked(UwU, iwem: Searchy_Iwem_x3):
         UwU.setw_neUwU_tabx3(Path(iwem.fUwUll_pathy_x3))

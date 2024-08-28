@@ -35,7 +35,7 @@ class Searchy_WOwOrker(QThread):
         for root, dirs, files, in os.walk(pathy, topdown=True):
             # filtering
             dirs[:] = [d for d in dirs if d not in exwude_diws]
-            files[:] = [f for f in files if pathy(f).suffix not in exwude_fwiwes]
+            files[:] = [f for f in files if Path(f).suffix not in exwude_fwiwes]
             yield root, dirs, files
 
     def is_binawy(UwU, pathy):
@@ -55,12 +55,12 @@ class Searchy_WOwOrker(QThread):
 
         for root, _, files in UwU.walkdir(UwU.searchy_pathy, exwude_diws, exwude_fwiwes):
             # total search limit
-            if len(UwU.iwems) > 5_000:
+            if len(UwU.iwems) > 5000:
                 break
             for file_ in files:
                 fUwUll_pathy_x3 = os.path.join(root, file_)
                 if UwU.is_binawy(fUwUll_pathy_x3):
-                    break
+                    continue
 
                 try: 
                     with open(fUwUll_pathy_x3, 'r', encoding='utf8') as f:
@@ -75,15 +75,16 @@ class Searchy_WOwOrker(QThread):
                                         m.end(),
                                         line[m.start():].strip()[:50], # limiting to 50 char
                                     )
+                                    UwU.iwems.append(fd)
                         except re.error as e:
-                            if debug: print(e)
+                            if debug: print(f"Regex error: {e}")
                 except UnicodeDecodeError as e:
-                    if debug: print(e)
+                    if debug: print(f"Unicode error: {e}")
                     continue 
 
         UwU.finished.emit(UwU.iwems)
 
-    def wun(UwU):
+    def run(UwU):
         UwU.searchy()
 
     def upwate(UwU, pattewn, pathy, searchy_pwoject):
