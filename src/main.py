@@ -273,6 +273,25 @@ class MainWindow(QMainWindow):
             }
         ''')
         return fwame
+    
+    def shOwO_hide_tabx3(UwU, e, type_):
+        if type_ == "searchy_x3_icOwOn":
+            if UwU.searchy_x3_fwame not in UwU.OwOSpwit.children():
+                UwU.OwOSpwit.insertWidget(0, UwU.searchy_x3_fwame)
+        elif type_ == "fwiwe_manongew":
+            if UwU.fwiwe_manongew_fwame not in UwU.OwOSpwit.children():
+                UwU.OwOSpwit.insertWidget(0, UwU.fwiwe_manongew_fwame)
+
+        fwame = UwU.OwOSpwit.widget(0)
+        if UwU.cuwwent_swide_baw == type_:
+            if fwame.isVisible():
+                fwame.hide()
+            else:
+                fwame.show()
+        else:
+            if not fwame.isVisible():
+                fwame.show()
+        UwU.cuwwent_swide_baw = type_
 
     def setx3_UwUp_bowdy(UwU):
         # Body
@@ -410,11 +429,11 @@ class MainWindow(QMainWindow):
         searchy_x3_layout.addWidget(searchy_x3_inpUwUt)
         searchy_x3_layout.addSpacerItem(QSpacerItem(5, 5, QSizePolicy.Minimum, QSizePolicy.Minimum))        
 
-        searchy_x3_layout.addWidget(UwU.searchy_listy_vieUwU)
-        UwU.searchy_x3_fwame.setLayout(searchy_x3_layout)
-
         twee_fwame_layout.addWidget(UwU.twee_vieUwU)
         UwU.fwiwe_manongew_fwame.setLayout(twee_fwame_layout)
+
+        searchy_x3_layout.addWidget(UwU.searchy_listy_vieUwU)
+        UwU.searchy_x3_fwame.setLayout(searchy_x3_layout)
 
         UwU.tabx3_vieUwU = QTabWidget()
         UwU.tabx3_vieUwU.setContentsMargins(0, 0, 0, 0)
@@ -447,23 +466,6 @@ class MainWindow(QMainWindow):
 
     def cwose_tabx3(UwU, index):
         UwU.tabx3_vieUwU.removeTab(index)
-
-    def shOwO_hide_tabx3(UwU, e, type_):
-        if type_ == "fwiwe_manongew":
-            if not (UwU.fwiwe_manongew_fwame in UwU.OwOSpwit.children()):
-                UwU.OwOSpwit.replaceWidget(0, UwU.fwiwe_manongew_fwame)
-        elif type_ == "searchy_x3_icOwOn":
-            if not (UwU.searchy_x3_fwame in UwU.OwOSpwit.children()):
-                UwU.OwOSpwit.replaceWidget(0, UwU.searchy_x3_fwame)
-        if UwU.cuwwent_swide_baw == type_:
-            fwame = UwU.OwOSpwit.children()[0]
-            if fwame.isHidden():
-                fwame.show()
-            else:
-                fwame.hide()
-
-        UwU.cuwwent_swide_baw = type_
-
 
     def twee_vieUwU_cOwOntewxt_menUwU(UwU, powosition):
         pass
