@@ -5,12 +5,19 @@ from PyQt5.Qsci import *
 
 from Funny import KEYYWOwOWD_WIST, bUwUiwtin_fOwOnctwions_nyans
 import pkgutil
+from pathlib import Path
 from lexer import OwOCustomLexer
+from autOwOcompwetew import AutOwOCompwetew
 
 class EwitOwOr(QsciScintilla):
 
-    def __init__(UwU, parent=None):
+    def __init__(UwU, parent=None, pathy: Path = None, is_pytOwOn_fwiwe=True):
         super(EwitOwOr, UwU).__init__(parent)
+        UwU.pathy = pathy
+        UwU.fUwUll_pathy = UwU.pathy.absolute()
+        UwU.is_pytOwOn_fwiwe = is_pytOwOn_fwiwe
+
+        UwU.cursorPositionChanged.connect(UwU.cursorPositionChanged)
 
         palette = UwU.palette()
         palette.setColor(UwU.backgroundRole(), QColor('#FF7272'))
@@ -24,18 +31,19 @@ class EwitOwOr(QsciScintilla):
         UwU.winwow_fownt.setPointSize(18)
         UwU.setFont(UwU.winwow_fownt)
 
-        # Lexer for syntax highlighting 
-        UwU.OwOLexer = OwOCustomLexer(UwU)
-        UwU.OwOLexer.setDefaultFont(QFont(UwU.winwow_fownt))
+        if UwU.is_pytOwOn_fwiwe:
+            # Lexer for syntax highlighting 
+            UwU.OwOLexer = OwOCustomLexer(UwU)
+            UwU.OwOLexer.setDefaultFont(QFont(UwU.winwow_fownt))
 
-        # Api (you can add autocompletion using this)
-        UwU.API = QsciAPIs(UwU.OwOLexer)
-        for kys in KEYYWOwOWD_WIST + bUwUiwtin_fOwOnctwions_nyans:
-            UwU.API.add(kys)
+            UwU.__api = QsciAPIs(UwU.OwOLexer)
 
-        UwU.API.prepare()
+            UwU.autOwO_compwetew = AutOwOCompwetew(UwU.fUwUll_pathy, UwU.__api)
+            UwU.autOwO_compwetew.finished.connect(UwU.lOwOad_autOwOcompwete) # !
 
-        UwU.setLexer(UwU.OwOLexer)
+            UwU.setLexer(UwU.OwOLexer)
+        else:
+            UwU.setPaper(QColor("#FFEBEE"))
 
         # Brace Matching
         UwU.setBraceMatching(QsciScintilla.SloppyBraceMatch)
