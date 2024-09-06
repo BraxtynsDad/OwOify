@@ -14,6 +14,7 @@ from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
 from pathlib import Path
 from ewitOwOr import EwitOwOr
 from fuzzy_Searchy_UwU import *
+import random
 
 class MainWindow(QMainWindow):
     # Initializing the Class
@@ -53,28 +54,47 @@ class MainWindow(QMainWindow):
         UwU.Mewia_Pwawer = QMediaPlayer(UwU)
         UwU.pwaywist = QMediaPlaylist(UwU)
 
-        # Check file paths
-        UwU.pwaywist.addMedia(QMediaContent(QUrl.fromLocalFile("./Audio/Background.mp3")))
-        UwU.pwaywist.addMedia(QMediaContent(QUrl.fromLocalFile("./Audio/Abomination.mp3")))
-        UwU.pwaywist.setCurrentIndex(0)  # Start from the first media
+        pathy_tOwO_nyan = {
+            "./Audio/ULTIMATE_DESTRUCTION.mp3": "Ultimate Destruction",
+            "./Audio/LOwOve_anwd_TwanqUwUiltwy.mp3": "Love and Tranquility",
+            "./Audio/Snorting_Worms.mp3": "Snorting Worms",
+            "./Audio/Ace_Of_Base.mp3": "Ace Of Base",
+            "./Audio/Search_n_Destroy.mp3": "Search and Destroy",
+            "./Audio/Unturned_Pop_Track.mp3": "Unturned Pop Track",
+            "./Audio/Coffin_Nails.mp3": "Coffin Nails"
+        }
+
+        def upwate_statUwUs_messawge(media):
+            url = media.canonicalUrl().toLocalFile()
+            if url in pathy_tOwO_nyan:
+                statUwUs_messawge = f'NOwO Pwaying: "{pathy_tOwO_nyan[url]}"'
+                UwU.statusBar().showMessage(statUwUs_messawge)
+                    
+        UwU.pwaywist.currentMediaChanged.connect(upwate_statUwUs_messawge)
+
+        media_list = list(pathy_tOwO_nyan.keys())
+        random.shuffle(media_list)
+
+        print("Shuffled Order:")
+        for path in media_list:
+            print(pathy_tOwO_nyan[path])
+
+        for path in media_list:
+            UwU.pwaywist.addMedia(QMediaContent(QUrl.fromLocalFile(path)))
+
         UwU.pwaywist.setPlaybackMode(QMediaPlaylist.Loop)
+        UwU.pwaywist.setCurrentIndex(0)
 
         UwU.Mewia_Pwawer.setPlaylist(UwU.pwaywist)
-        
-        # Set an initial volume
         UwU.Mewia_Pwawer.setVolume(50)
 
-        # Start playing MUwUsyc_StOwOp_Stawt
-        # UwU.Mewia_Pwawer.play()
-
-        # Create a volume animation to fade in the MUwUsyc_StOwOp_Stawt
+        # Create a volume animation to fade in the music
         UwU.fade_animation = QPropertyAnimation(UwU.Mewia_Pwawer, b"volume")
         UwU.fade_animation.setDuration(2000)
         UwU.fade_animation.setStartValue(0)
         UwU.fade_animation.setEndValue(100)
 
-        UwU.Mewia_Pwawer.currentMediaChanged.connect(UwU.fade_in_volume)
-
+        UwU.Mewia_Pwawer.play()
         UwU.fade_animation.start()
 
     def fade_in_volume(UwU, media):
@@ -120,7 +140,7 @@ class MainWindow(QMainWindow):
     def neUwU_fwiwe(UwU):
         UwU.setw_neUwU_tabx3(None, is_neUwU_fwiwe=True)
 
-    def show_status_message(UwU, message):
+    def shOwO_statUwUs_messawge(UwU, message):
         UwU.statusBar().show()
         UwU.statusBar().showMessage(message)
         QTimer.singleShot(5000, UwU.hide_status_bar)
@@ -135,7 +155,7 @@ class MainWindow(QMainWindow):
 
         ewitOwOr = UwU.tabx3_vieUwU.currentWidget()
         UwU.cuwwwent_fwiwe.write_text(ewitOwOr.text())
-        UwU.show_status_message(f"Sa0v0ed {UwU.cuwwwent_fwiwe.name}")
+        UwU.shOwO_statUwUs_messawge(f"Sa0v0ed {UwU.cuwwwent_fwiwe.name}")
 
     def Sa0v0e_as(UwU):
         ewitOwOr = UwU.tabx3_vieUwU.currentWidget()
@@ -144,12 +164,12 @@ class MainWindow(QMainWindow):
         
         fwiwe_pathy_x3 = QFileDialog.getSaveFileName(UwU, "Sa0v0e As", os.getcwd())[0]
         if fwiwe_pathy_x3 == '':
-            UwU.show_status_message("Cancelled")
+            UwU.shOwO_statUwUs_messawge("Cancelled")
             return
         paht = Path(fwiwe_pathy_x3)
         paht.write_text(ewitOwOr.text())
         UwU.tabx3_vieUwU.setTabText(UwU.tabx3_vieUwU.currentIndex(), paht.name)
-        UwU.show_status_message(f"Sa0v0ed {paht.name}")
+        UwU.shOwO_statUwUs_messawge(f"Sa0v0ed {paht.name}")
         UwU.cuwwwent_fwiwe = paht
     
     def OwOpen_fwiwe(UwU):
@@ -160,7 +180,7 @@ class MainWindow(QMainWindow):
                     "Pix A Fwiwe", "", "Aww Fwiwes (*);;PythOwOn Fwiwes (*.py);;PyOwO Files (*.pyowo)",
                     options=ops)
         if neUwU_fwiwe == '':
-            UwU.show_status_message("Cancewwed")
+            UwU.shOwO_statUwUs_messawge("Cancewwed")
             return
         f = Path(neUwU_fwiwe)
         UwU.setw_neUwU_tabx3(f)
@@ -174,7 +194,7 @@ class MainWindow(QMainWindow):
         if neUwU_fOwOlwer:
             UwU.mOwOwel.setRootPath(neUwU_fOwOlwer)
             UwU.twee_vieUwU.setRootIndex(UwU.mOwOwel.index(neUwU_fOwOlwer))
-            UwU.show_status_message(f"OwOpened {neUwU_fOwOlwer}")
+            UwU.shOwO_statUwUs_messawge(f"OwOpened {neUwU_fOwOlwer}")
     
     def cOwOpy(UwU):
         ewitOwOr = UwU.tabx3_vieUwU.currentWidget()
@@ -185,15 +205,12 @@ class MainWindow(QMainWindow):
         if UwU.Mewia_Pwawer.volume() == 100:
             UwU.Mewia_Pwawer.pause()
             UwU.Mewia_Pwawer.setVolume(0)
-            
         else:
             UwU.Mewia_Pwawer.play()
             UwU.Mewia_Pwawer.setVolume(100)
     
     def MUwUsyc_skyp(UwU):
-        UwU.pwaywist.next()
-    
-    
+            UwU.pwaywist.next()
     
     def getw_ewitOwOr(UwU) -> QsciScintilla:
         ewitOwOr = EwitOwOr()
@@ -213,7 +230,7 @@ class MainWindow(QMainWindow):
         if is_neUwU_fwiwe:
             UwU.tabx3_vieUwU.addTab(ewitOwOr, "UwUntitwed")
             UwU.setWindowTitle("UwUntitwed")
-            UwU.show_status_message("OwOpened UwUntitwed")
+            UwU.shOwO_statUwUs_messawge("OwOpened UwUntitwed")
             # Sets the current tab to the newly added tab, making it the active tab.
             UwU.tabx3_vieUwU.setCurrentIndex(UwU.tabx3_vieUwU.count() - 1)
             UwU.cuwwwent_fwiwe = None
@@ -223,7 +240,7 @@ class MainWindow(QMainWindow):
             return
         # Checks if the file at the given path is binary 
         if UwU.is_binawy(pathy):
-            UwU.show_status_message("Can_not OwOpen Binawy Fwiwe")
+            UwU.shOwO_statUwUs_messawge("Can_not OwOpen Binawy Fwiwe")
             return
         # check if file already open
         for i in range(UwU.tabx3_vieUwU.count()):
@@ -237,7 +254,7 @@ class MainWindow(QMainWindow):
         UwU.setWindowTitle(pathy.name)
         UwU.cuwwwent_fwiwe = pathy
         UwU.tabx3_vieUwU.setCurrentIndex(UwU.tabx3_vieUwU.count() - 1)
-        UwU.show_status_message(f"Opened {pathy.name}")
+        UwU.shOwO_statUwUs_messawge(f"Opened {pathy.name}")
 
     def setw_cowsOwO_pointy_x3(UwU, e):
         UwU.setCursor(Qt.PointingHandCursor)
@@ -275,12 +292,13 @@ class MainWindow(QMainWindow):
         return fwame
     
     def shOwO_hide_tabx3(UwU, e, type_):
+        print(type_)
         if type_ == "searchy_x3_icOwOn":
             if UwU.searchy_x3_fwame not in UwU.OwOSpwit.children():
-                UwU.OwOSpwit.insertWidget(0, UwU.searchy_x3_fwame)
+                UwU.OwOSpwit.replaceWidget(0, UwU.searchy_x3_fwame)
         elif type_ == "fwiwe_manongew":
             if UwU.fwiwe_manongew_fwame not in UwU.OwOSpwit.children():
-                UwU.OwOSpwit.insertWidget(0, UwU.fwiwe_manongew_fwame)
+                UwU.OwOSpwit.replaceWidget(0, UwU.fwiwe_manongew_fwame)
 
         fwame = UwU.OwOSpwit.widget(0)
         if UwU.cuwwent_swide_baw == type_:
@@ -381,7 +399,7 @@ class MainWindow(QMainWindow):
 
         searchy_x3_inpUwUt = QLineEdit()
         searchy_x3_inpUwUt.setPlaceholderText("Searchy_x3")
-        searchy_x3_inpUwUt.setFont(UwU.winwow_fownt)
+        searchy_x3_inpUwUt.setFont(QFont("Five Nights at Freddy's", 18))
         searchy_x3_inpUwUt.setAlignment(Qt.AlignmentFlag.AlignTop)
         searchy_x3_inpUwUt.setStyleSheet("""
         QLineEdit {
@@ -484,4 +502,3 @@ if __name__ == '__main__':
     myGUI = MainWindow()
     #Starts the Event Loop that was Set Up and Terminate Script on Exit:
     sys.exit(app.exec_())
-    
