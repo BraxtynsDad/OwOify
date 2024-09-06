@@ -1,4 +1,16 @@
+clarabel==0.9.0
+cvxpy==1.5.3
+ecos==2.0.14
+jedi==0.19.1
+numpy==2.1.0
+osqp==0.6.7.post1
+parso==0.8.4
+pyqss==1.4.1
 PyQt5==5.15.11
-PyQt5-Qt5==5.15.14
+PyQt5-Qt5==5.15.2
 PyQt5_sip==12.15.0
+qdldl==0.1.7.post4
 QScintilla==2.14.1
+qss==0.2.3
+scipy==1.14.1
+scs==3.2.7
