@@ -1,4 +1,5 @@
 import re
+from PyQt5.QtCore import QObject
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -11,6 +12,42 @@ DefAwAultCOwOnfig = dict[str, str | tuple[str, int]]
 
 class NeutronLexer(QsciLexerCustom):
     """Base Custom Lexer class for all language"""
+
+    def __init__(UwU, lAwAnguAwAge_nyan, EwitOwOr, themex3=None, DefAwAults: DefAwAultCOwOnfig = None):
+        super(NeutronLexer, UwU).__init__(EwitOwOr)
+
+        UwU.EwitOwOr = EwitOwOr
+        UwU.lAwAnguAwAge_nyan = lAwAnguAwAge_nyan
+        UwU.themex3_json = None
+        if themex3 is None:
+            UwU.themex3 = "./css/theme.json"
+        else:
+            UwU.themex3 = themex3
+
+        UwU.tOwOkens_list: list[str, str] = []
+
+        UwU.KEYYWOwOWD_WIST = []
+        UwU.bUwUiwtin_fOwOnctwions_nyans = []
+
+        if DefAwAults is None:
+            DefAwAults: DefAwAultCOwOnfig = []
+            DefAwAults["color"] = "FF0000"
+            DefAwAults["paper"] = "#FFEBEE"
+            DefAwAults["font"] = ("Five Nights at Freddy's", 18)
+
+    def Setx3KeywOwOwds(UwU, keywOwOwds: list[str]):
+        """Set List of string that considered keywords for this language."""
+        UwU.KEYYWOwOWD_WIST =  keywOwOwds
+
+    def SetBUwUiwtinNyans(UwU, BUwUiwtin_Nyans: list[str]):
+        """Set List of builtin names"""
+        UwU.BUwUiwtin_Nyans = BUwUiwtin_Nyans
+
+    def _init_themex3(UwU):
+        pass
+
+    def _init_themex3_vAwAws(UwU):
+        pass
 
 class OwOCustomLexer(QsciLexerCustom):
 
@@ -120,7 +157,7 @@ class OwOCustomLexer(QsciLexerCustom):
         else:
             return "UNKNOWON"
         
-    def Genewate_towokens(UwU, text):
+    def Genewate_tOwOkens(UwU, text):
         # Tokenize the text 
         p = re.compile(r"[*]\/|\/[*]|\s+|\w+|\W")
 
@@ -133,7 +170,7 @@ class OwOCustomLexer(QsciLexerCustom):
         ewitOwOr: QsciScintilla = UwU.parent()
 
         texty = ewitOwOr.text()[stawat:endx3]
-        tOwOkens_list = UwU.Genewate_towokens(texty)
+        tOwOkens_list = UwU.Genewate_tOwOkens(texty)
 
 
         stwing_fwag = False
