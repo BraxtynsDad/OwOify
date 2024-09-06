@@ -2,11 +2,15 @@ import re
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+import json
 
 from PyQt5.Qsci import QsciLexerCustom, QsciScintilla
 from Funny import *
-import types
-import builtins
+
+DefAwAultCOwOnfig = dict[str, str | tuple[str, int]]
+
+class NeutronLexer(QsciLexerCustom):
+    """Base Custom Lexer class for all language"""
 
 class OwOCustomLexer(QsciLexerCustom):
 
