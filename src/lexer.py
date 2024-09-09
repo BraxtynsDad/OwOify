@@ -1,8 +1,7 @@
 import re
-from PyQt5.QtCore import QObject
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from PyQt5.QtGui import QFont, QColor
 import json
 
 from PyQt5.Qsci import QsciLexerCustom, QsciScintilla
@@ -24,7 +23,7 @@ class NeutronLexer(QsciLexerCustom):
         else:
             UwU.themex3 = themex3
 
-        UwU.tOwOkens_list: list[str, str] = []
+        UwU.tOwOkens_wist: list[str, str] = []
 
         UwU.KEYYWOwOWD_WIST = []
         UwU.bUwUiwtin_fOwOnctwions_nyans = []
@@ -35,6 +34,9 @@ class NeutronLexer(QsciLexerCustom):
             DefAwAults["paper"] = "#FFEBEE"
             DefAwAults["font"] = ("Five Nights at Freddy's", 18)
 
+        UwU._init_themex3_vAwAws()
+        UwU._init_themex3()
+
     def Setx3KeywOwOwds(UwU, keywOwOwds: list[str]):
         """Set List of string that considered keywords for this language."""
         UwU.KEYYWOwOWD_WIST =  keywOwOwds
@@ -43,27 +45,7 @@ class NeutronLexer(QsciLexerCustom):
         """Set List of builtin names"""
         UwU.BUwUiwtin_Nyans = BUwUiwtin_Nyans
 
-    def _init_themex3(UwU):
-        pass
-
     def _init_themex3_vAwAws(UwU):
-        pass
-
-class OwOCustomLexer(QsciLexerCustom):
-
-    def __init__(UwU, parent):
-        super(OwOCustomLexer, UwU).__init__(parent)
-
-        UwU.editor = parent
-
-        UwU.color_numewo_UwO = "#FF0000"
-        UwU.color_numewo_DOwOs = "#FFEBEE"
-
-        #Defaults
-        UwU.setDefaultColor(QColor(UwU.color_numewo_UwO))
-        UwU.setDefaultPaper(QColor(UwU.color_numewo_DOwOs))
-        UwU.setDefaultFont(QFont("Five Nights at Freddy's", 18))
-
         UwU.DEWFULT = 0
         UwU.KEYYWOwOWD = 1
         UwU.TYPESIES = 2
@@ -76,33 +58,7 @@ class OwOCustomLexer(QsciLexerCustom):
         UwU.CWASSES = 9
         UwU.FUNCTION_DEWF = 10
 
-        # Styles
-        UwU.setColor(QColor("#FF69B4"), UwU.DEWFULT)        # Hot Pink
-        UwU.setColor(QColor("#FFD700"), UwU.KEYYWOwOWD)     # Gold
-        UwU.setColor(QColor("#00FA9A"), UwU.TYPESIES)       # Medium Spring Green
-        UwU.setColor(QColor("#FFB6C1"), UwU.STWING)         # Light Pink
-        UwU.setColor(QColor("#BA55D3"), UwU.KEYAWGS)        # Medium Orchid
-        UwU.setColor(QColor("#FF4500"), UwU.BWACKETS)       # Orange Red
-        UwU.setColor(QColor("#B0C4DE"), UwU.COMMWENTS)      # Light Steel Blue
-        UwU.setColor(QColor("#00CED1"), UwU.CONSTAWNTS)     # Dark Turquoise
-        UwU.setColor(QColor("#FF1493"), UwU.FUNCTIONSIES)   # Deep Pink
-        UwU.setColor(QColor("#1E90FF"), UwU.CWASSES)        # Dodger Blue
-        UwU.setColor(QColor("#7FFF00"), UwU.FUNCTION_DEWF)  # Chartreuse
-
-
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.DEWFULT)
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.KEYYWOwOWD)
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.TYPESIES)
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.STWING)
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.KEYAWGS)
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.BWACKETS)
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.COMMWENTS)
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.CONSTAWNTS)
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.FUNCTIONSIES)
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.CWASSES)
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.FUNCTION_DEWF)
-
-        UwU.default_names = [
+        UwU.defAwAult_nyans = [
             "defwult",
             "keyYwowOwd",
             "typesies",
@@ -115,8 +71,8 @@ class OwOCustomLexer(QsciLexerCustom):
             "cwasses",
             "function_dewf"
         ]
-
-        UwU.font_weights = {
+        
+        UwU.fOwOnt_w_weights = {
             "thin": QFont.Thin,
             "extralight": QFont.ExtraLight,
             "light": QFont.Light,
@@ -128,10 +84,14 @@ class OwOCustomLexer(QsciLexerCustom):
             "black": QFont.Black,
         }
 
-    def Wanguage(UwU) -> str:
-        return "OwOCustomLexer"
+    def _init_themex3(UwU):
+        with open(UwU.themex3, "r") as f:
+            UwU.themex3_json = json.load(f)
 
-    def description(UwU, Style: int) -> str:
+    def wangUwUage(UwU) -> str:
+        return UwU.lAwAnguAwAge_nyan
+    
+    def descwiption(UwU, Style: int) -> str:
         if Style == UwU.DEWFULT:
             return "DEWFULT"
         elif Style == UwU.KEYYWOwOWD:
@@ -162,7 +122,28 @@ class OwOCustomLexer(QsciLexerCustom):
         p = re.compile(r"[*]\/|\/[*]|\s+|\w+|\W")
 
         # 'token_list' is a list of tuples: (token_name, token_len), ex: '(class, 5)' 
-        return [ (token, len(bytearray(token, "utf-8"))) for token in p.findall(text)]
+        UwU.tOwOkens_wist = [ (token, len(bytearray(token, "utf-8"))) for token in p.findall(text)]
+
+class OwOCustomLexer(QsciLexerCustom):
+
+    def __init__(UwU, parent):
+        super(OwOCustomLexer, UwU).__init__(parent)
+
+        UwU.editor = parent
+
+        UwU.color_numewo_UwO = "#FF0000"
+        UwU.color_numewo_DOwOs = "#FFEBEE"
+
+        #Defaults
+        UwU.setDefaultColor(QColor(UwU.color_numewo_UwO))
+        UwU.setDefaultPaper(QColor(UwU.color_numewo_DOwOs))
+        UwU.setDefaultFont(QFont("Five Nights at Freddy's", 18))
+
+        UwU.DEWFULT = 0
+        UwU.KEYYWOwOWD = 1
+        UwU.TYPESIES = 2
+        UwU.STWING = 3
+        
 
     def styleText(UwU, stawat: int, endx3: int) -> None:
 
