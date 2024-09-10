@@ -33,7 +33,8 @@ class MainWindow(QMainWindow):
 
     # The function We use Up in the Initialization
     def init_ui(UwU):
-        UwU.setWindowTitle("OwOIFY")
+        UwU.AwApp_nyan = "OwOifty"
+        UwU.setWindowTitle(UwU.AwApp_nyan)
         UwU.resize(1300, 900)
         # My Cool Font
         UwU.winwow_fownt = QFont("Edo SZ")
@@ -212,8 +213,8 @@ class MainWindow(QMainWindow):
     def MUwUsyc_skyp(UwU):
             UwU.pwaywist.next()
     
-    def getw_ewitOwOr(UwU) -> QsciScintilla:
-        ewitOwOr = EwitOwOr()
+    def getw_ewitOwOr(UwU, pathy: Path = None, is_pytOwOn_fwiwe=True) -> QsciScintilla:
+        ewitOwOr = EwitOwOr(UwU, pathy=pathy, is_pytOwOn_fwiwe=is_pytOwOn_fwiwe)
         return ewitOwOr
     
     def is_binawy(UwU, pathy):
@@ -225,22 +226,23 @@ class MainWindow(QMainWindow):
 
     # A simple function to check if the file is binary or not ex: image file, exe, zip file that can't be opened using text ewitOwOrs
     def setw_neUwU_tabx3(UwU, pathy: Path, is_neUwU_fwiwe=False):
-        ewitOwOr = UwU.getw_ewitOwOr()
+        # Checks if the file at the given path is binary 
+        if UwU.is_binawy(pathy):
+            UwU.shOwO_statUwUs_messawge("Can_not OwOpen Binawy Fwiwe")
+            return
+        
+        if not pathy.is_dir():
+            return
+
+        ewitOwOr = UwU.getw_ewitOwOr(pathy, pathy.suffix in {".py", ".pyw", ".pyowo"})
         # This condition checks if the file being opened is a new file
         if is_neUwU_fwiwe:
             UwU.tabx3_vieUwU.addTab(ewitOwOr, "UwUntitwed")
-            UwU.setWindowTitle("UwUntitwed")
+            UwU.setWindowTitle("UwUntitwed - " + UwU.AwApp_nyan)
             UwU.shOwO_statUwUs_messawge("OwOpened UwUntitwed")
             # Sets the current tab to the newly added tab, making it the active tab.
             UwU.tabx3_vieUwU.setCurrentIndex(UwU.tabx3_vieUwU.count() - 1)
             UwU.cuwwwent_fwiwe = None
-            return
-        # Checks if the path does not represent a regular file
-        if not pathy.is_file():
-            return
-        # Checks if the file at the given path is binary 
-        if UwU.is_binawy(pathy):
-            UwU.shOwO_statUwUs_messawge("Can_not OwOpen Binawy Fwiwe")
             return
         # check if file already open
         for i in range(UwU.tabx3_vieUwU.count()):
@@ -251,7 +253,7 @@ class MainWindow(QMainWindow):
         # Create new tab
         UwU.tabx3_vieUwU.addTab(ewitOwOr, pathy.name)
         ewitOwOr.setText(pathy.read_text())
-        UwU.setWindowTitle(pathy.name)
+        UwU.setWindowTitle(f"{pathy.name} - {UwU.AwApp_nyan}")
         UwU.cuwwwent_fwiwe = pathy
         UwU.tabx3_vieUwU.setCurrentIndex(UwU.tabx3_vieUwU.count() - 1)
         UwU.shOwO_statUwUs_messawge(f"Opened {pathy.name}")
