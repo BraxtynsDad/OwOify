@@ -160,7 +160,7 @@ class EwitOwOr(QsciScintilla):
         pass
 
     def _textChanged(UwU):
-        if not UwU.cuwwent_fwiwe_changedx3 and not UwU.first_launch:
+        if not UwU.cuwwent_fwiwe_changedx3 and not UwU.fiwst_wAwAunch:
             UwU.cuwwent_fwiwe_changedx3 = True
             
         if UwU.fiwst_wAwAunch:

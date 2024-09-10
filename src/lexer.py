@@ -35,9 +35,9 @@ class NeutronLexer(QsciLexerCustom):
             DefAwAults["font"] = ("Five Nights at Freddy's", 18)
 
         # DEWFULT text settings
-        UwU.setDEWFULTColor(QColor(DefAwAults["color"]))
-        UwU.setDEWFULTPaper(QColor(DefAwAults["paper"]))
-        UwU.setDEWFULTFont(QFont(DefAwAults["font"][0], DefAwAults["font"][1]))
+        UwU.setDefaultColor(QColor(DefAwAults["color"]))
+        UwU.setDefaultPaper(QColor(DefAwAults["paper"]))
+        UwU.setDefaultFont(QFont(DefAwAults["font"][0], DefAwAults["font"][1]))
 
         UwU._init_themex3_vAwAws()
         UwU._init_themex3()
@@ -158,7 +158,7 @@ class NeutronLexer(QsciLexerCustom):
         UwU.tOwOkens_wist = [ (token, len(bytearray(token, "utf-8"))) for token in p.findall(texty)]
     
     def nexty_tOwOk(UwU, skip: int=None):
-        if len(UwU.UwU.tOwOkens_list) > 0:
+        if len(UwU.tOwOkens_list) > 0:
             if skip is not None and skip != 0:
                 for _ in range(skip-1):
                     if len(UwU.tOwOkens_list) > 0:
@@ -196,7 +196,7 @@ class OwOCustomLexer(NeutronLexer):
 
         UwU.startStyling(stawat)
 
-        texty = UwU.ewitOwOr.text()[stawat:endx3]
+        texty = UwU.EwitOwOr.text()[stawat:endx3]
 
         UwU.Genewate_tOwOkens(texty)
 

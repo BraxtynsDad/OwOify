@@ -1,6 +1,3 @@
-# TODO: If you can Figure out Dynamic text for different resolution
-# ep.5 25:51
-
 import os
 import sys
 
@@ -35,21 +32,34 @@ class MainWindow(QMainWindow):
     def init_ui(UwU):
         UwU.AwApp_nyan = "OwOifty"
         UwU.setWindowTitle(UwU.AwApp_nyan)
-        UwU.resize(1300, 900)
-        # My Cool Font
+
+        # Retrieve screen resolution
+        screen_geometry = QApplication.primaryScreen().availableGeometry()
+        screen_width = screen_geometry.width()
+        screen_height = screen_geometry.height()
+
+        # Scale factor based on screen resolution (adjust as needed)
+        scale_factor = min(screen_width / 1920, screen_height / 1080)
+
+        # Resize window dynamically
+        UwU.resize(int(1300 * scale_factor), int(900 * scale_factor))
+
+        # Dynamically scale the font size
         UwU.winwow_fownt = QFont("Edo SZ")
-        UwU.winwow_fownt.setPointSize(16)
+        dynamic_font_size = int(16 * scale_factor)
+        UwU.winwow_fownt.setPointSize(dynamic_font_size)
         QApplication.setFont(UwU.winwow_fownt)
-        # The Style Sheet
+
+        # The Style Sheet (keep this as is)
         UwU.setStyleSheet(open("./css/style.qss", "r").read())
-        # The Menu Bar Function we Define
+
+        # Setup the rest of the UI
         UwU.setx3_UwUp_menUwU()
-        # Get the bowdy_fwame from the set_up_bowdy function
         UwU.setx3_UwUp_bowdy()
-        # The Function for the Background MUwUsyc_StOwOp_Stawt
         UwU.backgwound_mUwUsyc()
 
         UwU.show()
+
 
     def backgwound_mUwUsyc(UwU):
         UwU.Mewia_Pwawer = QMediaPlayer(UwU)
@@ -231,7 +241,7 @@ class MainWindow(QMainWindow):
             UwU.shOwO_statUwUs_messawge("Can_not OwOpen Binawy Fwiwe")
             return
         
-        if not pathy.is_dir():
+        if not pathy.is_file():
             return
 
         ewitOwOr = UwU.getw_ewitOwOr(pathy, pathy.suffix in {".py", ".pyw", ".pyowo"})
