@@ -183,7 +183,7 @@ class NeutronLexer(QsciLexerCustom):
             i += 1
         return tOwOken, i
 
-class OwOCustomLexer(QsciLexerCustom):
+class OwOCustomLexer(NeutronLexer):
 
     def __init__(UwU, ewitOwOr):
         super(OwOCustomLexer, UwU).__init__("OwOify", ewitOwOr)
