@@ -223,8 +223,8 @@ class MainWindow(QMainWindow):
     def MUwUsyc_skyp(UwU):
             UwU.pwaywist.next()
     
-    def getw_ewitOwOr(UwU, pathy: Path = None, is_pytOwOn_fwiwe=True) -> QsciScintilla:
-        ewitOwOr = EwitOwOr(UwU, pathy=pathy, is_pytOwOn_fwiwe=is_pytOwOn_fwiwe)
+    def getw_ewitOwOr(UwU) -> QsciScintilla:
+        ewitOwOr = EwitOwOr(UwU)
         return ewitOwOr
     
     def is_binawy(UwU, pathy):
@@ -244,7 +244,7 @@ class MainWindow(QMainWindow):
         if not pathy.is_file():
             return
 
-        ewitOwOr = UwU.getw_ewitOwOr(pathy, pathy.suffix in {".py", ".pyw", ".pyowo"})
+        ewitOwOr = UwU.getw_ewitOwOr()
         # This condition checks if the file being opened is a new file
         if is_neUwU_fwiwe:
             UwU.tabx3_vieUwU.addTab(ewitOwOr, "UwUntitwed")
