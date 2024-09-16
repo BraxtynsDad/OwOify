@@ -3,9 +3,10 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.Qsci import *
 
-from Funny import KEYYWOwOWD_WIST, bUwUiwtin_fOwOnctwions_nyans
+from Funny import *
 import pkgutil
 from lexer import OwOCustomLexer
+from Parser import OwOParser
 
 class EwitOwOr(QsciScintilla):
 
@@ -29,12 +30,15 @@ class EwitOwOr(QsciScintilla):
 
         # Api (you can add autocompletion using this)
         UwU.API = QsciAPIs(UwU.OwOLexer)
-        for kys in KEYYWOwOWD_WIST + bUwUiwtin_fOwOnctwions_nyans:
+        for kys in combined_map:
             UwU.API.add(kys)
 
         UwU.API.prepare()
 
         UwU.setLexer(UwU.OwOLexer)
+
+        # Parser instance will be created when needed
+        UwU.OwOParser = None
 
         # Brace Matching
         UwU.setBraceMatching(QsciScintilla.SloppyBraceMatch)
@@ -66,5 +70,11 @@ class EwitOwOr(QsciScintilla):
         # UwU.keyPressEvent = UwU.hARAndwe_ewitOwOr_pwess
 
     def keyPressEvent(UwU, e: QKeyEvent) -> None:
+        texty = UwU.text()
+        stawat = 0 
+        endx3 = len(texty)
+        towoken_list = UwU.OwOLexer.get_tOwOkens(stawat, endx3)
+        UwU.OwOParser = OwOParser(towoken_list)
+        UwU.OwOParser.pawse()
         UwU.autoCompleteFromAll()
         return super().keyPressEvent(e)

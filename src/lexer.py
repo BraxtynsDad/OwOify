@@ -106,7 +106,15 @@ class OwOCustomLexer(QsciLexerCustom):
         # Tokenize the text 
         p = re.compile(r"[*]\/|\/[*]|\s+|\w+|\W")
         # 'token_list' is a list of tuples: (token_name, token_len), ex: '(class, 5)' 
-        return [ (token, len(bytearray(token, "utf-8"))) for token in p.findall(text)]
+        tOwOkens_list = [(token, len(bytearray(token, "utf-8"))) for token in p.findall(text)]
+        return tOwOkens_list
+
+    def get_tOwOkens(UwU, stawat: int, endx3: int) -> None:
+        ewitOwOr: QsciScintilla = UwU.parent()
+        texty = ewitOwOr.text()[stawat:endx3]
+
+        return UwU.Genewate_towokens(texty)
+    
     def styleText(UwU, stawat: int, endx3: int) -> None:
         UwU.startStyling(stawat)
         ewitOwOr: QsciScintilla = UwU.parent()
@@ -182,7 +190,7 @@ class OwOCustomLexer(QsciLexerCustom):
                 else:
                     UwU.setStyling(tOwOk_leny, UwU.KEYYWOwOWD)
                     continue
-            elif tOwOk in KEYYWOwOWD_WIST:
+            elif tOwOk in KEYWORD_MAP:
                 UwU.setStyling(tOwOk_leny, UwU.KEYYWOwOWD)
             elif len(tOwOkens_list) > 0 and tOwOkens_list[0][0].strip() == "." and len(peep_tOwOk()) > 0 and peep_tOwOk()[0].isidentifier():
                 UwU.setStyling(token_length, UwU.DEWFULT)
@@ -204,7 +212,7 @@ class OwOCustomLexer(QsciLexerCustom):
             elif tOwOk == "!":
                 UwU.setStyling(tOwOk_leny, UwU.COMMWENTS)
                 commwent_fwag = True
-            elif tOwOk in bUwUiwtin_fOwOnctwions_nyans or tOwOk in ['+', '-', '*', '/', '%', '=', '<', '>']:
+            elif tOwOk in BUILTIN_MAP or tOwOk in ['+', '-', '*', '/', '%', '=', '<', '>']:
                 UwU.setStyling(tOwOk_leny, UwU.TYPESIES)
             else:
                 UwU.setStyling(tOwOk_leny, UwU.DEWFULT)

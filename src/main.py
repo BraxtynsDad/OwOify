@@ -228,11 +228,23 @@ class MainWindow(QMainWindow):
         return ewitOwOr
     
     def is_binawy(UwU, pathy):
-        '''
-        Check if fwiwe is binawy UwU x3
-        '''
-        with open(pathy, 'rb') as f:
-            return b'\0' in f.read(1024)
+        # Check if path is a file and not a directory
+        if not os.path.isfile(pathy):
+            # If it's not a file, return False
+            return False
+
+        try:
+            with open(pathy, 'rb') as f:
+                fwead = f.read(1024)
+                # Check for non-text bytes (binary data)
+                if b'\0' in fwead:
+                    return True
+                else:
+                    return False
+        except Exception as e:
+            # Handle any exceptions, like permission issues
+            print(f"Error weading file: {e}")
+            return False
 
     # A simple function to check if the file is binary or not ex: image file, exe, zip file that can't be opened using text ewitOwOrs
     def setw_neUwU_tabx3(UwU, pathy: Path, is_neUwU_fwiwe=False):
