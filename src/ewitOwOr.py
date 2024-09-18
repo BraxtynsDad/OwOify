@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from PyQt5.QtGui import QTextCharFormat, QFont, QColor, QKeyEvent
 from PyQt5.Qsci import *
 
 from Funny import *
@@ -68,6 +68,23 @@ class EwitOwOr(QsciScintilla):
         UwU.setMarginsBackgroundColor(QColor("#F0E6F6"))  # Light pastel lavender
         UwU.setMarginsFont(UwU.winwow_fownt)
         # UwU.keyPressEvent = UwU.hARAndwe_ewitOwOr_pwess
+
+    def handwe_ewwow(self, e):
+        # e.args[1] would be the token position passed from the parser
+        token_pos = e.args[1]  
+        start, length = token_pos[0], token_pos[1]  # Assuming you have start and length
+
+        # Create a format for red underlining
+        error_format = QTextCharFormat()
+        error_format.setUnderlineStyle(QTextCharFormat.SingleUnderline)
+        error_format.setUnderlineColor(QColor('red'))
+        
+        # Apply format from start to start+length
+        cursor = self.textCursor()
+        cursor.setPosition(start)
+        cursor.movePosition(cursor.Right, cursor.KeepAnchor, length)
+        cursor.mergeCharFormat(error_format)
+
 
     def keyPressEvent(UwU, e: QKeyEvent) -> None:
         texty = UwU.text()

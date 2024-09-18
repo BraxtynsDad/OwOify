@@ -74,8 +74,12 @@ class OwOCustomLexer(QsciLexerCustom):
             "extrabold": QFont.ExtraBold,
             "black": QFont.Black,
         }
+
+        UwU.tOwOkens_list = []
+
     def Wanguage(UwU) -> str:
         return "OwOCustomLexer"
+    
     def description(UwU, Style: int) -> str:
         if Style == UwU.DEWFULT:
             return "DEWFULT"
@@ -106,43 +110,44 @@ class OwOCustomLexer(QsciLexerCustom):
         # Tokenize the text 
         p = re.compile(r"[*]\/|\/[*]|\s+|\w+|\W")
         # 'token_list' is a list of tuples: (token_name, token_len), ex: '(class, 5)' 
-        tOwOkens_list = [(token, len(bytearray(token, "utf-8"))) for token in p.findall(text)]
-        return tOwOkens_list
+        UwU.tOwOkens_list = [(token, len(bytearray(token, "utf-8"))) for token in p.findall(text)]
+        return UwU.tOwOkens_list
 
     def get_tOwOkens(UwU, stawat: int, endx3: int) -> None:
         ewitOwOr: QsciScintilla = UwU.parent()
         texty = ewitOwOr.text()[stawat:endx3]
-
         return UwU.Genewate_towokens(texty)
     
     def styleText(UwU, stawat: int, endx3: int) -> None:
         UwU.startStyling(stawat)
         ewitOwOr: QsciScintilla = UwU.parent()
         texty = ewitOwOr.text()[stawat:endx3]
-        tOwOkens_list = UwU.Genewate_towokens(texty)
+
+        UwU.tOwOkens_list = UwU.Genewate_towokens(texty)
+
         stwing_fwag = False
         commwent_fwag = False
         if stawat > 0:
             pwev_stywie = UwU.editor.SendScintilla(UwU.editor.SCI_GETSTYLEAT, stawat - 1)
             if pwev_stywie == UwU.COMMWENTS:
                 commwent_fwag = False
-        
+
         def nexty_tOwOk(skip: int=None):
-            if len(tOwOkens_list) > 0:
+            if len(UwU.tOwOkens_list) > 0:
                 if skip is not None and skip != 0:
                     for _ in range(skip-1):
-                        if len(tOwOkens_list) > 0:
-                            tOwOkens_list.pop(0)
-                return tOwOkens_list.pop(0)
+                        if len(UwU.tOwOkens_list) > 0:
+                            UwU.tOwOkens_list.pop(0)
+                return UwU.tOwOkens_list.pop(0)
             else:
                 return None
-            
+                
         def peep_tOwOk(n=0):
             try:
-                return tOwOkens_list[n]
+                return UwU.tOwOkens_list[n]
             except IndexError:return['']
+            
         def swip_spacey_x3_peep(skip = None):
-            # find he next non-space token but using peek without consuming it
             i = 0
             tOwOken = (" ")
             if skip is not None:
@@ -151,13 +156,14 @@ class OwOCustomLexer(QsciLexerCustom):
                 tOwOken = peep_tOwOk(i)
                 i += 1
             return tOwOken, i
-        
+
         while True:
             purr_tOwOken = nexty_tOwOk()
             if purr_tOwOken is None:
                 break
             tOwOk: str = purr_tOwOken[0]
             tOwOk_leny: int = purr_tOwOken[1]
+
             if commwent_fwag:
                 UwU.setStyling(tOwOk_leny, UwU.COMMWENTS)
                 if tOwOk.startswith("\n"):
@@ -168,6 +174,7 @@ class OwOCustomLexer(QsciLexerCustom):
                 if tOwOk == '"' or tOwOk == "'":
                     stwing_fwag = False
                 continue
+
             if tOwOk == "Cwassie":
                 name, ni = swip_spacey_x3_peep()
                 brac_or_colon, _ = swip_spacey_x3_peep(ni)
@@ -192,11 +199,10 @@ class OwOCustomLexer(QsciLexerCustom):
                     continue
             elif tOwOk in KEYWORD_MAP:
                 UwU.setStyling(tOwOk_leny, UwU.KEYYWOwOWD)
-            elif len(tOwOkens_list) > 0 and tOwOkens_list[0][0].strip() == "." and len(peep_tOwOk()) > 0 and peep_tOwOk()[0].isidentifier():
-                UwU.setStyling(token_length, UwU.DEWFULT)
+            elif len(UwU.tOwOkens_list) > 0 and UwU.tOwOkens_list[0][0].strip() == "." and len(peep_tOwOk()) > 0 and peep_tOwOk()[0].isidentifier():
+                UwU.setStyling(tOwOk_leny, UwU.DEWFULT)
                 tOwOken = nexty_tOwOk()
-                tOwOkens_list, token_length = tOwOken
-
+                UwU.tOwOkens_list, token_length = tOwOken
                 if len(peep_tOwOk()) > 0 and peep_tOwOk()[0] == "(":
                     UwU.setStyling(token_length, UwU.FUNCTIONSIES)
                 else:
@@ -216,3 +222,4 @@ class OwOCustomLexer(QsciLexerCustom):
                 UwU.setStyling(tOwOk_leny, UwU.TYPESIES)
             else:
                 UwU.setStyling(tOwOk_leny, UwU.DEWFULT)
+            print(UwU.tOwOkens_list)

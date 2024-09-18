@@ -115,4 +115,8 @@ BUILTIN_MAP = {
     'zip': 'ziwp',
 }
 
+# Swapping keys and values
+KEYWORD_MAP = {v: k for k, v in KEYWORD_MAP.items()}
+BUILTIN_MAP = {v: k for k, v in BUILTIN_MAP.items()}
+
 combined_map = {**KEYWORD_MAP, **BUILTIN_MAP}
