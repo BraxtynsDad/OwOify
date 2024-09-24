@@ -56,7 +56,7 @@ class MainWindow(QMainWindow):
         # Setup the rest of the UI
         UwU.setx3_UwUp_menUwU()
         UwU.setx3_UwUp_bowdy()
-        UwU.backgwound_mUwUsyc()
+        # UwU.backgwound_mUwUsyc()
 
         UwU.show()
 
@@ -163,25 +163,42 @@ class MainWindow(QMainWindow):
     def Sa0v0e(UwU):
         if UwU.cuwwwent_fwiwe is None and UwU.tabx3_vieUwU.count() > 0:
             UwU.Sa0v0e_as()
-
+            return
         ewitOwOr = UwU.tabx3_vieUwU.currentWidget()
-        UwU.cuwwwent_fwiwe.write_text(ewitOwOr.text())
-        UwU.shOwO_statUwUs_messawge(f"Sa0v0ed {UwU.cuwwwent_fwiwe.name}")
+
+        if UwU.cuwwwent_fwiwe is None:
+            UwU.shOwO_statUwUs_messawge("Sa0v0e Cancewwed")
+            return
+        try:
+            UwU.cuwwwent_fwiwe.write_text(ewitOwOr.text())
+            UwU.shOwO_statUwUs_messawge(f"Sa0v0ed {UwU.cuwwwent_fwiwe.name}")
+        except Exception as e:
+            UwU.shOwO_statUwUs_messawge(f"Error Saving: {str(e)}")
+
 
     def Sa0v0e_as(UwU):
+        # Get the current editor tab
         ewitOwOr = UwU.tabx3_vieUwU.currentWidget()
         if ewitOwOr is None:
             return
         
+        # Open "Save As" dialog to get the new file path
         fwiwe_pathy_x3 = QFileDialog.getSaveFileName(UwU, "Sa0v0e As", os.getcwd())[0]
+        
+        # If the user cancels the "Save As" dialog
         if fwiwe_pathy_x3 == '':
-            UwU.shOwO_statUwUs_messawge("Cancelled")
+            UwU.shOwO_statUwUs_messawge("Save As Cancelled")
             return
+
+        # Save the file content to the new path
         paht = Path(fwiwe_pathy_x3)
-        paht.write_text(ewitOwOr.text())
-        UwU.tabx3_vieUwU.setTabText(UwU.tabx3_vieUwU.currentIndex(), paht.name)
-        UwU.shOwO_statUwUs_messawge(f"Sa0v0ed {paht.name}")
-        UwU.cuwwwent_fwiwe = paht
+        try:
+            paht.write_text(ewitOwOr.text())
+            UwU.tabx3_vieUwU.setTabText(UwU.tabx3_vieUwU.currentIndex(), paht.name)
+            UwU.shOwO_statUwUs_messawge(f"Sa0v0ed {paht.name}")
+            UwU.cuwwwent_fwiwe = paht  # Set the current file to the new path
+        except Exception as e:
+            UwU.shOwO_statUwUs_messawge(f"Error Saving: {str(e)}")
     
     def OwOpen_fwiwe(UwU):
         ops = QFileDialog.Options()
@@ -248,7 +265,24 @@ class MainWindow(QMainWindow):
 
     # A simple function to check if the file is binary or not ex: image file, exe, zip file that can't be opened using text ewitOwOrs
     def setw_neUwU_tabx3(UwU, pathy: Path, is_neUwU_fwiwe=False):
-        # Checks if the file at the given path is binary 
+        # If this is a new file, handle it separately
+        if is_neUwU_fwiwe:
+            # Create a new, untitled file tab
+            ewitOwOr = UwU.getw_ewitOwOr()
+            UwU.tabx3_vieUwU.addTab(ewitOwOr, "UwUntitwed")
+            UwU.setWindowTitle("UwUntitwed - " + UwU.AwApp_nyan)
+            UwU.shOwO_statUwUs_messawge("OwOpened UwUntitwed")
+            UwU.tabx3_vieUwU.setCurrentIndex(UwU.tabx3_vieUwU.count() - 1)
+            UwU.cuwwwent_fwiwe = None  # No file associated with new untitled file
+            return
+
+        # Handle existing files
+        if pathy is None:
+            # Handle case where path is None (for example, user canceled file selection)
+            UwU.shOwO_statUwUs_messawge("No fwiwe pathy pwovided")
+            return
+        
+        # Check if the file is binary and return early if true
         if UwU.is_binawy(pathy):
             UwU.shOwO_statUwUs_messawge("Can_not OwOpen Binawy Fwiwe")
             return
@@ -256,22 +290,41 @@ class MainWindow(QMainWindow):
         if not pathy.is_file():
             return
 
+        # Check if the file is already open
+        for i in range(UwU.tabx3_vieUwU.count()):
+            if UwU.tabx3_vieUwU.tabText(i) == pathy.name:
+                UwU.tabx3_vieUwU.setCurrentIndex(i)
+                UwU.cuwwwent_fwiwe = pathy
+                return
+        
+        # Create new tab for existing file
         ewitOwOr = UwU.getw_ewitOwOr()
+        UwU.tabx3_vieUwU.addTab(ewitOwOr, pathy.name)
+        ewitOwOr.setText(pathy.read_text())
+        UwU.setWindowTitle(f"{pathy.name} - {UwU.AwApp_nyan}")
+        UwU.cuwwwent_fwiwe = pathy
+        UwU.tabx3_vieUwU.setCurrentIndex(UwU.tabx3_vieUwU.count() - 1)
+        UwU.shOwO_statUwUs_messawge(f"Opened {pathy.name}")
+
+        # Create the editor for a new or existing file
+        ewitOwOr = UwU.getw_ewitOwOr()
+
         # This condition checks if the file being opened is a new file
         if is_neUwU_fwiwe:
             UwU.tabx3_vieUwU.addTab(ewitOwOr, "UwUntitwed")
             UwU.setWindowTitle("UwUntitwed - " + UwU.AwApp_nyan)
             UwU.shOwO_statUwUs_messawge("OwOpened UwUntitwed")
-            # Sets the current tab to the newly added tab, making it the active tab.
             UwU.tabx3_vieUwU.setCurrentIndex(UwU.tabx3_vieUwU.count() - 1)
             UwU.cuwwwent_fwiwe = None
             return
-        # check if file already open
+
+        # Check if the file is already open
         for i in range(UwU.tabx3_vieUwU.count()):
             if UwU.tabx3_vieUwU.tabText(i) == pathy.name:
                 UwU.tabx3_vieUwU.setCurrentIndex(i)
                 UwU.cuwwwent_fwiwe = pathy
-                return     
+                return
+        
         # Create new tab
         UwU.tabx3_vieUwU.addTab(ewitOwOr, pathy.name)
         ewitOwOr.setText(pathy.read_text())
@@ -279,6 +332,7 @@ class MainWindow(QMainWindow):
         UwU.cuwwwent_fwiwe = pathy
         UwU.tabx3_vieUwU.setCurrentIndex(UwU.tabx3_vieUwU.count() - 1)
         UwU.shOwO_statUwUs_messawge(f"Opened {pathy.name}")
+
 
     def setw_cowsOwO_pointy_x3(UwU, e):
         UwU.setCursor(Qt.PointingHandCursor)

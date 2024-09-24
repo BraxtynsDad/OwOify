@@ -1,1 +1,45 @@
-"'
+x3 Variable declarations with assignments
+nuu x = 10
+x3 Declare an integer variable x with value 10
+kawaii y = 20.0
+x3 Declare a float variable y with value 20.0
+baka name = "Alice"
+x3 Declare a string variable name with value "Alice"
+nyan is_happy = Twue
+x3 Declare a boolean variable is_happy with value True
+x3 Function definition with parameters and default values
+dewf greet(pwease message, baka user = "Friend"):
+    ifflie user == "Friend":
+        pwint("Hello, " + user + "!")
+    elswe:
+        pwint(message + ", " + user + "!")
+x3 Function call
+greet("Welcome", "Alice")
+x3 While loop with an if statement inside
+nuu counter = 0
+whiwile counter < 5:
+    ifflie counter % 2 == 0:
+        pwint("Counter is even: " + counter)
+    elswe:
+        pwint("Counter is odd: " + counter)
+    counter = counter + 1
+x3 List declaration and access
+nuu numbers = [1, 2, 3, 4, 5]
+pwint("First number in the list is: " + numbers[0])
+x3 Function with return statement
+dewf add(nuu a, nuu b):
+    wetuwn a + b
+x3 Using the function
+nuu sum = add(5, 7)
+pwint("Sum is: " + sum)
+x3 Nested function calls and complex expressions
+nuu result = add(add(1, 2), add(3, 4)) * (x - y) / 2
+pwint("Result is: " + result)
+x3 Boolean logic
+nyan is_valid = (x > 0) == Twue
+pwint("Is valid: " + is_valid)
+x3 Import statement (assuming your language supports it)
+impowt math_module
+x3 Use of imported module function
+nuu sqrt_result = math_module.sqrt(16)
+pwint("Square root of 16 is: " + sqrt_result)

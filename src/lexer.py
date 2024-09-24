@@ -12,10 +12,13 @@ class OwOCustomLexer(QsciLexerCustom):
         UwU.editor = parent
         UwU.color_numewo_UwO = "#FF0000"
         UwU.color_numewo_DOwOs = "#FFEBEE"
-        #Defaults
+        
+        # Defaults
         UwU.setDefaultColor(QColor(UwU.color_numewo_UwO))
         UwU.setDefaultPaper(QColor(UwU.color_numewo_DOwOs))
         UwU.setDefaultFont(QFont("Five Nights at Freddy's", 18))
+
+        # Define different styles
         UwU.DEWFULT = 0
         UwU.KEYYWOwOWD = 1
         UwU.TYPESIES = 2
@@ -27,7 +30,8 @@ class OwOCustomLexer(QsciLexerCustom):
         UwU.FUNCTIONSIES = 8
         UwU.CWASSES = 9
         UwU.FUNCTION_DEWF = 10
-        # Styles
+
+        # Define styles with colors
         UwU.setColor(QColor("#FF69B4"), UwU.DEWFULT)        # Hot Pink
         UwU.setColor(QColor("#FFD700"), UwU.KEYYWOwOWD)     # Gold
         UwU.setColor(QColor("#00FA9A"), UwU.TYPESIES)       # Medium Spring Green
@@ -39,85 +43,42 @@ class OwOCustomLexer(QsciLexerCustom):
         UwU.setColor(QColor("#FF1493"), UwU.FUNCTIONSIES)   # Deep Pink
         UwU.setColor(QColor("#1E90FF"), UwU.CWASSES)        # Dodger Blue
         UwU.setColor(QColor("#7FFF00"), UwU.FUNCTION_DEWF)  # Chartreuse
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.DEWFULT)
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.KEYYWOwOWD)
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.TYPESIES)
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.STWING)
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.KEYAWGS)
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.BWACKETS)
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.COMMWENTS)
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.CONSTAWNTS)
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.FUNCTIONSIES)
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.CWASSES)
-        UwU.setPaper(QColor(UwU.color_numewo_DOwOs), UwU.FUNCTION_DEWF)
-        UwU.default_names = [
-            "defwult",
-            "keyYwowOwd",
-            "typesies",
-            "stwings",
-            "keyawgs",
-            "bwackets",
-            "commwents",
-            "constawnts",
-            "functionsies",
-            "cwasses",
-            "function_dewf"
-        ]
-        UwU.font_weights = {
-            "thin": QFont.Thin,
-            "extralight": QFont.ExtraLight,
-            "light": QFont.Light,
-            "normal": QFont.Normal,
-            "medium": QFont.Medium,
-            "demibold": QFont.DemiBold,
-            "bold": QFont.Bold,
-            "extrabold": QFont.ExtraBold,
-            "black": QFont.Black,
-        }
 
         UwU.tOwOkens_list = []
 
     def Wanguage(UwU) -> str:
         return "OwOCustomLexer"
-    
+
     def description(UwU, Style: int) -> str:
-        if Style == UwU.DEWFULT:
-            return "DEWFULT"
-        elif Style == UwU.KEYYWOwOWD:
-            return "KEYYWOwOWD"
-        elif Style == UwU.TYPESIES:
-            return "TYPESIES"
-        elif Style == UwU.STWING:
-            return "STWING"
-        elif Style == UwU.KEYAWGS:
-            return "KEYAWGS"
-        elif Style == UwU.BWACKETS:
-            return "BWACKETS"
-        elif Style == UwU.COMMWENTS:
-            return "COMMWENTS"
-        elif Style == UwU.CONSTAWNTS:
-            return "CONSTAWNTS"
-        elif Style == UwU.FUNCTIONSIES:
-            return "FUNCTIONSIES"
-        elif Style == UwU.CWASSES:
-            return "CWASSES"
-        elif Style == UwU.FUNCTION_DEWF:
-            return "FUNCTION_DEWF"
-        else:
-            return "UNKNOWON"
-        
+        descriptions = {
+            UwU.DEWFULT: "DEWFULT",
+            UwU.KEYYWOwOWD: "KEYYWOwOWD",
+            UwU.TYPESIES: "TYPESIES",
+            UwU.STWING: "STWING",
+            UwU.KEYAWGS: "KEYAWGS",
+            UwU.BWACKETS: "BWACKETS",
+            UwU.COMMWENTS: "COMMWENTS",
+            UwU.CONSTAWNTS: "CONSTAWNTS",
+            UwU.FUNCTIONSIES: "FUNCTIONSIES",
+            UwU.CWASSES: "CWASSES",
+            UwU.FUNCTION_DEWF: "FUNCTION_DEWF"
+        }
+        return descriptions.get(Style, "UNKNOWON")
+
     def Genewate_towokens(UwU, text):
-        # Tokenize the text 
-        p = re.compile(r"[*]\/|\/[*]|\s+|\w+|\W")
-        # 'token_list' is a list of tuples: (token_name, token_len), ex: '(class, 5)' 
+        """Tokenizes the text and stores the tokens."""
+        p = re.compile(r"\/[*]|\s+|==|!=|<=|>=|\w+|\"[^\"]*\"|\'[^\']*\'|\W")
         UwU.tOwOkens_list = [(token, len(bytearray(token, "utf-8"))) for token in p.findall(text)]
         return UwU.tOwOkens_list
 
-    def get_tOwOkens(UwU, stawat: int, endx3: int) -> None:
-        ewitOwOr: QsciScintilla = UwU.parent()
-        texty = ewitOwOr.text()[stawat:endx3]
-        return UwU.Genewate_towokens(texty)
-    
+    def get_token_list(UwU):
+        """Returns the token list, generates it if not already generated."""
+        ewitOwOr: QsciScintilla = UwU.editor
+        texty = ewitOwOr.text()  # Get the entire text from the editor
+        if not UwU.tOwOkens_list:  # Generate tokens if the list is empty
+            UwU.Genewate_towokens(texty)
+        return UwU.tOwOkens_list
+
     def styleText(UwU, stawat: int, endx3: int) -> None:
         UwU.startStyling(stawat)
         ewitOwOr: QsciScintilla = UwU.parent()
@@ -145,7 +106,8 @@ class OwOCustomLexer(QsciLexerCustom):
         def peep_tOwOk(n=0):
             try:
                 return UwU.tOwOkens_list[n]
-            except IndexError:return['']
+            except IndexError:
+                return ['']
             
         def swip_spacey_x3_peep(skip = None):
             i = 0
@@ -162,16 +124,18 @@ class OwOCustomLexer(QsciLexerCustom):
             if purr_tOwOken is None:
                 break
             tOwOk: str = purr_tOwOken[0]
-            tOwOk_leny: int = purr_tOwOken[1]
+            tOwOk_leny: int = len(tOwOk)  # Use len(tOwOk) for character length
 
+            # Styling logic remains the same...
             if commwent_fwag:
                 UwU.setStyling(tOwOk_leny, UwU.COMMWENTS)
-                if tOwOk.startswith("\n"):
+                if tOwOk.startswith("\n"):  
                     commwent_fwag = False
                 continue
+
             if stwing_fwag:
                 UwU.setStyling(tOwOk_leny, UwU.STWING)
-                if tOwOk == '"' or tOwOk == "'":
+                if tOwOk == '"' or tOwOk == "'":  
                     stwing_fwag = False
                 continue
 
@@ -197,7 +161,7 @@ class OwOCustomLexer(QsciLexerCustom):
                 else:
                     UwU.setStyling(tOwOk_leny, UwU.KEYYWOwOWD)
                     continue
-            elif tOwOk in KEYWORD_MAP:
+            elif tOwOk in combined_map:  # Check combined_map for both keywords and built-ins
                 UwU.setStyling(tOwOk_leny, UwU.KEYYWOwOWD)
             elif len(UwU.tOwOkens_list) > 0 and UwU.tOwOkens_list[0][0].strip() == "." and len(peep_tOwOk()) > 0 and peep_tOwOk()[0].isidentifier():
                 UwU.setStyling(tOwOk_leny, UwU.DEWFULT)
@@ -218,8 +182,7 @@ class OwOCustomLexer(QsciLexerCustom):
             elif tOwOk == "!":
                 UwU.setStyling(tOwOk_leny, UwU.COMMWENTS)
                 commwent_fwag = True
-            elif tOwOk in BUILTIN_MAP or tOwOk in ['+', '-', '*', '/', '%', '=', '<', '>']:
+            elif tOwOk in ['+', '-', '*', '/', '%', '=', '<', '>']:
                 UwU.setStyling(tOwOk_leny, UwU.TYPESIES)
             else:
                 UwU.setStyling(tOwOk_leny, UwU.DEWFULT)
-            print(UwU.tOwOkens_list)
