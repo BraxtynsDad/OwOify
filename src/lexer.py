@@ -1,24 +1,16 @@
-import re
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+# lexer.py
 
-from PyQt5.Qsci import QsciLexerCustom, QsciScintilla
-from Funny import *
+import re
+from PyQt5.QtGui import QColor
+from PyQt5.Qsci import QsciLexerCustom
+from Funny import combined_map  # Assuming this contains your keyword mappings
 
 class OwOCustomLexer(QsciLexerCustom):
-    def __init__(UwU, parent):
+    def __init__(UwU, parent=None):
         super(OwOCustomLexer, UwU).__init__(parent)
         UwU.editor = parent
-        UwU.color_numewo_UwO = "#FF0000"
-        UwU.color_numewo_DOwOs = "#FFEBEE"
-        
-        # Defaults
-        UwU.setDefaultColor(QColor(UwU.color_numewo_UwO))
-        UwU.setDefaultPaper(QColor(UwU.color_numewo_DOwOs))
-        UwU.setDefaultFont(QFont("Five Nights at Freddy's", 18))
 
-        # Define different styles
+        # Initialize styles
         UwU.DEWFULT = 0
         UwU.KEYYWOwOWD = 1
         UwU.TYPESIES = 2
@@ -31,7 +23,7 @@ class OwOCustomLexer(QsciLexerCustom):
         UwU.CWASSES = 9
         UwU.FUNCTION_DEWF = 10
 
-        # Define styles with colors
+        # Set colors for each style
         UwU.setColor(QColor("#FF69B4"), UwU.DEWFULT)        # Hot Pink
         UwU.setColor(QColor("#FFD700"), UwU.KEYYWOwOWD)     # Gold
         UwU.setColor(QColor("#00FA9A"), UwU.TYPESIES)       # Medium Spring Green
@@ -46,10 +38,10 @@ class OwOCustomLexer(QsciLexerCustom):
 
         UwU.tOwOkens_list = []
 
-    def Wanguage(UwU) -> str:
+    def language(UwU) -> str:
         return "OwOCustomLexer"
 
-    def description(UwU, Style: int) -> str:
+    def description(UwU, style: int) -> str:
         descriptions = {
             UwU.DEWFULT: "DEWFULT",
             UwU.KEYYWOwOWD: "KEYYWOwOWD",
@@ -63,126 +55,164 @@ class OwOCustomLexer(QsciLexerCustom):
             UwU.CWASSES: "CWASSES",
             UwU.FUNCTION_DEWF: "FUNCTION_DEWF"
         }
-        return descriptions.get(Style, "UNKNOWON")
+        return descriptions.get(style, "UNKNOWON")
 
     def Genewate_towokens(UwU, text):
-        """Tokenizes the text and stores the tokens."""
-        p = re.compile(r"\/[*]|\s+|==|!=|<=|>=|\w+|\"[^\"]*\"|\'[^\']*\'|\W")
-        UwU.tOwOkens_list = [(token, len(bytearray(token, "utf-8"))) for token in p.findall(text)]
-        return UwU.tOwOkens_list
+        """Tokenizes the text and stores the tokens, including indentation."""
+        # Normalize line endings to \n
+        text = text.replace('\r\n', '\n').replace('\r', '\n')
 
-    def get_token_list(UwU):
-        """Returns the token list, generates it if not already generated."""
-        ewitOwOr: QsciScintilla = UwU.editor
-        texty = ewitOwOr.text()  # Get the entire text from the editor
-        if not UwU.tOwOkens_list:  # Generate tokens if the list is empty
-            UwU.Genewate_towokens(texty)
-        return UwU.tOwOkens_list
+        # Define the regex pattern for tokenization
+        p = re.compile(
+            r'''
+            (?P<COMMENT>x3[^\n]*)                   # Comment starting with x3
+            | (?P<NEWLINE>\n)                       # Newline
+            | (?P<WHITESPACE>[ \t]+)                # Whitespace (spaces and tabs)
+            | (?P<OPERATOR>==|!=|<=|>=|[+\-*/%<>=]) # Operators
+            | (?P<FLOAT>
+                (?:\d+\.\d*|\.\d+)
+                (?:[eE][+-]?\d+)?
+            )                                       # Floating-point numbers
+            | (?P<INTEGER>\d+(?:[eE][+-]?\d+)?)     # Integers and numbers with exponents
+            | (?P<STRING>"[^"\n]*"|'[^'\n]*')       # String literals
+            | (?P<IDENTIFIER>\w+)                   # Identifiers
+            | (?P<SYMBOL>[()\[\]{},.:])             # Symbols
+            | (?P<UNKNOWN>.)                        # Any other character
+            ''',
+            re.VERBOSE
+        )
 
-    def styleText(UwU, stawat: int, endx3: int) -> None:
-        UwU.startStyling(stawat)
-        ewitOwOr: QsciScintilla = UwU.parent()
-        texty = ewitOwOr.text()[stawat:endx3]
+        tokens = []
+        pos = 0  # Current position in the text
+        lines = text.split('\n')
+        indentation_stack = [0]
 
-        UwU.tOwOkens_list = UwU.Genewate_towokens(texty)
+        for line in lines:
+            # Calculate indentation level
+            indent_match = re.match(r'[ \t]*', line)
+            indent_str = indent_match.group()
+            indent_str = indent_str.replace('\t', '    ')  # Convert tabs to 4 spaces
+            indent_level = len(indent_str)
+            stripped_line = line[len(indent_str):]
+            line_start_pos = pos
+            indent_end_pos = line_start_pos + len(indent_str)
 
-        stwing_fwag = False
-        commwent_fwag = False
-        if stawat > 0:
-            pwev_stywie = UwU.editor.SendScintilla(UwU.editor.SCI_GETSTYLEAT, stawat - 1)
-            if pwev_stywie == UwU.COMMWENTS:
-                commwent_fwag = False
+            if indent_level > indentation_stack[-1]:
+                indentation_stack.append(indent_level)
+                tokens.append(('INDENT', '', line_start_pos, indent_end_pos))
+            elif indent_level < indentation_stack[-1]:
+                while indentation_stack and indent_level < indentation_stack[-1]:
+                    indentation_stack.pop()
+                    tokens.append(('DEDENT', '', line_start_pos, indent_end_pos))
 
-        def nexty_tOwOk(skip: int=None):
-            if len(UwU.tOwOkens_list) > 0:
-                if skip is not None and skip != 0:
-                    for _ in range(skip-1):
-                        if len(UwU.tOwOkens_list) > 0:
-                            UwU.tOwOkens_list.pop(0)
-                return UwU.tOwOkens_list.pop(0)
+            line_pos = pos + len(indent_str)
+            for match in p.finditer(stripped_line):
+                token_type = match.lastgroup
+                token_value = match.group()
+                token_start = line_pos + match.start()
+                token_end = line_pos + match.end()
+
+                if token_type == 'WHITESPACE' or token_type == 'NEWLINE':
+                    # Skip whitespace and newline tokens within a line
+                    continue
+                elif token_type == 'UNKNOWN':
+                    # Optionally, report or handle unknown tokens
+                    # For now, skip unknown tokens
+                    continue
+                else:
+                    tokens.append((token_type, token_value, token_start, token_end))
+
+            # Add newline token at the end of the line
+            tokens.append(('NEWLINE', '\n', pos + len(line), pos + len(line) + 1))
+            pos += len(line) + 1  # +1 for the newline character
+
+        # Emit remaining DEDENTs
+        while len(indentation_stack) > 1:
+            indentation_stack.pop()
+            tokens.append(('DEDENT', '', pos, pos))
+
+        return tokens
+
+    def tokenize_for_highlighting(UwU, text):
+        """Tokenizes the text for syntax highlighting, without indentation tokens."""
+        # Normalize line endings to \n
+        text = text.replace('\r\n', '\n').replace('\r', '\n')
+
+        p = re.compile(
+            r'''
+            (?P<COMMENT>x3[^\n]*)                   # Comment starting with x3
+            | (?P<STRING>"[^"\n]*"|'[^'\n]*')       # String literals
+            | (?P<OPERATOR>==|!=|<=|>=|[+\-*/%<>=]) # Operators
+            | (?P<FLOAT>
+                (?:\d+\.\d*|\.\d+)
+                (?:[eE][+-]?\d+)?
+            )                                       # Floating-point numbers
+            | (?P<INTEGER>\d+(?:[eE][+-]?\d+)?)     # Integers and numbers with exponents
+            | (?P<IDENTIFIER>\w+)                   # Identifiers
+            | (?P<SYMBOL>[()\[\]{},.:])             # Symbols
+            | (?P<WHITESPACE>[ \t]+)                # Whitespace
+            | (?P<NEWLINE>\n)                       # Newline
+            | (?P<UNKNOWN>.)                        # Any other character
+            ''',
+            re.VERBOSE
+        )
+
+        tokens = []
+        for match in p.finditer(text):
+            token_type = match.lastgroup
+            token_value = match.group()
+            token_start = match.start()
+            token_end = match.end()
+
+            if token_type == 'UNKNOWN':
+                # Skip unknown tokens
+                continue
             else:
-                return None
-                
-        def peep_tOwOk(n=0):
-            try:
-                return UwU.tOwOkens_list[n]
-            except IndexError:
-                return ['']
-            
-        def swip_spacey_x3_peep(skip = None):
-            i = 0
-            tOwOken = (" ")
-            if skip is not None:
-                i = skip
-            while tOwOken and tOwOken[0].isspace():
-                tOwOken = peep_tOwOk(i)
-                i += 1
-            return tOwOken, i
+                tokens.append((token_type, token_value, token_start, token_end))
 
-        while True:
-            purr_tOwOken = nexty_tOwOk()
-            if purr_tOwOken is None:
+        return tokens
+
+    def styleText(UwU, start: int, end: int) -> None:
+        UwU.startStyling(start)
+        text = UwU.editor.text()
+
+        tokens = UwU.tokenize_for_highlighting(text)
+
+        # Find the index of the first token to style
+        token_index = 0
+        while token_index < len(tokens) and tokens[token_index][2] < start:
+            token_index += 1
+
+        while token_index < len(tokens):
+            token_type, token_value, token_start, token_end = tokens[token_index]
+            if token_start >= end:
                 break
-            tOwOk: str = purr_tOwOken[0]
-            tOwOk_leny: int = len(tOwOk)  # Use len(tOwOk) for character length
 
-            # Styling logic remains the same...
-            if commwent_fwag:
-                UwU.setStyling(tOwOk_leny, UwU.COMMWENTS)
-                if tOwOk.startswith("\n"):  
-                    commwent_fwag = False
-                continue
+            # Calculate the length of the token within the styling range
+            token_length = token_end - token_start
+            if token_length <= 0:
+                token_index += 1
+                continue  # Skip tokens with zero length
 
-            if stwing_fwag:
-                UwU.setStyling(tOwOk_leny, UwU.STWING)
-                if tOwOk == '"' or tOwOk == "'":  
-                    stwing_fwag = False
-                continue
-
-            if tOwOk == "Cwassie":
-                name, ni = swip_spacey_x3_peep()
-                brac_or_colon, _ = swip_spacey_x3_peep(ni)
-                if name[0].isidentifier() and brac_or_colon[0] in (":", "("):
-                    UwU.setStyling(tOwOk_leny, UwU.KEYYWOwOWD)
-                    _ = nexty_tOwOk(ni)
-                    UwU.setStyling(name[1]+1, UwU.CWASSES)
-                    continue
+            # Determine the style based on token_type
+            if token_type == 'COMMENT':
+                style = UwU.COMMWENTS
+            elif token_type == 'IDENTIFIER':
+                if token_value in combined_map:
+                    style = UwU.KEYYWOwOWD
                 else:
-                    UwU.setStyling(tOwOk_leny, UwU.KEYYWOwOWD)
-                    continue
-            elif tOwOk == "dewf":
-                name, ni = swip_spacey_x3_peep()
-                brac_or_colon, _ = swip_spacey_x3_peep(ni)
-                if name[0].isidentifier():
-                    UwU.setStyling(tOwOk_leny, UwU.KEYYWOwOWD)
-                    _ = nexty_tOwOk(ni)
-                    UwU.setStyling(name[1]+1, UwU.FUNCTION_DEWF)
-                    continue
-                else:
-                    UwU.setStyling(tOwOk_leny, UwU.KEYYWOwOWD)
-                    continue
-            elif tOwOk in combined_map:  # Check combined_map for both keywords and built-ins
-                UwU.setStyling(tOwOk_leny, UwU.KEYYWOwOWD)
-            elif len(UwU.tOwOkens_list) > 0 and UwU.tOwOkens_list[0][0].strip() == "." and len(peep_tOwOk()) > 0 and peep_tOwOk()[0].isidentifier():
-                UwU.setStyling(tOwOk_leny, UwU.DEWFULT)
-                tOwOken = nexty_tOwOk()
-                UwU.tOwOkens_list, token_length = tOwOken
-                if len(peep_tOwOk()) > 0 and peep_tOwOk()[0] == "(":
-                    UwU.setStyling(token_length, UwU.FUNCTIONSIES)
-                else:
-                    UwU.setStyling(token_length, UwU.DEWFULT)
-                continue
-            elif tOwOk.isnumeric() or tOwOk == 'UwU':
-                UwU.setStyling(tOwOk_leny, UwU.CONSTAWNTS)
-            elif tOwOk in ["(", ")", "{", "}", "[", "]"]:
-                UwU.setStyling(tOwOk_leny, UwU.BWACKETS)
-            elif tOwOk == '"' or tOwOk == "'":
-                UwU.setStyling(tOwOk_leny, UwU.STWING)
-                stwing_fwag = True
-            elif tOwOk == "!":
-                UwU.setStyling(tOwOk_leny, UwU.COMMWENTS)
-                commwent_fwag = True
-            elif tOwOk in ['+', '-', '*', '/', '%', '=', '<', '>']:
-                UwU.setStyling(tOwOk_leny, UwU.TYPESIES)
+                    style = UwU.DEWFULT
+            elif token_type in ['INTEGER', 'FLOAT']:
+                style = UwU.CONSTAWNTS
+            elif token_type == 'STRING':
+                style = UwU.STWING
+            elif token_type == 'SYMBOL':
+                style = UwU.BWACKETS
+            elif token_type == 'OPERATOR':
+                style = UwU.TYPESIES
             else:
-                UwU.setStyling(tOwOk_leny, UwU.DEWFULT)
+                style = UwU.DEWFULT
+
+            # Apply styling
+            UwU.setStyling(token_length, style)
+            token_index += 1

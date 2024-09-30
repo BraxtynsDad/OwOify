@@ -1,16 +1,19 @@
+# editor.py
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import QTextCharFormat, QFont, QColor, QKeyEvent
 from PyQt5.Qsci import *
 
-from Funny import *
+from Funny import combined_map  # Assuming combined_map is defined in Funny.py
 from lexer import OwOCustomLexer
 from Parser import OwOParser
 
 class EwitOwOr(QsciScintilla):
-    def __init__(UwU, parent=None):
+    def __init__(UwU, parent=None, file_extension=None):
         super(EwitOwOr, UwU).__init__(parent)
+        UwU.file_extension = file_extension
 
+        # Set the background color
         palette = UwU.palette()
         palette.setColor(UwU.backgroundRole(), QColor('#FF7272'))
         UwU.setPalette(palette)
@@ -18,32 +21,47 @@ class EwitOwOr(QsciScintilla):
         UwU.setUtf8(True)
 
         # Font
-        UwU.winwow_fownt = QFont("Five nights at Freddy's")
-        UwU.winwow_fownt.setPointSize(18)
+        UwU.winwow_fownt = QFont("Five nights at Freddy's", 18)
         UwU.setFont(UwU.winwow_fownt)
+        UwU.setMarginsFont(UwU.winwow_fownt)
 
         # Lexer for syntax highlighting
         UwU.OwOLexer = OwOCustomLexer(UwU)
-        UwU.OwOLexer.setDefaultFont(QFont(UwU.winwow_fownt))
+        UwU.OwOLexer.setFont(UwU.winwow_fownt)
+        UwU.setLexer(UwU.OwOLexer)
 
-        # Api for autocompletion
+        # API for autocompletion
         UwU.API = QsciAPIs(UwU.OwOLexer)
         for kys in combined_map:
             UwU.API.add(kys)
-
         UwU.API.prepare()
-
-        UwU.setLexer(UwU.OwOLexer)
 
         # Parser instance will be created when needed
         UwU.OwOParser = None
 
-        # Define error and warning indicators
-        UwU.error_indicator = 0
-        UwU.warning_indicator = 1
+        # Initialize indicators for errors
+        # Background highlight indicator
+        UwU.ERROR_INDICATOR_BG = 0
+        UwU.indicatorDefine(QsciScintilla.INDIC_FULLBOX, UwU.ERROR_INDICATOR_BG)
+        UwU.setIndicatorForegroundColor(QColor("#FFCCCC"), UwU.ERROR_INDICATOR_BG)
+        # Use SendScintilla to set alpha
+        UwU.SendScintilla(QsciScintilla.SCI_INDICSETALPHA, UwU.ERROR_INDICATOR_BG, 150)
+        UwU.setIndicatorDrawUnder(False, UwU.ERROR_INDICATOR_BG)
 
-        # Set up indicators for underlining
-        UwU.setup_indicators()
+        # Text color change indicator
+        UwU.ERROR_INDICATOR_FG = 1
+        UwU.indicatorDefine(QsciScintilla.INDIC_TEXTFORE, UwU.ERROR_INDICATOR_FG)
+        UwU.setIndicatorForegroundColor(QColor("#FF0000"), UwU.ERROR_INDICATOR_FG)
+
+        # Enable mouse tracking and call tips for hover functionality
+        UwU.setMouseTracking(True)
+        UwU.setCallTipsVisible(True)
+        UwU.setCallTipsStyle(QsciScintilla.CallTipsNoContext)
+        UwU.setCallTipsBackgroundColor(QColor("#FFFFE0"))  # Light yellow background
+        UwU.setCallTipsForegroundColor(QColor("#000000"))  # Black text
+
+        # Initialize parser errors storage
+        UwU.parser_errors = []
 
         # Brace Matching
         UwU.setBraceMatching(QsciScintilla.SloppyBraceMatch)
@@ -66,53 +84,71 @@ class EwitOwOr(QsciScintilla):
         UwU.setCaretLineBackgroundColor(QColor("#E6E6FA"))
         UwU.setCaretWidth(1)
 
-        # EOL
-        UwU.setEolMode(QsciScintilla.EolWindows)
-        UwU.setEolVisibility(False)
+        # Margins
         UwU.setMarginType(0, QsciScintilla.NumberMargin)
         UwU.setMarginWidth(0, "00000")
         UwU.setMarginsForegroundColor(QColor("#FFB6C1"))
         UwU.setMarginsBackgroundColor(QColor("#F0E6F6"))
         UwU.setMarginsFont(UwU.winwow_fownt)
-        UwU.modificationChanged.connect(UwU.applyLexerOnChange)
 
-    def setup_indicators(UwU):
-        """Set up indicators for error and warning underlining."""
-        UwU.SendScintilla(QsciScintilla.SCI_INDICSETSTYLE, UwU.error_indicator, QsciScintilla.INDIC_SQUIGGLE)
-        UwU.SendScintilla(QsciScintilla.SCI_INDICSETFORE, UwU.error_indicator, QColor("#FF0000"))  # Red for errors
-
-        UwU.SendScintilla(QsciScintilla.SCI_INDICSETSTYLE, UwU.warning_indicator, QsciScintilla.INDIC_SQUIGGLE)
-        UwU.SendScintilla(QsciScintilla.SCI_INDICSETFORE, UwU.warning_indicator, QColor("#FFD700"))  # Yellow for warnings
-
-    def underline_error(UwU, start, length):
-        """Underline the error in red."""
-        UwU.SendScintilla(QsciScintilla.SCI_SETINDICATORCURRENT, UwU.error_indicator)
-        UwU.SendScintilla(QsciScintilla.SCI_INDICATORFILLRANGE, start, length)
-
-    def underline_warning(UwU, start, length):
-        """Underline the warning in yellow."""
-        UwU.SendScintilla(QsciScintilla.SCI_SETINDICATORCURRENT, UwU.warning_indicator)
-        UwU.SendScintilla(QsciScintilla.SCI_INDICATORFILLRANGE, start, length)
+        # Connect the textChanged signal to update the lexer and parse the code
+        UwU.textChanged.connect(UwU.applyLexerOnChange)
 
     def clear_indicators(UwU):
-        """Clear all existing indicators (both errors and warnings)."""
-        start, end = 0, UwU.length()
-        UwU.SendScintilla(QsciScintilla.SCI_INDICATORCLEARRANGE, start, end)
+        length = UwU.length()
+        for indicator in [UwU.ERROR_INDICATOR_BG, UwU.ERROR_INDICATOR_FG]:
+            UwU.SendScintilla(QsciScintilla.SCI_SETINDICATORCURRENT, indicator)
+            UwU.SendScintilla(QsciScintilla.SCI_INDICATORCLEARRANGE, 0, length)
+
+    def underline_error(UwU, start_pos, length):
+        # Debug print to verify positions
+        print(f"Underlining error at position {start_pos} with length {length}")
+
+        # Apply background highlight
+        UwU.SendScintilla(QsciScintilla.SCI_SETINDICATORCURRENT, UwU.ERROR_INDICATOR_BG)
+        UwU.SendScintilla(QsciScintilla.SCI_INDICATORFILLRANGE, start_pos, length)
+
+        # Apply red text color
+        UwU.SendScintilla(QsciScintilla.SCI_SETINDICATORCURRENT, UwU.ERROR_INDICATOR_FG)
+        UwU.SendScintilla(QsciScintilla.SCI_INDICATORFILLRANGE, start_pos, length)
 
     def applyLexerOnChange(UwU):
-        start, end = 0, UwU.length()
-        UwU.OwOLexer.styleText(start, end)
-        tokens = UwU.OwOLexer.get_token_list()
-        print(f'tokens: {tokens}')
-        parser = OwOParser(tokens)
+        text = UwU.text()
         try:
+            tokens = UwU.OwOLexer.Genewate_towokens(text)
+            parser = OwOParser(tokens)
             ast = parser.parse()
-            print("AST:", ast)
+            print(f'AST: {ast}')
         except Exception as e:
-            print(f"Parsing Error: {e}")
-        for error in parser.errors:
-            UwU.underline_error(error['start'], error['length'])
+            print(f"Unexpected Parsing Error: {e}")
+            # Optionally, report the error in the editor or status bar
+
+        # Clear existing indicators
+        UwU.clear_indicators()
+
+        # Store parser errors for hover functionality
+        UwU.parser_errors = parser.errors if parser else []
+
+        # Underline errors
+        for error in UwU.parser_errors:
+            start_pos = error.get('position', 0)
+            length = error.get('length', 1)
+            UwU.underline_error(start_pos, length)
+
 
     def keyPressEvent(UwU, e: QKeyEvent) -> None:
         super().keyPressEvent(e)
         UwU.autoCompleteFromAll()
+
+    def indicatorEvent(UwU, pos, modifiers, event):
+        if event == QsciScintilla.IndicatorMouseEvent.IndicatorMouseHover:
+            # Find the error at this position
+            for error in UwU.parser_errors:
+                start = error['position']
+                end = start + error['length']
+                if start <= pos <= end:
+                    # Show the call tip at the current position
+                    UwU.callTipShow(pos, error['message'])
+                    break
+        else:
+            UwU.callTipCancel()

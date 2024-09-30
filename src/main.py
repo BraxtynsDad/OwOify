@@ -240,9 +240,10 @@ class MainWindow(QMainWindow):
     def MUwUsyc_skyp(UwU):
             UwU.pwaywist.next()
     
-    def getw_ewitOwOr(UwU) -> QsciScintilla:
-        ewitOwOr = EwitOwOr(UwU)
+    def getw_ewitOwOr(UwU, file_extension=None) -> QsciScintilla:
+        ewitOwOr = EwitOwOr(UwU, file_extension)
         return ewitOwOr
+
     
     def is_binawy(UwU, pathy):
         # Check if path is a file and not a directory
@@ -267,8 +268,8 @@ class MainWindow(QMainWindow):
     def setw_neUwU_tabx3(UwU, pathy: Path, is_neUwU_fwiwe=False):
         # If this is a new file, handle it separately
         if is_neUwU_fwiwe:
-            # Create a new, untitled file tab
-            ewitOwOr = UwU.getw_ewitOwOr()
+            # Assume new untitled files are .pyowo files
+            ewitOwOr = UwU.getw_ewitOwOr('.pyowo')
             UwU.tabx3_vieUwU.addTab(ewitOwOr, "UwUntitwed")
             UwU.setWindowTitle("UwUntitwed - " + UwU.AwApp_nyan)
             UwU.shOwO_statUwUs_messawge("OwOpened UwUntitwed")
@@ -290,6 +291,9 @@ class MainWindow(QMainWindow):
         if not pathy.is_file():
             return
 
+        # Get the file extension
+        file_extension = pathy.suffix.lower()
+
         # Check if the file is already open
         for i in range(UwU.tabx3_vieUwU.count()):
             if UwU.tabx3_vieUwU.tabText(i) == pathy.name:
@@ -298,16 +302,13 @@ class MainWindow(QMainWindow):
                 return
         
         # Create new tab for existing file
-        ewitOwOr = UwU.getw_ewitOwOr()
+        ewitOwOr = UwU.getw_ewitOwOr(file_extension)
         UwU.tabx3_vieUwU.addTab(ewitOwOr, pathy.name)
         ewitOwOr.setText(pathy.read_text())
         UwU.setWindowTitle(f"{pathy.name} - {UwU.AwApp_nyan}")
         UwU.cuwwwent_fwiwe = pathy
         UwU.tabx3_vieUwU.setCurrentIndex(UwU.tabx3_vieUwU.count() - 1)
         UwU.shOwO_statUwUs_messawge(f"Opened {pathy.name}")
-
-        # Create the editor for a new or existing file
-        ewitOwOr = UwU.getw_ewitOwOr()
 
         # This condition checks if the file being opened is a new file
         if is_neUwU_fwiwe:
