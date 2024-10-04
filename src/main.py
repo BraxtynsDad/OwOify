@@ -177,7 +177,6 @@ class MainWindow(QMainWindow):
 
 
     def Sa0v0e_as(UwU):
-        # Get the current editor tab
         ewitOwOr = UwU.tabx3_vieUwU.currentWidget()
         if ewitOwOr is None:
             return
@@ -404,6 +403,14 @@ class MainWindow(QMainWindow):
         bowdy.setSpacing(0)
         bowdy_fwame.setLayout(bowdy)
 
+        # Tab View
+        UwU.tabx3_vieUwU = QTabWidget()
+        # UwU.tabx3_vieUwU.setContentsMargins(0, 0, 0, 0)
+        UwU.tabx3_vieUwU.setTabsClosable(True)
+        UwU.tabx3_vieUwU.setMovable(True)
+        UwU.tabx3_vieUwU.setDocumentMode(True)
+        UwU.tabx3_vieUwU.tabCloseRequested.connect(UwU.cwose_tabx3)
+
         # Sidebar
         UwU.swide_baw = QFrame()
         UwU.swide_baw.setFrameShape(QFrame.StyledPanel)
@@ -531,13 +538,6 @@ class MainWindow(QMainWindow):
 
         searchy_x3_layout.addWidget(UwU.searchy_listy_vieUwU)
         UwU.searchy_x3_fwame.setLayout(searchy_x3_layout)
-
-        UwU.tabx3_vieUwU = QTabWidget()
-        UwU.tabx3_vieUwU.setContentsMargins(0, 0, 0, 0)
-        UwU.tabx3_vieUwU.setTabsClosable(True)
-        UwU.tabx3_vieUwU.setMovable(True)
-        UwU.tabx3_vieUwU.setDocumentMode(True)
-        UwU.tabx3_vieUwU.tabCloseRequested.connect(UwU.cwose_tabx3)
 
         UwU.OwOSpwit.addWidget(UwU.fwiwe_manongew_fwame)
         UwU.OwOSpwit.addWidget(UwU.tabx3_vieUwU)

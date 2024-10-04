@@ -4,9 +4,10 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import QTextCharFormat, QFont, QColor, QKeyEvent
 from PyQt5.Qsci import *
 
-from Funny import combined_map  # Assuming combined_map is defined in Funny.py
+from Funny import *
 from lexer import OwOCustomLexer
 from Parser import OwOParser
+from Interpreter import *
 
 class EwitOwOr(QsciScintilla):
     def __init__(UwU, parent=None, file_extension=None):
@@ -32,7 +33,7 @@ class EwitOwOr(QsciScintilla):
 
         # API for autocompletion
         UwU.API = QsciAPIs(UwU.OwOLexer)
-        for kys in combined_map:
+        for kys in keyword and built:
             UwU.API.add(kys)
         UwU.API.prepare()
 
@@ -102,7 +103,7 @@ class EwitOwOr(QsciScintilla):
 
     def underline_error(UwU, start_pos, length):
         # Debug print to verify positions
-        print(f"Underlining error at position {start_pos} with length {length}")
+        # print(f"Underlining error at position {start_pos} with length {length}")
 
         # Apply background highlight
         UwU.SendScintilla(QsciScintilla.SCI_SETINDICATORCURRENT, UwU.ERROR_INDICATOR_BG)
@@ -114,14 +115,16 @@ class EwitOwOr(QsciScintilla):
 
     def applyLexerOnChange(UwU):
         text = UwU.text()
+        UwU.OwOLexer.styleText(0, 10)
         try:
             tokens = UwU.OwOLexer.Genewate_towokens(text)
             parser = OwOParser(tokens)
             ast = parser.parse()
-            print(f'AST: {ast}')
+            # print(f'AST: {ast}')
         except Exception as e:
-            print(f"Unexpected Parsing Error: {e}")
+            #print(f"Unexpected Parsing Error: {e}")
             # Optionally, report the error in the editor or status bar
+            pass
 
         # Clear existing indicators
         UwU.clear_indicators()
@@ -134,6 +137,10 @@ class EwitOwOr(QsciScintilla):
             start_pos = error.get('position', 0)
             length = error.get('length', 1)
             UwU.underline_error(start_pos, length)
+
+        interpreter = ExtendedInterpreter(ast)
+        interpreter.interpret()
+        return ast
 
 
     def keyPressEvent(UwU, e: QKeyEvent) -> None:

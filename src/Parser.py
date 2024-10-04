@@ -37,7 +37,7 @@ class OwOParser:
                 break
         else:
             UwU.current_token = None  # No more tokens
-        logging.debug(f"Next token: {UwU.current_token}")
+        # logging.debug(f"Next token: {UwU.current_token}")
 
     def current_token_is(UwU, expected_type, expected_value=None):
         if UwU.current_token is None:
@@ -124,9 +124,9 @@ class OwOParser:
         token_value = UwU.current_token[1]
 
         if token_type == 'IDENTIFIER':
-            if token_value in ['baka', 'nuu', 'kawaii', 'nyan']:
+            if token_value in ['baka', 'nuu', 'kawaii', 'nyan', 'pwease']:
                 return UwU.variable_declaration()
-            elif token_value in ['dewf', 'pwease']:
+            elif token_value in ['dewf']:
                 return UwU.function_definition()
             elif token_value == 'ifflie':
                 return UwU.if_statement()
@@ -194,7 +194,7 @@ class OwOParser:
 
     def function_definition(UwU):
         try:
-            logging.debug("Entering function_definition")
+            # logging.debug("Entering function_definition")
             if UwU.current_token and UwU.current_token[1] in ['dewf', 'pwease']:
                 UwU.eat('IDENTIFIER')  # Consume 'dewf' or 'pwease'
             else:
@@ -267,7 +267,7 @@ class OwOParser:
 
             # Parse function body
             body = UwU.block()
-            logging.debug("Exiting function_definition")
+            # logging.debug("Exiting function_definition")
 
             return {'type': 'function_definition', 'name': function_name, 'parameters': parameters, 'body': body}
         except Exception as e:
