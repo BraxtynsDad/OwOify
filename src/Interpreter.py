@@ -1,3 +1,5 @@
+# interpreter.py
+
 from Parser import OwOParser
 
 class Environment:
@@ -21,18 +23,20 @@ class Environment:
         if name in self.functions:
             return self.functions[name]
         else:
-            raise NameError(f"Function '{name}' is not defined.")
-
+            return None  # Return None if function is not defined
 
 class Interpreter:
     def __init__(self, ast):
         self.ast = ast
         self.env = Environment()
+        self.return_value = None  # To handle return statements
 
     def interpret(self):
         try:
             for stmt in self.ast['statements']:
                 self.execute_statement(stmt)
+                if self.return_value is not None:
+                    break  # Exit if a return statement is executed
         except Exception as e:
             print(f"Error: {e}")
 
@@ -50,6 +54,8 @@ class Interpreter:
             self.handle_if_statement(stmt)
         elif stmt_type == 'assignment':
             self.handle_assignment(stmt)
+        elif stmt_type == 'return':
+            self.return_value = self.evaluate_expression(stmt['value'])
         else:
             raise NotImplementedError(f"Statement type '{stmt_type}' not implemented.")
 
@@ -58,8 +64,24 @@ class Interpreter:
         var_type = stmt['var_type']
         value_node = stmt['value']
         value = self.evaluate_expression(value_node)
-        # Optionally, enforce type based on var_type
-        # For simplicity, we'll ignore var_type
+
+        # Enforce type based on var_type
+        expected_type = {
+            'nuu': int,
+            'kawaii': float,
+            'baka': bool,
+            'pwease': str,
+            'nyan': list,
+        }
+
+        if var_type in expected_type:
+            try:
+                value = expected_type[var_type](value)
+            except ValueError:
+                raise TypeError(f"Cannot assign value of type {type(value).__name__} to variable '{var_name}' of type {var_type}")
+        else:
+            raise TypeError(f"Unknown variable type '{var_type}'")
+
         self.env.set_variable(var_name, value)
 
     def handle_assignment(self, stmt):
@@ -79,10 +101,10 @@ class Interpreter:
             # Remove surrounding quotes
             return expr['value'].strip('"').strip("'")
         elif expr_type == 'boolean':
-            val = expr['value'].lower()
-            if val == 'twue':  # Handling the typo 'Twue'
+            val = expr['value']
+            if val in ['Twue', 'twue']:
                 return True
-            elif val == 'false':
+            elif val in ['Fawlse', 'fawlse']:
                 return False
             else:
                 raise ValueError(f"Invalid boolean value '{expr['value']}'")
@@ -93,18 +115,43 @@ class Interpreter:
             right = self.evaluate_expression(expr['right'])
             operator = expr['operator']
             return self.apply_operator(operator, left, right)
+        elif expr_type == 'function_call':
+            # Evaluate function call and return its result
+            func_call_stmt = expr  # The expression is a function call statement
+            return self.handle_function_call(func_call_stmt)
+        elif expr_type == 'unary_operation':
+            operator = expr['operator']
+            operand = self.evaluate_expression(expr['operand'])
+            if operator == 'nwope':
+                return not operand
+            else:
+                raise NotImplementedError(f"Unary operator '{operator}' not implemented.")
         else:
             raise NotImplementedError(f"Expression type '{expr_type}' not implemented.")
 
     def apply_operator(self, operator, left, right):
         if operator == '+':
-            return left + right
+            # Handle string concatenation
+            if isinstance(left, str) or isinstance(right, str):
+                return str(left) + str(right)
+            else:
+                return left + right
         elif operator == '-':
             return left - right
         elif operator == '*':
-            return left * right
+            # Handle string multiplication
+            if isinstance(left, str) and isinstance(right, int):
+                return left * right
+            elif isinstance(right, str) and isinstance(left, int):
+                return right * left
+            else:
+                return left * right
         elif operator == '/':
             return left / right
+        elif operator == '%':
+            return left % right
+        elif operator == '**':
+            return left ** right
         elif operator == '<':
             return left < right
         elif operator == '>':
@@ -117,6 +164,10 @@ class Interpreter:
             return left <= right
         elif operator == '>=':
             return left >= right
+        elif operator == 'anwd':
+            return left and right
+        elif operator == 'owr':
+            return left or right
         else:
             raise NotImplementedError(f"Operator '{operator}' not implemented.")
 
@@ -129,31 +180,72 @@ class Interpreter:
     def handle_function_call(self, stmt):
         func_name = stmt['name']
         args = stmt['arguments']
-        func_def = self.env.get_function(func_name)
-        if func_def is None:
-            raise NameError(f"Function '{func_name}' is not defined.")
 
-        # Evaluate arguments
-        arg_values = [self.evaluate_expression(arg) for arg in args]
+        # Handle built-in functions
+        if func_name == 'pwint':
+            arg_values = [self.evaluate_expression(arg) for arg in args]
+            print(*arg_values)
+            return
+        elif func_name == 'inpuwt':
+            prompt = self.evaluate_expression(args[0]) if args else ''
+            user_input = input(prompt)
+            return user_input
+        elif func_name == 'leny':
+            arg_value = self.evaluate_expression(args[0])
+            return len(arg_value)
+        elif func_name == 'wange':
+            # Handle range function with 1 to 3 arguments
+            arg_values = [self.evaluate_expression(arg) for arg in args]
+            return range(*arg_values)
+        elif func_name == 'inty':
+            arg_value = self.evaluate_expression(args[0])
+            return int(arg_value)
+        elif func_name == 'stwie':
+            arg_value = self.evaluate_expression(args[0])
+            return str(arg_value)
+        elif func_name == 'fwoaty':
+            arg_value = self.evaluate_expression(args[0])
+            return float(arg_value)
+        elif func_name == 'booww':
+            arg_value = self.evaluate_expression(args[0])
+            return bool(arg_value)
+        elif func_name == 'wistie':
+            arg_values = [self.evaluate_expression(arg) for arg in args]
+            return list(arg_values)
+        else:
+            # Handle user-defined functions
+            func_def = self.env.get_function(func_name)
+            if func_def is None:
+                raise NameError(f"Function '{func_name}' is not defined.")
 
-        # Prepare a new environment for function execution
-        local_env = Environment()
-        # Assign arguments to parameters
-        for param, arg in zip(func_def['parameters'], arg_values):
-            param_name = param['name']
-            local_env.set_variable(param_name, arg)
+            # Evaluate arguments
+            arg_values = [self.evaluate_expression(arg) for arg in args]
 
-        # Save current environment
-        previous_env = self.env
-        # Set the new local environment
-        self.env = local_env
+            # Prepare a new environment for function execution
+            local_env = Environment()
+            # Assign arguments to parameters
+            for param, arg in zip(func_def['parameters'], arg_values):
+                param_name = param['name']
+                local_env.set_variable(param_name, arg)
 
-        # Execute function body
-        for stmt in func_def['body']:
-            self.execute_statement(stmt)
+            # Save current environment
+            previous_env = self.env
+            # Set the new local environment
+            self.env = local_env
 
-        # Restore the previous environment
-        self.env = previous_env
+            # Execute function body
+            return_value = None
+            for s in func_def['body']:
+                if s['type'] == 'return':
+                    return_value = self.evaluate_expression(s['value'])
+                    break
+                else:
+                    self.execute_statement(s)
+
+            # Restore the previous environment
+            self.env = previous_env
+
+            return return_value
 
     def handle_if_statement(self, stmt):
         condition = self.evaluate_expression(stmt['condition'])
@@ -170,39 +262,3 @@ class Interpreter:
             for s in stmt['body']:
                 self.execute_statement(s)
             condition = self.evaluate_expression(stmt['condition'])
-
-class ExtendedInterpreter(Interpreter):
-    def handle_function_call(self, stmt):
-        func_name = stmt['name']
-        args = stmt['arguments']
-        if func_name == 'pwint':
-            # Handle 'pwint' as a print statement
-            arg_values = [self.evaluate_expression(arg) for arg in args]
-            print(*arg_values)
-            return
-        # Otherwise, handle as normal function
-        func_def = self.env.get_function(func_name)
-        if func_def is None:
-            raise NameError(f"Function '{func_name}' is not defined.")
-
-        # Evaluate arguments
-        arg_values = [self.evaluate_expression(arg) for arg in args]
-
-        # Prepare a new environment for function execution
-        local_env = Environment()
-        # Assign arguments to parameters
-        for param, arg in zip(func_def['parameters'], arg_values):
-            param_name = param['name']
-            local_env.set_variable(param_name, arg)
-
-        # Save current environment
-        previous_env = self.env
-        # Set the new local environment
-        self.env = local_env
-
-        # Execute function body
-        for stmt in func_def['body']:
-            self.execute_statement(stmt)
-
-        # Restore the previous environment
-        self.env = previous_env

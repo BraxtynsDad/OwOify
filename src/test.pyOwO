@@ -1,5 +1,5 @@
 x3 Correct variable declarations for reference
-nuu x = 10
+nuu x = 9
 kawaii y = 20.0
 baka name = "Alice"
 nyan is_happy = Twue
@@ -13,7 +13,7 @@ x3 Calling the function incorrectly (missing an argument)
 incorrect_function(5, Twue)
 
 x3 Loop with a syntax error (missing colon and indentation)
-whiwile x < 10:
+whiwiwe x < 10:
     pwint("x is less than 10")
     x = x + 1
 

@@ -130,7 +130,7 @@ class OwOParser:
                 return UwU.function_definition()
             elif token_value == 'ifflie':
                 return UwU.if_statement()
-            elif token_value == 'whiwile':
+            elif token_value == 'whiwiwe':
                 return UwU.while_statement()
             elif token_value == 'impowt':
                 return UwU.import_statement()
@@ -388,7 +388,7 @@ class OwOParser:
         Returns:
             dict: The AST node representing the while statement.
         """
-        UwU.eat('IDENTIFIER', 'whiwile')  # Consume 'whiwile'
+        UwU.eat('IDENTIFIER', 'whiwiwe')  # Consume 'whiwiwe'
         condition = UwU.expression()  # Parse the condition expression
         UwU.eat('SYMBOL', ':')  # Expect ':'
 

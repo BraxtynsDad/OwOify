@@ -137,9 +137,6 @@ class EwitOwOr(QsciScintilla):
             start_pos = error.get('position', 0)
             length = error.get('length', 1)
             UwU.underline_error(start_pos, length)
-
-        interpreter = ExtendedInterpreter(ast)
-        interpreter.interpret()
         return ast
 
 
