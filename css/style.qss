@@ -5,6 +5,10 @@ QMainWindow {
     color: #B97A95;
 }
 
+QFrame {
+    background-color: transparent; /* Ensure frames don't override the background */
+}
+
 QTabWidget {
     background-color: #FFB6C1;
     color: #D4A5FF;
@@ -45,7 +49,6 @@ QSplitter {
 QSplitter::handle {
     background-color: #FFB6C1;
     border: 1px solid #FF7272;
-    border-radius: 6px;
 }
 
 QSplitter::handle:hover {
@@ -58,7 +61,6 @@ QScrollBar:vertical {
     width: 14px;
     margin: 15px 0 15px 0;
     background-color: #E3A2B1;
-    border-radius: 0px;
 }
 
 QScrollBar:handle:vertical {
@@ -98,7 +100,6 @@ QScrollBar:horizontal {
     height: 14px;
     margin: 0 15px 0 15px;
     background-color: #E3A2B1;
-    border-radius: 0px;
 }
 
 QScrollBar:handle:horizontal {
@@ -131,6 +132,31 @@ QScrollBar::add-line:horizontal {
 
 QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
     background: none;
+}
+
+QPushButton {
+    background-color: none;
+    color: #7D5A89;
+    border: none;
+}
+
+QPushButton:hover {
+    background-color: #FFE6EB;
+}
+
+QMenu {
+    background-color: #FFB6C1;
+    color: #7D5A89;
+    border: 1px solid #D4A5FF;
+}
+
+QMenu::item {
+    padding: 5px 20px;
+}
+
+QMenu::item:selected {
+    background-color: #D4A5FF;
+    color: #FF7272;
 }
 
 QsciScintilla {
