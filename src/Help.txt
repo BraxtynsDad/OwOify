@@ -1,0 +1,33 @@
+Hello you poor soul this is help section so you can figure out what the heck is going on
+Here is a list of pyOwOs python equivalents
+    x3 Keywords
+    Fawlse: 'False',
+    Twue: 'True',
+    ifflie: 'if',
+    elswe: 'else',
+    whiwiwe: 'while',
+    dewf: 'def',
+    nwope: 'not',
+    anwd: 'and',
+    owr: 'or',
+    x3 Variable Declarations
+    baka: 'bool',
+    pwease: 'string',
+    nuu: 'int',
+    kawaii: 'float',
+    nyan: 'list',
+    x3 Built-in Functions
+    pwint("example"): 'print',
+    inpuwt("example"): 'input',
+    leny("example"): 'len',
+    wange("example"): 'range',
+    inty("example"): 'int',
+    stwie("example"): 'str',
+    fwoaty("example"): 'float',
+    wistie("example"): 'list',
+    booww("example"): 'bool',
+Variable declarations like in C are necessary
+like in dewf function(nuu b):
+or just defining a variable for the first time.
+Other than that its just like python just extremely limited
+Have Fun!

@@ -1,4 +1,5 @@
 # editor.py
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import QTextCharFormat, QFont, QColor, QKeyEvent
@@ -6,7 +7,7 @@ from PyQt5.Qsci import *
 
 from Funny import *
 from lexer import OwOCustomLexer
-from Parser import OwOParser
+from Parser import OwOParser  # Ensure this is the correct import
 from Interpreter import *
 
 class EwitOwOr(QsciScintilla):
@@ -33,7 +34,7 @@ class EwitOwOr(QsciScintilla):
 
         # API for autocompletion
         UwU.API = QsciAPIs(UwU.OwOLexer)
-        for kys in keyword and built:
+        for kys in combined_map:  # Use '+' to concatenate lists
             UwU.API.add(kys)
         UwU.API.prepare()
 
@@ -47,12 +48,16 @@ class EwitOwOr(QsciScintilla):
         UwU.setIndicatorForegroundColor(QColor("#FFCCCC"), UwU.ERROR_INDICATOR_BG)
         # Use SendScintilla to set alpha
         UwU.SendScintilla(QsciScintilla.SCI_INDICSETALPHA, UwU.ERROR_INDICATOR_BG, 150)
-        UwU.setIndicatorDrawUnder(False, UwU.ERROR_INDICATOR_BG)
+        UwU.setIndicatorDrawUnder(True, UwU.ERROR_INDICATOR_BG)
+        # Set hover style
+        UwU.setIndicatorHoverStyle(UwU.ERROR_INDICATOR_BG, QsciScintilla.INDIC_FULLBOX)
 
         # Text color change indicator
         UwU.ERROR_INDICATOR_FG = 1
         UwU.indicatorDefine(QsciScintilla.INDIC_TEXTFORE, UwU.ERROR_INDICATOR_FG)
         UwU.setIndicatorForegroundColor(QColor("#FF0000"), UwU.ERROR_INDICATOR_FG)
+        # Set hover style
+        UwU.setIndicatorHoverStyle(UwU.ERROR_INDICATOR_FG, QsciScintilla.INDIC_TEXTFORE)
 
         # Enable mouse tracking and call tips for hover functionality
         UwU.setMouseTracking(True)
@@ -92,6 +97,11 @@ class EwitOwOr(QsciScintilla):
         UwU.setMarginsBackgroundColor(QColor("#F0E6F6"))
         UwU.setMarginsFont(UwU.winwow_fownt)
 
+        # Debounce timer for parsing and updating indicators
+        UwU.update_timer = QTimer()
+        UwU.update_timer.setSingleShot(True)
+        UwU.update_timer.timeout.connect(UwU.deferredApplyLexer)
+
         # Connect the textChanged signal to update the lexer and parse the code
         UwU.textChanged.connect(UwU.applyLexerOnChange)
 
@@ -101,30 +111,37 @@ class EwitOwOr(QsciScintilla):
             UwU.SendScintilla(QsciScintilla.SCI_SETINDICATORCURRENT, indicator)
             UwU.SendScintilla(QsciScintilla.SCI_INDICATORCLEARRANGE, 0, length)
 
-    def underline_error(UwU, start_pos, length):
-        # Debug print to verify positions
-        # print(f"Underlining error at position {start_pos} with length {length}")
+    def underline_error(UwU, line, column, length):
+        if UwU.file_extension == '.pyowo':
+            # Convert line and column to position
+            start_pos = UwU.positionFromLineIndex(line, column)
 
-        # Apply background highlight
-        UwU.SendScintilla(QsciScintilla.SCI_SETINDICATORCURRENT, UwU.ERROR_INDICATOR_BG)
-        UwU.SendScintilla(QsciScintilla.SCI_INDICATORFILLRANGE, start_pos, length)
+            # Apply background highlight
+            UwU.SendScintilla(QsciScintilla.SCI_SETINDICATORCURRENT, UwU.ERROR_INDICATOR_BG)
+            UwU.SendScintilla(QsciScintilla.SCI_INDICATORFILLRANGE, start_pos, length)
 
-        # Apply red text color
-        UwU.SendScintilla(QsciScintilla.SCI_SETINDICATORCURRENT, UwU.ERROR_INDICATOR_FG)
-        UwU.SendScintilla(QsciScintilla.SCI_INDICATORFILLRANGE, start_pos, length)
+            # Apply red text color
+            UwU.SendScintilla(QsciScintilla.SCI_SETINDICATORCURRENT, UwU.ERROR_INDICATOR_FG)
+            UwU.SendScintilla(QsciScintilla.SCI_INDICATORFILLRANGE, start_pos, length)
 
     def applyLexerOnChange(UwU):
+        # Restart the timer on every text change
+        UwU.update_timer.start(200)  # Debounce interval in milliseconds
+
+    def deferredApplyLexer(UwU):
         text = UwU.text()
-        UwU.OwOLexer.styleText(0, 10)
+        parser = None
         try:
+            # Tokenize the text
             tokens = UwU.OwOLexer.Genewate_towokens(text)
+
+            # Parse the tokens
             parser = OwOParser(tokens)
             ast = parser.parse()
-            # print(f'AST: {ast}')
         except Exception as e:
-            #print(f"Unexpected Parsing Error: {e}")
-            # Optionally, report the error in the editor or status bar
-            pass
+            # Handle or log the exception if necessary
+            print(f"Parser error: {e}")
+            parser = None
 
         # Clear existing indicators
         UwU.clear_indicators()
@@ -134,25 +151,31 @@ class EwitOwOr(QsciScintilla):
 
         # Underline errors
         for error in UwU.parser_errors:
-            start_pos = error.get('position', 0)
+            # Use line and column if available
+            line = error.get('line', 0)
+            column = error.get('column', 0)
             length = error.get('length', 1)
-            UwU.underline_error(start_pos, length)
-        return ast
-
+            UwU.underline_error(line, column, length)
 
     def keyPressEvent(UwU, e: QKeyEvent) -> None:
         super().keyPressEvent(e)
         UwU.autoCompleteFromAll()
 
     def indicatorEvent(UwU, pos, modifiers, event):
-        if event == QsciScintilla.IndicatorMouseEvent.IndicatorMouseHover:
+        if event == QsciScintilla.SCMI_HOVER:
             # Find the error at this position
             for error in UwU.parser_errors:
-                start = error['position']
-                end = start + error['length']
-                if start <= pos <= end:
+                start_line = error.get('line', 0)
+                start_index = error.get('column', 0)
+                length = error.get('length', 1)
+                start_pos = UwU.positionFromLineIndex(start_line, start_index)
+                end_pos = start_pos + length
+                if start_pos <= pos <= end_pos:
                     # Show the call tip at the current position
                     UwU.callTipShow(pos, error['message'])
                     break
+            else:
+                UwU.callTipsCancel()
         else:
-            UwU.callTipCancel()
+            UwU.callTipsCancel()
+

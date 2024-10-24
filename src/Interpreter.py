@@ -1,6 +1,7 @@
 # interpreter.py
 
-from Parser import OwOParser
+from PyQt5.QtCore import QThread, pyqtSignal
+import time  # For sleep in InterpreterThread
 
 class Environment:
     def __init__(self):
@@ -26,10 +27,11 @@ class Environment:
             return None  # Return None if function is not defined
 
 class Interpreter:
-    def __init__(self, ast):
+    def __init__(self, ast, interpreter_thread=None):
         self.ast = ast
         self.env = Environment()
         self.return_value = None  # To handle return statements
+        self.interpreter_thread = interpreter_thread
 
     def interpret(self):
         try:
@@ -38,7 +40,10 @@ class Interpreter:
                 if self.return_value is not None:
                     break  # Exit if a return statement is executed
         except Exception as e:
-            print(f"Error: {e}")
+            error_message = f"Error: {e}"
+            print(error_message)
+            if self.interpreter_thread:
+                self.interpreter_thread.output_signal.emit(error_message)
 
     def execute_statement(self, stmt):
         stmt_type = stmt['type']
@@ -184,11 +189,18 @@ class Interpreter:
         # Handle built-in functions
         if func_name == 'pwint':
             arg_values = [self.evaluate_expression(arg) for arg in args]
-            print(*arg_values)
+            output = ' '.join(map(str, arg_values))
+            if self.interpreter_thread:
+                self.interpreter_thread.output_signal.emit(output)
+            else:
+                print(output)
             return
         elif func_name == 'inpuwt':
             prompt = self.evaluate_expression(args[0]) if args else ''
-            user_input = input(prompt)
+            if self.interpreter_thread:
+                user_input = self.interpreter_thread.get_input(prompt)
+            else:
+                user_input = input(prompt)
             return user_input
         elif func_name == 'leny':
             arg_value = self.evaluate_expression(args[0])
@@ -262,3 +274,45 @@ class Interpreter:
             for s in stmt['body']:
                 self.execute_statement(s)
             condition = self.evaluate_expression(stmt['condition'])
+
+# InterpreterThread class within interpreter.py
+
+class InterpreterThread(QThread):
+    request_input = pyqtSignal(str)
+    output_signal = pyqtSignal(str)
+
+    def __init__(self, ast):
+        super().__init__()
+        self.ast = ast
+        self.input_value = None
+        self.input_received = False
+        self.interpreter = Interpreter(ast, self)
+        self._is_running = True
+
+    ready_for_input = pyqtSignal()
+
+    def run(self):
+        try:
+            self.interpreter.interpret()
+            # Emit the signal when done
+            self.ready_for_input.emit()
+        except Exception as e:
+            error_message = f"Interpreter Error: {e}"
+            self.output_signal.emit(error_message)
+
+    def get_input(self, prompt):
+        self.request_input.emit(prompt)
+        # Wait until input is received
+        while not self.input_received and self._is_running:
+            time.sleep(0.01)  # Sleep for a short time to prevent busy waiting
+        if not self._is_running:
+            raise Exception("Interpreter execution was stopped.")
+        self.input_received = False
+        return self.input_value
+
+    def provide_input(self, value):
+        self.input_value = value
+        self.input_received = True
+
+    def stop(self):
+        self._is_running = False

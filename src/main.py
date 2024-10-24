@@ -9,12 +9,14 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.Qsci import *
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
+from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 from pathlib import Path
 from ewitOwOr import EwitOwOr
 from lexer import *
 from Parser import OwOParser
-from Interpreter import Interpreter
+from Interpreter import *
+from terminal_widget import TerminalWidget
 from fuzzy_Searchy_UwU import *
 import random
 
@@ -62,15 +64,15 @@ class MainWindow(QMainWindow):
         UwU.setStyleSheet(open("./css/style.qss", "r").read())
 
         # Add the terminal output area
-        UwU.terminal_output = QTextEdit()
-        UwU.terminal_output.setReadOnly(True)
-        UwU.terminal_output.setFont(QFont("MsPain", 16))
+        UwU.terminal_output = TerminalWidget()
+        UwU.terminal_output.setFont(QFont("Comic Sans MS", 12))
         UwU.terminal_output.setStyleSheet("""
         QTextEdit {
             background-color: #1e1e1e;
             color: #d4d4d4;
         }
         """)
+        UwU.terminal_output.input_submitted.connect(UwU.provide_input_to_interpreter)
 
         # Setup the rest of the UI
         UwU.create_custom_title_bar()
@@ -128,7 +130,7 @@ class MainWindow(QMainWindow):
         file_button.setMenu(file_menu)
 
         # Second button (e.g., 'Edit')
-        edit_button = QPushButton("Ewit")
+        edit_button = QPushButton("Hewp")
         edit_button.setFont(UwU.winwow_fownt)
         edit_button.setStyleSheet("""
             QPushButton {
@@ -147,10 +149,10 @@ class MainWindow(QMainWindow):
         UwU.add_menu_actions(edit_menu, 'Music')
         edit_button.setMenu(edit_menu)
 
-        # Run button
-        run_button = QPushButton("Run")
-        run_button.setFont(QFont("MsPain", 18))
-        run_button.setStyleSheet("""
+        # wun button
+        UwU.wun_button = QPushButton("wun")
+        UwU.wun_button.setFont(QFont("MsPain", 18))
+        UwU.wun_button.setStyleSheet("""
             QPushButton {
                 background-color: none;
                 color: #FFFFFF;
@@ -160,7 +162,7 @@ class MainWindow(QMainWindow):
                 color: #C724B1;
             }  
         """)
-        run_button.clicked.connect(UwU.run_code)
+        UwU.wun_button.clicked.connect(UwU.wun_code)
 
         # Create the title label
         title_label = QLabel(UwU.AwApp_nyan)
@@ -228,7 +230,7 @@ class MainWindow(QMainWindow):
         # Left side
         title_bar_layout.addWidget(file_button)
         title_bar_layout.addWidget(edit_button)
-        title_bar_layout.addWidget(run_button)
+        title_bar_layout.addWidget(UwU.wun_button)
 
         # Add stretch to push title label to the center
         title_bar_layout.addStretch()
@@ -263,6 +265,8 @@ class MainWindow(QMainWindow):
         elif menu_type == 'Music':
             UwU.add_menu_action(menu, "MUwUsyc StOwOp/Stawt", "Ctrl+P", UwU.MUwUsyc_StOwOp_Stawt, menUwU_fownt)
             UwU.add_menu_action(menu, "MUwUsyc skyp", "Shift+N", UwU.MUwUsyc_skyp, menUwU_fownt)
+            UwU.add_menu_action(menu, "Hewp", "Ctrl+H", UwU.Hewp_txt, menUwU_fownt)
+            UwU.add_menu_action(menu, "VideOwO Hewp", "Shift+Y", UwU.Start_VideOwO, menUwU_fownt)
 
     def add_menu_action(UwU, menu, title, shortcut, handler, font):
         action = QAction(title, UwU)
@@ -321,21 +325,25 @@ class MainWindow(QMainWindow):
         if ewitOwOr is None:
             return
 
-        # Open "Save As" dialog to get the new file path
-        fwiwe_pathy_x3 = QFileDialog.getSaveFileName(UwU, "Sa0v0e As", os.getcwd())[0]
+        dialog = QFileDialog(UwU, "Sa0v0e As", os.getcwd())
+        dialog.setAcceptMode(QFileDialog.AcceptSave)
+        dialog.setFont(QFont("Comic Sans MS", 12))
+        if dialog.exec_() == QFileDialog.Accepted:
+            fwiwe_pathy_x3 = dialog.selectedFiles()[0]
+        else:
+            UwU.shOwO_statUwUs_messawge("Save As Cancelled")
+            return
 
-        # If the user cancels the "Save As" dialog
         if fwiwe_pathy_x3 == '':
             UwU.shOwO_statUwUs_messawge("Save As Cancelled")
             return
 
-        # Save the file content to the new path
         paht = Path(fwiwe_pathy_x3)
         try:
             paht.write_text(ewitOwOr.text())
             UwU.tabx3_vieUwU.setTabText(UwU.tabx3_vieUwU.currentIndex(), paht.name)
             UwU.shOwO_statUwUs_messawge(f"Sa0v0ed {paht.name}")
-            UwU.cuwwwent_fwiwe = paht  # Set the current file to the new path
+            UwU.cuwwwent_fwiwe = paht
         except Exception as e:
             UwU.shOwO_statUwUs_messawge(f"Error Saving: {str(e)}")
 
@@ -343,29 +351,42 @@ class MainWindow(QMainWindow):
         ops = QFileDialog.Options()
         ops |= QFileDialog.DontUseNativeDialog
 
-        neUwU_fwiwe, _ = QFileDialog.getOpenFileName(UwU,
-                    "Pix A Fwiwe", "", "Aww Fwiwes (*);;PythOwOn Fwiwes (*.py);;PyOwO Files (*.pyowo)",
-                    options=ops)
+        dialog = QFileDialog(UwU, "Pix A Fwiwe", "")
+        dialog.setFileMode(QFileDialog.ExistingFile)
+        dialog.setOption(QFileDialog.ReadOnly, True)
+        dialog.setNameFilter("Aww Fwiwes (*);;PythOwOn Fwiwes (*.py);;PyOwO Files (*.pyowo)")
+        dialog.setFont(QFont("Comic Sans MS", 12))  # Set font to Comic Sans
+        if dialog.exec_() == QFileDialog.Accepted:
+            neUwU_fwiwe = dialog.selectedFiles()[0]
+        else:
+            UwU.shOwO_statUwUs_messawge("Cancewwed")
+            return
+
         if neUwU_fwiwe == '':
             UwU.shOwO_statUwUs_messawge("Cancewwed")
             return
         f = Path(neUwU_fwiwe)
         UwU.setw_neUwU_tabx3(f)
 
+
     def OwOpen_fOwOlwer(UwU):
         ops = QFileDialog.Options()
         ops |= QFileDialog.DontUseNativeDialog
 
-        neUwU_fOwOlwer = QFileDialog.getExistingDirectory(UwU, "Pix A FOwOlwer", "", options=ops)
+        dialog = QFileDialog(UwU, "Pix A FOwOlwer", "")
+        dialog.setFileMode(QFileDialog.Directory)
+        dialog.setOption(QFileDialog.ShowDirsOnly, True)
+        dialog.setFont(QFont("Comic Sans MS", 12))
+        if dialog.exec_() == QFileDialog.Accepted:
+            neUwU_fOwOlwer = dialog.selectedFiles()[0]
+        else:
+            UwU.shOwO_statUwUs_messawge("Cancewwed")
+            return
+
         if neUwU_fOwOlwer:
             UwU.mOwOwel.setRootPath(neUwU_fOwOlwer)
             UwU.twee_vieUwU.setRootIndex(UwU.mOwOwel.index(neUwU_fOwOlwer))
             UwU.shOwO_statUwUs_messawge(f"OwOpened {neUwU_fOwOlwer}")
-
-    def cOwOpy(UwU):
-        ewitOwOr = UwU.tabx3_vieUwU.currentWidget()
-        if ewitOwOr is not None:
-            ewitOwOr.copy()
 
     def MUwUsyc_StOwOp_Stawt(UwU):
         if UwU.Mewia_Pwawer.volume() == 100:
@@ -378,18 +399,22 @@ class MainWindow(QMainWindow):
     def MUwUsyc_skyp(UwU):
             UwU.pwaywist.next()
 
+    def Hewp_txt(UwU):
+        UwU.setw_neUwU_tabx3(Path("./src/Help.txt"), is_neUwU_fwiwe=False)
+
+
     def backgwound_mUwUsyc(UwU):
         UwU.Mewia_Pwawer = QMediaPlayer(UwU)
         UwU.pwaywist = QMediaPlaylist(UwU)
 
         pathy_tOwO_nyan = {
-            "./Audio/ULTIMATE_DESTRUCTION.mp3": "Ultimate Destruction",
-            "./Audio/LOwOve_anwd_TwanqUwUiltwy.mp3": "Love and Tranquility",
-            "./Audio/Snorting_Worms.mp3": "Snorting Worms",
-            "./Audio/Ace_Of_Base.mp3": "Ace Of Base",
-            "./Audio/Search_n_Destroy.mp3": "Search and Destroy",
-            "./Audio/Unturned_Pop_Track.mp3": "Unturned Pop Track",
-            "./Audio/Coffin_Nails.mp3": "Coffin Nails"
+            "./Media/ULTIMATE_DESTRUCTION.mp3": "Ultimate Destruction",
+            "./Media/LOwOve_anwd_TwanqUwUiltwy.mp3": "Love and Tranquility",
+            "./Media/Snorting_Worms.mp3": "Snorting Worms",
+            "./Media/Ace_Of_Base.mp3": "Ace Of Base",
+            "./Media/Search_n_Destroy.mp3": "Search and Destroy",
+            "./Media/Unturned_Pop_Track.mp3": "Unturned Pop Track",
+            "./Media/Coffin_Nails.mp3": "Coffin Nails"
         }
 
         def upwate_statUwUs_messawge(media):
@@ -501,14 +526,6 @@ class MainWindow(QMainWindow):
         UwU.tabx3_vieUwU.setCurrentIndex(UwU.tabx3_vieUwU.count() - 1)
         UwU.shOwO_statUwUs_messawge(f"Opened {pathy.name}")
 
-    def read_file_with_encodings(UwU, pathy, encodings=['utf-8', 'latin-1', 'cp1252']):
-        for encoding in encodings:
-            try:
-                return pathy.read_text(encoding=encoding)
-            except UnicodeDecodeError:
-                continue
-        raise UnicodeDecodeError(f"Unable to read file {pathy.name} with common encodings.")
-
         # This condition checks if the file being opened is a new file
         if is_neUwU_fwiwe:
             UwU.tabx3_vieUwU.addTab(ewitOwOr, "UwUntitwed")
@@ -533,6 +550,14 @@ class MainWindow(QMainWindow):
         UwU.tabx3_vieUwU.setCurrentIndex(UwU.tabx3_vieUwU.count() - 1)
         UwU.shOwO_statUwUs_messawge(f"Opened {pathy.name}")
 
+
+    def read_file_with_encodings(UwU, pathy, encodings=['utf-8', 'latin-1', 'cp1252']):
+        for encoding in encodings:
+            try:
+                return pathy.read_text(encoding=encoding)
+            except UnicodeDecodeError:
+                continue
+        raise UnicodeDecodeError(f"Unable to read file {pathy.name} with common encodings.")
 
     def setw_cowsOwO_pointy_x3(UwU, e):
         UwU.setCursor(Qt.PointingHandCursor)
@@ -753,47 +778,66 @@ class MainWindow(QMainWindow):
 
         UwU.setCentralWidget(UwU.bowdy_fwame)
 
-    def run_code(UwU):
+    def wun_code(UwU):
         # Get the current editor
         ewitOwOr = UwU.tabx3_vieUwU.currentWidget()
         if ewitOwOr is None:
             return
 
+        # Disable the wun button to prevent multiple wuns
+        UwU.wun_button.setEnabled(False)
+
         # Get the code from the editor
         code = ewitOwOr.text()
 
-        # Clear the terminal output
-        UwU.terminal_output.clear()
+        # Move cursor to the end
+        UwU.terminal_output.moveCursor(QTextCursor.End)
 
-        # Redirect stdout and stderr to capture print statements and errors
-        stdout = io.StringIO()
-        stderr = io.StringIO()
-        with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
-            try:
-                # Tokenize, parse, and interpret the code
-                tokens = OwOCustomLexer.Genewate_towokens(ewitOwOr, code)
-                parser = OwOParser(tokens)
-                ast = parser.parse()
+        # Parse the code
+        tokens = OwOCustomLexer.Genewate_towokens(ewitOwOr, code)
+        parser = OwOParser(tokens)
+        ast = parser.parse()
 
-                # Check for parsing errors
-                if parser.errors:
-                    for error in parser.errors:
-                        UwU.terminal_output.append(f"Parsing Error: {error['message']}")
-                else:
-                    interpreter = Interpreter(ast)
-                    interpreter.interpret()
-            except Exception as e:
-                UwU.terminal_output.append(f"Error: {e}")
+        # Check for parsing errors
+        if parser.errors:
+            for error in parser.errors:
+                UwU.terminal_output.append(f"\nParsing Error: {error['message']}")
+            UwU.wun_button.setEnabled(True)
+            return
 
-        # Get the outputs
-        output = stdout.getvalue()
-        error_output = stderr.getvalue()
+        # Create and start the interpreter thread
+        UwU.interpreter_thread = InterpreterThread(ast)
+        UwU.interpreter_thread.request_input.connect(UwU.handle_input_request)
+        UwU.interpreter_thread.output_signal.connect(UwU.handle_interpreter_output)
+        UwU.interpreter_thread.finished.connect(UwU.interpreter_finished)
+        UwU.interpreter_thread.ready_for_input.connect(UwU.set_standard_prompt)
+        UwU.interpreter_thread.start()
 
-        # Display outputs in the terminal
-        if output:
-            UwU.terminal_output.append(output)
-        if error_output:
-            UwU.terminal_output.append(error_output)
+    def handle_input_request(UwU, prompt):
+        # Set the terminal's prompt to the input prompt
+        UwU.terminal_output.set_prompt(prompt)
+        # Set a flag indicating that input is expected
+        UwU.terminal_output.expecting_input = True
+
+    def provide_input_to_interpreter(UwU, input_text):
+        if UwU.interpreter_thread:
+            UwU.interpreter_thread.provide_input(input_text)
+        else:
+            pass  # Handle cases where no interpreter is wunning
+    
+    def set_standard_prompt(UwU):
+        UwU.terminal_output.set_prompt(UwU.terminal_output.standard_prompt)
+
+    def handle_interpreter_output(UwU, output_text):
+        UwU.terminal_output.append_output(output_text)
+        
+    def interpreter_finished(UwU):
+        # Set the prompt when interpreter finishes
+        UwU.terminal_output.set_prompt(UwU.terminal_output.standard_prompt)
+        UwU.terminal_output.moveCursor(QTextCursor.End)
+        UwU.terminal_output.ensureCursorVisible()
+        # Re-enable the wun button
+        UwU.wun_button.setEnabled(True)
 
     def searchy_finishewd(UwU, iwems):
         UwU.searchy_listy_vieUwU.clear()
@@ -818,7 +862,107 @@ class MainWindow(QMainWindow):
         p = Path(path)
         UwU.setw_neUwU_tabx3(p)
 
-# ensures that the code for initializing the QApplication only executes when you run the script directly and not when it is imported
+    def Start_VideOwO(UwU):
+        # Create a container widget that will hold both the video and controls
+        video_container = QWidget()
+        video_layout = QVBoxLayout()  # Layout for the video and controls
+
+        # Create media player and video widget
+        UwU.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
+        UwU.videoWidget = QVideoWidget()
+
+        # Create video control buttons
+        play_button = QPushButton("⏯")
+        play_button.setStyleSheet("""
+            QPushButton {
+                background-color: none;
+                color: #FFFFFF;
+                border: none;
+            }
+            QPushButton::menu-indicator {
+                image: none;
+            }
+            QPushButton:hover {
+                color: #C724B1;
+            }  
+        """)
+        pause_button = QPushButton("⏸")
+        pause_button.setStyleSheet("""
+            QPushButton {
+                background-color: none;
+                color: #FFFFFF;
+                border: none;
+            }
+            QPushButton::menu-indicator {
+                image: none;
+            }
+            QPushButton:hover {
+                color: #C724B1;
+            }  
+        """)
+        stop_button = QPushButton("⏹")
+        stop_button.setStyleSheet("""
+            QPushButton {
+                background-color: none;
+                color: #FFFFFF;
+                border: none;
+            }
+            QPushButton::menu-indicator {
+                image: none;
+            }
+            QPushButton:hover {
+                color: #C724B1;
+            }  
+        """)
+
+        # Create a slider for seeking through the video
+        video_slider = QSlider(Qt.Horizontal)
+        video_slider.setRange(0, 0)  # Initial range, will be updated later
+
+        control_layout = QHBoxLayout()
+        control_layout.addWidget(play_button)
+        control_layout.addWidget(pause_button)
+        control_layout.addWidget(stop_button)
+        control_layout.addWidget(video_slider)
+
+        video_layout.addWidget(UwU.videoWidget)
+        video_layout.addLayout(control_layout)
+        video_container.setLayout(video_layout)
+
+        # Add the container widget to the tab view
+        UwU.tabx3_vieUwU.addTab(video_container, "Video")
+
+        # Set the video output to the video widget
+        UwU.mediaPlayer.setVideoOutput(UwU.videoWidget)
+
+        # Load and play the video
+        video_url = QUrl.fromLocalFile(str('./Media/Luigi.avi'))
+        UwU.mediaPlayer.setMedia(QMediaContent(video_url))
+
+        # Set slider to sync with video duration
+        def on_duration_changed(duration):
+            video_slider.setRange(0, duration)
+
+        def on_position_changed(position):
+            video_slider.setValue(position)
+
+        # Connect mediaPlayer signals for slider functionality
+        UwU.mediaPlayer.durationChanged.connect(on_duration_changed)
+        UwU.mediaPlayer.positionChanged.connect(on_position_changed)
+
+        # Connect slider to change video position when moved
+        video_slider.sliderMoved.connect(UwU.mediaPlayer.setPosition)
+
+        # Define the play, pause, and stop button functions
+        play_button.clicked.connect(UwU.mediaPlayer.play)
+        pause_button.clicked.connect(UwU.mediaPlayer.pause)
+        stop_button.clicked.connect(UwU.mediaPlayer.stop)
+
+        # Auto-play if not already playing
+        if UwU.mediaPlayer.state() != QMediaPlayer.PlayingState:
+            UwU.mediaPlayer.play()
+
+# ensures that the code for initializing the QApplication only executes when you wun the script directly and not when it is imported
 if __name__ == '__main__':
     # setting up the main event loop and potentially handling any command-line arguments
     app = QApplication(sys.argv)
