@@ -38,7 +38,7 @@ QTabBar::close-button:hover {
     background-color: #D4A5FF;
 }
 
-QTabBar::close-button::selected:hover{
+QTabBar::close-button::selected:hover {
     background-color: #fac9ff;
 }
 
@@ -61,38 +61,16 @@ QScrollBar:vertical {
     width: 14px;
     margin: 15px 0 15px 0;
     background-color: #E3A2B1;
+    border-radius: 0px; /* Ensuring the behavior remains smooth */
 }
 
 QScrollBar:handle:vertical {
     background-color: #D4A5FF;
+    border-radius: 0px; /* Avoid rounded to maintain good scroll behavior */
 }
 
 QScrollBar:handle:vertical:pressed {
     background-color: #FFE6EB;
-}
-
-QScrollBar::sub-line:vertical {
-    border: none;
-    background: none;
-    height: 15px;
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
-    subcontrol-position: top;
-    subcontrol-origin: margin;
-}
-
-QScrollBar::add-line:vertical {
-    border: none;
-    background: none;
-    height: 15px;
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
-    subcontrol-position: bottom;
-    subcontrol-origin: margin;
-}
-
-QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
-    background: none;
 }
 
 QScrollBar:horizontal {
@@ -100,42 +78,36 @@ QScrollBar:horizontal {
     height: 14px;
     margin: 0 15px 0 15px;
     background-color: #E3A2B1;
+    border-radius: 0px; /* Ensuring the behavior remains smooth */
 }
 
 QScrollBar:handle:horizontal {
     background-color: #D4A5FF;
+    border-radius: 0px; /* Avoid rounded to maintain good scroll behavior */
 }
 
 QScrollBar:handle:horizontal:pressed {
     background-color: #FFE6EB;
 }
 
-QScrollBar::sub-line:horizontal {
-    border: none;
-    background: none;
-    width: 15px;
-    border-top-left-radius: 7px;
-    border-bottom-left-radius: 7px;
-    subcontrol-position: left;
-    subcontrol-origin: margin;
-}
-
+QScrollBar::sub-line:vertical,
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:horizontal,
 QScrollBar::add-line:horizontal {
     border: none;
     background: none;
+    height: 15px;
     width: 15px;
-    border-top-right-radius: 7px;
-    border-bottom-right-radius: 7px;
-    subcontrol-position: right;
     subcontrol-origin: margin;
 }
 
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical,
 QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
     background: none;
 }
 
 QPushButton {
-    background-color: none;
+    background-color: transparent;
     color: #7D5A89;
     border: none;
 }
@@ -152,6 +124,8 @@ QMenu {
 
 QMenu::item {
     padding: 5px 20px;
+    background-color: #FFB6C1;
+    color: #7D5A89;
 }
 
 QMenu::item:selected {
@@ -163,4 +137,25 @@ QsciScintilla {
     border: none;
     background-color: #ebf0c1;
     color: #C724B1;
+}
+
+QAbstractItemView {
+    background-color: #FFB6C1;  /* Ensure a non-black background */
+    color: #7D5A89;
+    border: 1px solid #D4A5FF;
+    selection-background-color: #D4A5FF;  /* Background color when item is selected */
+    selection-color: #FF7272;  /* Color for text when selected */
+}
+
+QComboBox QAbstractItemView {
+    background-color: #FFB6C1;  /* Ensuring dropdown options are readable */
+    color: #7D5A89;
+    border: 1px solid #D4A5FF;
+    selection-background-color: #D4A5FF;
+    selection-color: #FF7272;
+}
+
+/* For the QLabel that might display text with suggestions */
+QLabel {
+    color: #7D5A89;
 }
