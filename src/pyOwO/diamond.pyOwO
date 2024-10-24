@@ -1,0 +1,23 @@
+dewf draw_diamond(nuu n):
+    x3 Upper half of the diamond
+    nuu i = 0
+    whiwiwe i < n:
+        nuu spaces_count = n - i - 1
+        nuu stars_count = 2 * i + 1
+        pwease spaces = ' ' * spaces_count
+        pwease stars = '*' * stars_count
+        pwint(spaces + stars)
+        i = i + 1
+    x3 Lower half of the diamond
+    i = n - 2
+    whiwiwe i >= 0:
+        spaces_count = n - i - 1
+        stars_count = 2 * i + 1
+        spaces = ' ' * spaces_count
+        stars = '*' * stars_count
+        pwint(spaces + stars)
+        i = i - 1
+
+pwease n_str = inpuwt("Enter the size of the diamond: ")
+nuu n = inty(n_str)
+draw_diamond(n)

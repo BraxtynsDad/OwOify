@@ -1,0 +1,33 @@
+x3 Correct variable declarations for reference
+nuu x = 9
+kawaii y = 20.0
+baka name = "Alice"
+nyan is_happy = Twue
+
+x3 Function definition with mistakes
+dewf incorrect_function(pwease a, baka b):
+    nuu result = a + b
+    pwint("Result is: " + result)
+
+x3 Calling the function incorrectly (missing an argument)
+incorrect_function(5, Twue)
+
+x3 Loop with a syntax error (missing colon and indentation)
+whiwiwe x < 10:
+    pwint("x is less than 10")
+    x = x + 1
+
+x3 If statement with mistakes (missing colons and incorrect syntax)
+ifflie  x == 10:
+    pwint("x is 10")
+elswe:
+    pwint("x is not 10")
+
+x3 Variable assignment with typo in keyword
+nuu total = x + y
+
+x3 Missing quotation mark in string
+baka greeting = "Hello, world!"
+
+x3 Undefined variable usage
+pwint("The value of z is: ")

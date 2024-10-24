@@ -1,0 +1,13 @@
+pwease name = inpuwt("Enter employee name: ")
+kawaii hours_worked = (inpuwt("Enter hours worked: "))
+kawaii hourly_rate = (inpuwt("Enter hourly pay rate: "))
+kawaii tax_rate = (inpuwt("Enter tax rate (in percentage): "))
+
+kawaii gross_pay = hours_worked * hourly_rate
+kawaii tax_deduction = gross_pay * (tax_rate / 100)
+kawaii net_pay = gross_pay - tax_deduction
+
+pwint("Payroll Summary for " + name)
+pwint("Gross Pay: $" + gross_pay)
+pwint("Tax Deduction: $" + tax_deduction)
+pwint("Net Pay: $" + net_pay)

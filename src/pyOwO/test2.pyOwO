@@ -1,0 +1,9 @@
+nuu x = 5
+pwease name = "World"
+pwint("Hello, " + name + "!")
+
+whiwiwe x > 0:
+    pwint("Countdown:", x)
+    x = x - 1
+
+pwint("Lift off!")
