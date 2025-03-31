@@ -2,7 +2,7 @@
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.QtGui import QTextCharFormat, QFont, QColor, QKeyEvent
+from PyQt5.QtGui import QTextCharFormat, QFont, QColor, QKeyEvent, QFontDatabase
 from PyQt5.Qsci import *
 
 from Funny import *
@@ -18,12 +18,14 @@ class EwitOwOr(QsciScintilla):
         # Set the background color
         palette = UwU.palette()
         palette.setColor(UwU.backgroundRole(), QColor('#FF7272'))
+        fnaf = QFontDatabase.addApplicationFont("./css/fnaf.ttf")
+        UwU.fnaf_families = QFontDatabase.applicationFontFamilies(fnaf)
         UwU.setPalette(palette)
 
         UwU.setUtf8(True)
 
         # Font
-        UwU.winwow_fownt = QFont("Five nights at Freddy's", 18)
+        UwU.winwow_fownt = QFont(UwU.fnaf_families[0], 18)
         UwU.setFont(UwU.winwow_fownt)
         UwU.setMarginsFont(UwU.winwow_fownt)
 
@@ -97,11 +99,6 @@ class EwitOwOr(QsciScintilla):
         UwU.setMarginsBackgroundColor(QColor("#F0E6F6"))
         UwU.setMarginsFont(UwU.winwow_fownt)
 
-        # Debounce timer for parsing and updating indicators
-        UwU.update_timer = QTimer()
-        UwU.update_timer.setSingleShot(True)
-        UwU.update_timer.timeout.connect(UwU.deferredApplyLexer)
-
         # Connect the textChanged signal to update the lexer and parse the code
         UwU.textChanged.connect(UwU.applyLexerOnChange)
 
@@ -125,15 +122,13 @@ class EwitOwOr(QsciScintilla):
             UwU.SendScintilla(QsciScintilla.SCI_INDICATORFILLRANGE, start_pos, length)
 
     def applyLexerOnChange(UwU):
-        # Restart the timer on every text change
-        UwU.update_timer.start(200)  # Debounce interval in milliseconds
-
-    def deferredApplyLexer(UwU):
         text = UwU.text()
         parser = None
         try:
             # Tokenize the text
             tokens = UwU.OwOLexer.Genewate_towokens(text)
+            start, end = 0, UwU.length()
+            UwU.OwOLexer.styleText(start, end)
 
             # Parse the tokens
             parser = OwOParser(tokens)
@@ -156,6 +151,8 @@ class EwitOwOr(QsciScintilla):
             column = error.get('column', 0)
             length = error.get('length', 1)
             UwU.underline_error(line, column, length)
+        
+        print(ast)
 
     def keyPressEvent(UwU, e: QKeyEvent) -> None:
         super().keyPressEvent(e)

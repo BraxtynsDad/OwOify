@@ -137,7 +137,6 @@ class OwOCustomLexer(QsciLexerCustom):
         while len(indentation_stack) > 1:
             indentation_stack.pop()
             tokens.append(('DEDENT', '', pos, pos))
-
         return tokens
 
     def generate_token(UwU, text):

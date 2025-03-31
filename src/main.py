@@ -28,6 +28,12 @@ class MainWindow(QMainWindow):
         # Add before init
         UwU.side_baw_coluwm = "#FFDBE2"
         UwU.bowdy_fwame_img_x3 = "./Icons/bk.jpg"
+        fnaf = QFontDatabase.addApplicationFont("./css/fnaf.ttf")
+        edosz = QFontDatabase.addApplicationFont("./css/edosz.ttf")
+        ms_pain = QFontDatabase.addApplicationFont("./css/MS_PAIN.ttf")
+        UwU.edosz_families = QFontDatabase.applicationFontFamilies(edosz)
+        UwU.fnaf_families = QFontDatabase.applicationFontFamilies(fnaf)
+        UwU.ms_pain_families = QFontDatabase.applicationFontFamilies(ms_pain)
         UwU.old_pos = None  # For dragging the window
         UwU.init_ui()
 
@@ -55,7 +61,7 @@ class MainWindow(QMainWindow):
         UwU.resize(int(1300 * scale_factor), int(900 * scale_factor))
 
         # Dynamically scale the font size
-        UwU.winwow_fownt = QFont("Edo SZ")
+        UwU.winwow_fownt = QFont(UwU.edosz_families[0])
         dynamic_font_size = int(16 * scale_factor)
         UwU.winwow_fownt.setPointSize(dynamic_font_size)
         QApplication.setFont(UwU.winwow_fownt)
@@ -110,8 +116,8 @@ class MainWindow(QMainWindow):
 
         # Create the two buttons with dropdown menus
         # First button (e.g., 'File')
-        file_button = QPushButton("Fwiwe")
-        file_button.setFont(QFont("Edo sz", 14))
+        file_button = QPushButton("File")
+        file_button.setFont(QFont(UwU.edosz_families[0], 14))
         file_button.setStyleSheet("""
             QPushButton {
                 background-color: none;
@@ -130,7 +136,7 @@ class MainWindow(QMainWindow):
         file_button.setMenu(file_menu)
 
         # Second button (e.g., 'Edit')
-        edit_button = QPushButton("Hewp")
+        edit_button = QPushButton("Help")
         edit_button.setFont(UwU.winwow_fownt)
         edit_button.setStyleSheet("""
             QPushButton {
@@ -150,8 +156,8 @@ class MainWindow(QMainWindow):
         edit_button.setMenu(edit_menu)
 
         # wun button
-        UwU.wun_button = QPushButton("wun")
-        UwU.wun_button.setFont(QFont("MsPain", 18))
+        UwU.wun_button = QPushButton("run")
+        UwU.wun_button.setFont(QFont(UwU.ms_pain_families[0], 18))
         UwU.wun_button.setStyleSheet("""
             QPushButton {
                 background-color: none;
@@ -254,19 +260,20 @@ class MainWindow(QMainWindow):
         UwU.title_bar.mouseReleaseEvent = UwU.title_bar_mouseReleaseEvent
 
     def add_menu_actions(UwU, menu, menu_type):
-        menUwU_fownt = QFont("Edo SZ", 10)
+        menUwU_fownt = QFont(UwU.edosz_families[0], 10)
         if menu_type == 'File':
-            UwU.add_menu_action(menu, "NeUwU Fwiwe", "Ctrl+N", UwU.neUwU_fwiwe, menUwU_fownt)
-            UwU.add_menu_action(menu, "OwOpen Fwiwe", "Ctrl+O", UwU.OwOpen_fwiwe, menUwU_fownt)
-            UwU.add_menu_action(menu, "OwOpen fOwOlwer", "Ctrl+K", UwU.OwOpen_fOwOlwer, menUwU_fownt)
+            UwU.add_menu_action(menu, "New File", "Ctrl+N", UwU.neUwU_fwiwe, menUwU_fownt)
+            UwU.add_menu_action(menu, "Open File", "Ctrl+O", UwU.OwOpen_fwiwe, menUwU_fownt)
+            UwU.add_menu_action(menu, "Open Folder", "Ctrl+K", UwU.OwOpen_fOwOlwer, menUwU_fownt)
             menu.addSeparator()
-            UwU.add_menu_action(menu, "Sa0v0e", "Ctrl+S", UwU.Sa0v0e, menUwU_fownt)
-            UwU.add_menu_action(menu, "Sa0v0e As", "Ctrl+Shift+S", UwU.Sa0v0e_as, menUwU_fownt)
+            UwU.add_menu_action(menu, "Save", "Ctrl+S", UwU.Sa0v0e, menUwU_fownt)
+            UwU.add_menu_action(menu, "Save As", "Ctrl+Shift+S", UwU.Sa0v0e_as, menUwU_fownt)
         elif menu_type == 'Music':
-            UwU.add_menu_action(menu, "MUwUsyc StOwOp/Stawt", "Ctrl+P", UwU.MUwUsyc_StOwOp_Stawt, menUwU_fownt)
-            UwU.add_menu_action(menu, "MUwUsyc skyp", "Shift+N", UwU.MUwUsyc_skyp, menUwU_fownt)
-            UwU.add_menu_action(menu, "Hewp", "Ctrl+H", UwU.Hewp_txt, menUwU_fownt)
-            UwU.add_menu_action(menu, "VideOwO Hewp", "Shift+Y", UwU.Start_VideOwO, menUwU_fownt)
+            UwU.add_menu_action(menu, "Musyc Stop/Start", "Ctrl+P", UwU.MUwUsyc_StOwOp_Stawt, menUwU_fownt)
+            UwU.add_menu_action(menu, "Musyc skyp", "Shift+N", UwU.MUwUsyc_skyp, menUwU_fownt)
+            UwU.add_menu_action(menu, "Clear Console", "Ctrl+T", UwU.clr_cOwOnsOwOle, menUwU_fownt)
+            UwU.add_menu_action(menu, "Help", "Ctrl+H", UwU.Hewp_txt, menUwU_fownt)
+            UwU.add_menu_action(menu, "Video Help", "Shift+Y", UwU.Start_VideOwO, menUwU_fownt)
 
     def add_menu_action(UwU, menu, title, shortcut, handler, font):
         action = QAction(title, UwU)
@@ -274,6 +281,10 @@ class MainWindow(QMainWindow):
         action.triggered.connect(handler)
         action.setFont(font)  # Set font for the action
         menu.addAction(action)
+    
+    def clr_cOwOnsOwOle(UwU):
+        UwU.terminal_output.clear()
+        UwU.terminal_output.append("(´• ω •`)>")
 
     def title_bar_mousePressEvent(UwU, event):
         if event.button() == Qt.LeftButton:
@@ -312,11 +323,11 @@ class MainWindow(QMainWindow):
         ewitOwOr = UwU.tabx3_vieUwU.currentWidget()
 
         if UwU.cuwwwent_fwiwe is None:
-            UwU.shOwO_statUwUs_messawge("Sa0v0e Cancewwed")
+            UwU.shOwO_statUwUs_messawge("Save Cancewwed")
             return
         try:
             UwU.cuwwwent_fwiwe.write_text(ewitOwOr.text())
-            UwU.shOwO_statUwUs_messawge(f"Sa0v0ed {UwU.cuwwwent_fwiwe.name}")
+            UwU.shOwO_statUwUs_messawge(f"Saved {UwU.cuwwwent_fwiwe.name}")
         except Exception as e:
             UwU.shOwO_statUwUs_messawge(f"Error Saving: {str(e)}")
 
@@ -420,7 +431,7 @@ class MainWindow(QMainWindow):
         def upwate_statUwUs_messawge(media):
             url = media.canonicalUrl().toLocalFile()
             if url in pathy_tOwO_nyan:
-                statUwUs_messawge = f'NOwO Pwaying: "{pathy_tOwO_nyan[url]}"'
+                statUwUs_messawge = f'Now Playing: "{pathy_tOwO_nyan[url]}"'
                 UwU.statusBar().showMessage(statUwUs_messawge)
                     
         UwU.pwaywist.currentMediaChanged.connect(upwate_statUwUs_messawge)
@@ -684,7 +695,7 @@ class MainWindow(QMainWindow):
 
         # Tree view
         UwU.twee_vieUwU = QTreeView()
-        UwU.twee_vieUwU.setFont(QFont("Five Nights at Freddy's", 18))
+        UwU.twee_vieUwU.setFont(QFont(UwU.fnaf_families[0], 18))
         UwU.twee_vieUwU.setModel(UwU.mOwOwel)
         UwU.twee_vieUwU.setRootIndex(UwU.mOwOwel.index(os.getcwd()))
         UwU.twee_vieUwU.setSelectionMode(QTreeView.SingleSelection)
@@ -715,8 +726,8 @@ class MainWindow(QMainWindow):
         searchy_x3_layout.setSpacing(0)
 
         searchy_x3_inpUwUt = QLineEdit()
-        searchy_x3_inpUwUt.setPlaceholderText("Searchy_x3")
-        searchy_x3_inpUwUt.setFont(QFont("Five Nights at Freddy's", 18))
+        searchy_x3_inpUwUt.setPlaceholderText("Search")
+        searchy_x3_inpUwUt.setFont(QFont(UwU.fnaf_families[0], 18))
         searchy_x3_inpUwUt.setAlignment(Qt.AlignmentFlag.AlignTop)
         searchy_x3_inpUwUt.setStyleSheet("""
         QLineEdit {
@@ -731,8 +742,8 @@ class MainWindow(QMainWindow):
         }
         """)
 
-        UwU.searchy_checkybOwOx = QCheckBox("Seawch in MOwOdUwUles")
-        UwU.searchy_checkybOwOx.setFont(QFont("Five Nights at Freddy's", 18))
+        UwU.searchy_checkybOwOx = QCheckBox("Search in Modules")
+        UwU.searchy_checkybOwOx.setFont(QFont(UwU.fnaf_families[0], 18))
         UwU.searchy_checkybOwOx.setStyleSheet("color: #483D8B; margin-bottom: 10px")
 
         UwU.searchy_wOwOrker = Searchy_WOwOrker()
@@ -746,7 +757,7 @@ class MainWindow(QMainWindow):
         )
 
         UwU.searchy_listy_vieUwU = QListWidget()
-        UwU.searchy_listy_vieUwU.setFont(QFont("Five Nights at Freddy's", 18))
+        UwU.searchy_listy_vieUwU.setFont(QFont(UwU.fnaf_families[0], 18))
         UwU.searchy_listy_vieUwU.setStyleSheet("""
         QListWidget {
             background-color: #FFF5E1;  /* Soft peach */
@@ -934,9 +945,7 @@ class MainWindow(QMainWindow):
 
         # Set the video output to the video widget
         UwU.mediaPlayer.setVideoOutput(UwU.videoWidget)
-
-        # Load and play the video
-        video_url = QUrl.fromLocalFile(str('./Media/Luigi.avi'))
+        video_url = QUrl.fromLocalFile(str('./Media/Help.avi'))
         UwU.mediaPlayer.setMedia(QMediaContent(video_url))
 
         # Set slider to sync with video duration

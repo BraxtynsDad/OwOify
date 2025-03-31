@@ -31,3 +31,4 @@ like in dewf function(nuu b):
 or just defining a variable for the first time.
 Other than that its just like python just extremely limited
 Have Fun!
+One more thing the hewp videOwO does work you just need to keep at it.

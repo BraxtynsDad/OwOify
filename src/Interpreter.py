@@ -4,71 +4,71 @@ from PyQt5.QtCore import QThread, pyqtSignal
 import time  # For sleep in InterpreterThread
 
 class Environment:
-    def __init__(self):
-        self.variables = {}
-        self.functions = {}
+    def __init__(UwU):
+        UwU.variables = {}
+        UwU.functions = {}
 
-    def set_variable(self, name, value):
-        self.variables[name] = value
+    def set_variable(UwU, name, value):
+        UwU.variables[name] = value
 
-    def get_variable(self, name):
-        if name in self.variables:
-            return self.variables[name]
+    def get_variable(UwU, name):
+        if name in UwU.variables:
+            return UwU.variables[name]
         else:
             raise NameError(f"Variable '{name}' is not defined.")
 
-    def set_function(self, name, func_def):
-        self.functions[name] = func_def
+    def set_function(UwU, name, func_def):
+        UwU.functions[name] = func_def
 
-    def get_function(self, name):
-        if name in self.functions:
-            return self.functions[name]
+    def get_function(UwU, name):
+        if name in UwU.functions:
+            return UwU.functions[name]
         else:
             return None  # Return None if function is not defined
 
 class Interpreter:
-    def __init__(self, ast, interpreter_thread=None):
-        self.ast = ast
-        self.env = Environment()
-        self.return_value = None  # To handle return statements
-        self.interpreter_thread = interpreter_thread
+    def __init__(UwU, ast, interpreter_thread=None):
+        UwU.ast = ast
+        UwU.env = Environment()
+        UwU.return_value = None  # To handle return statements
+        UwU.interpreter_thread = interpreter_thread
 
-    def interpret(self):
+    def interpret(UwU):
         try:
-            for stmt in self.ast['statements']:
-                self.execute_statement(stmt)
-                if self.return_value is not None:
+            for stmt in UwU.ast['statements']:
+                UwU.execute_statement(stmt)
+                if UwU.return_value is not None:
                     break  # Exit if a return statement is executed
         except Exception as e:
             error_message = f"Error: {e}"
             print(error_message)
-            if self.interpreter_thread:
-                self.interpreter_thread.output_signal.emit(error_message)
+            if UwU.interpreter_thread:
+                UwU.interpreter_thread.output_signal.emit(error_message)
 
-    def execute_statement(self, stmt):
+    def execute_statement(UwU, stmt):
         stmt_type = stmt['type']
         if stmt_type == 'variable_declaration':
-            self.handle_variable_declaration(stmt)
+            UwU.handle_variable_declaration(stmt)
         elif stmt_type == 'function_definition':
-            self.handle_function_definition(stmt)
+            UwU.handle_function_definition(stmt)
         elif stmt_type == 'function_call':
-            self.handle_function_call(stmt)
+            UwU.handle_function_call(stmt)
         elif stmt_type == 'while_statement':
-            self.handle_while_statement(stmt)
+            UwU.handle_while_statement(stmt)
         elif stmt_type == 'if_statement':
-            self.handle_if_statement(stmt)
+            UwU.handle_if_statement(stmt)
         elif stmt_type == 'assignment':
-            self.handle_assignment(stmt)
+            UwU.handle_assignment(stmt)
         elif stmt_type == 'return':
-            self.return_value = self.evaluate_expression(stmt['value'])
+            UwU.return_value = UwU.evaluate_expression(stmt['value'])
         else:
             raise NotImplementedError(f"Statement type '{stmt_type}' not implemented.")
 
-    def handle_variable_declaration(self, stmt):
+    def handle_variable_declaration(UwU, stmt):
         var_name = stmt['variable']
         var_type = stmt['var_type']
         value_node = stmt['value']
-        value = self.evaluate_expression(value_node)
+        value = UwU.evaluate_expression(value_node)
 
         # Enforce type based on var_type
         expected_type = {
@@ -87,18 +87,18 @@ class Interpreter:
         else:
             raise TypeError(f"Unknown variable type '{var_type}'")
 
-        self.env.set_variable(var_name, value)
+        UwU.env.set_variable(var_name, value)
 
-    def handle_assignment(self, stmt):
+    def handle_assignment(UwU, stmt):
         var_name = stmt['variable']
         value_node = stmt['value']
-        value = self.evaluate_expression(value_node)
-        if var_name in self.env.variables:
-            self.env.set_variable(var_name, value)
+        value = UwU.evaluate_expression(value_node)
+        if var_name in UwU.env.variables:
+            UwU.env.set_variable(var_name, value)
         else:
             raise NameError(f"Variable '{var_name}' is not defined.")
 
-    def evaluate_expression(self, expr):
+    def evaluate_expression(UwU, expr):
         expr_type = expr['type']
         if expr_type == 'number':
             return float(expr['value']) if '.' in expr['value'] else int(expr['value'])
@@ -114,19 +114,19 @@ class Interpreter:
             else:
                 raise ValueError(f"Invalid boolean value '{expr['value']}'")
         elif expr_type == 'identifier':
-            return self.env.get_variable(expr['value'])
+            return UwU.env.get_variable(expr['value'])
         elif expr_type == 'binary_operation':
-            left = self.evaluate_expression(expr['left'])
-            right = self.evaluate_expression(expr['right'])
+            left = UwU.evaluate_expression(expr['left'])
+            right = UwU.evaluate_expression(expr['right'])
             operator = expr['operator']
-            return self.apply_operator(operator, left, right)
+            return UwU.apply_operator(operator, left, right)
         elif expr_type == 'function_call':
             # Evaluate function call and return its result
             func_call_stmt = expr  # The expression is a function call statement
-            return self.handle_function_call(func_call_stmt)
+            return UwU.handle_function_call(func_call_stmt)
         elif expr_type == 'unary_operation':
             operator = expr['operator']
-            operand = self.evaluate_expression(expr['operand'])
+            operand = UwU.evaluate_expression(expr['operand'])
             if operator == 'nwope':
                 return not operand
             else:
@@ -134,7 +134,7 @@ class Interpreter:
         else:
             raise NotImplementedError(f"Expression type '{expr_type}' not implemented.")
 
-    def apply_operator(self, operator, left, right):
+    def apply_operator(UwU, operator, left, right):
         if operator == '+':
             # Handle string concatenation
             if isinstance(left, str) or isinstance(right, str):
@@ -176,62 +176,62 @@ class Interpreter:
         else:
             raise NotImplementedError(f"Operator '{operator}' not implemented.")
 
-    def handle_function_definition(self, stmt):
+    def handle_function_definition(UwU, stmt):
         func_name = stmt['name']
         parameters = stmt['parameters']
         body = stmt['body']
-        self.env.set_function(func_name, {'parameters': parameters, 'body': body})
+        UwU.env.set_function(func_name, {'parameters': parameters, 'body': body})
 
-    def handle_function_call(self, stmt):
+    def handle_function_call(UwU, stmt):
         func_name = stmt['name']
         args = stmt['arguments']
 
         # Handle built-in functions
         if func_name == 'pwint':
-            arg_values = [self.evaluate_expression(arg) for arg in args]
+            arg_values = [UwU.evaluate_expression(arg) for arg in args]
             output = ' '.join(map(str, arg_values))
-            if self.interpreter_thread:
-                self.interpreter_thread.output_signal.emit(output)
+            if UwU.interpreter_thread:
+                UwU.interpreter_thread.output_signal.emit(output)
             else:
                 print(output)
             return
         elif func_name == 'inpuwt':
-            prompt = self.evaluate_expression(args[0]) if args else ''
-            if self.interpreter_thread:
-                user_input = self.interpreter_thread.get_input(prompt)
+            prompt = UwU.evaluate_expression(args[0]) if args else ''
+            if UwU.interpreter_thread:
+                user_input = UwU.interpreter_thread.get_input(prompt)
             else:
                 user_input = input(prompt)
             return user_input
         elif func_name == 'leny':
-            arg_value = self.evaluate_expression(args[0])
+            arg_value = UwU.evaluate_expression(args[0])
             return len(arg_value)
         elif func_name == 'wange':
             # Handle range function with 1 to 3 arguments
-            arg_values = [self.evaluate_expression(arg) for arg in args]
+            arg_values = [UwU.evaluate_expression(arg) for arg in args]
             return range(*arg_values)
         elif func_name == 'inty':
-            arg_value = self.evaluate_expression(args[0])
+            arg_value = UwU.evaluate_expression(args[0])
             return int(arg_value)
         elif func_name == 'stwie':
-            arg_value = self.evaluate_expression(args[0])
+            arg_value = UwU.evaluate_expression(args[0])
             return str(arg_value)
         elif func_name == 'fwoaty':
-            arg_value = self.evaluate_expression(args[0])
+            arg_value = UwU.evaluate_expression(args[0])
             return float(arg_value)
         elif func_name == 'booww':
-            arg_value = self.evaluate_expression(args[0])
+            arg_value = UwU.evaluate_expression(args[0])
             return bool(arg_value)
         elif func_name == 'wistie':
-            arg_values = [self.evaluate_expression(arg) for arg in args]
+            arg_values = [UwU.evaluate_expression(arg) for arg in args]
             return list(arg_values)
         else:
             # Handle user-defined functions
-            func_def = self.env.get_function(func_name)
+            func_def = UwU.env.get_function(func_name)
             if func_def is None:
                 raise NameError(f"Function '{func_name}' is not defined.")
 
             # Evaluate arguments
-            arg_values = [self.evaluate_expression(arg) for arg in args]
+            arg_values = [UwU.evaluate_expression(arg) for arg in args]
 
             # Prepare a new environment for function execution
             local_env = Environment()
@@ -241,39 +241,39 @@ class Interpreter:
                 local_env.set_variable(param_name, arg)
 
             # Save current environment
-            previous_env = self.env
+            previous_env = UwU.env
             # Set the new local environment
-            self.env = local_env
+            UwU.env = local_env
 
             # Execute function body
             return_value = None
             for s in func_def['body']:
                 if s['type'] == 'return':
-                    return_value = self.evaluate_expression(s['value'])
+                    return_value = UwU.evaluate_expression(s['value'])
                     break
                 else:
-                    self.execute_statement(s)
+                    UwU.execute_statement(s)
 
             # Restore the previous environment
-            self.env = previous_env
+            UwU.env = previous_env
 
             return return_value
 
-    def handle_if_statement(self, stmt):
-        condition = self.evaluate_expression(stmt['condition'])
+    def handle_if_statement(UwU, stmt):
+        condition = UwU.evaluate_expression(stmt['condition'])
         if condition:
             for s in stmt['if_body']:
-                self.execute_statement(s)
+                UwU.execute_statement(s)
         else:
             for s in stmt.get('else_body', []):
-                self.execute_statement(s)
+                UwU.execute_statement(s)
 
-    def handle_while_statement(self, stmt):
-        condition = self.evaluate_expression(stmt['condition'])
+    def handle_while_statement(UwU, stmt):
+        condition = UwU.evaluate_expression(stmt['condition'])
         while condition:
             for s in stmt['body']:
-                self.execute_statement(s)
-            condition = self.evaluate_expression(stmt['condition'])
+                UwU.execute_statement(s)
+            condition = UwU.evaluate_expression(stmt['condition'])
 
 # InterpreterThread class within interpreter.py
 
@@ -281,38 +281,38 @@ class InterpreterThread(QThread):
     request_input = pyqtSignal(str)
     output_signal = pyqtSignal(str)
 
-    def __init__(self, ast):
+    def __init__(UwU, ast):
         super().__init__()
-        self.ast = ast
-        self.input_value = None
-        self.input_received = False
-        self.interpreter = Interpreter(ast, self)
-        self._is_running = True
+        UwU.ast = ast
+        UwU.input_value = None
+        UwU.input_received = False
+        UwU.interpreter = Interpreter(ast, UwU)
+        UwU._is_running = True
 
     ready_for_input = pyqtSignal()
 
-    def run(self):
+    def run(UwU):
         try:
-            self.interpreter.interpret()
+            UwU.interpreter.interpret()
             # Emit the signal when done
-            self.ready_for_input.emit()
+            UwU.ready_for_input.emit()
         except Exception as e:
             error_message = f"Interpreter Error: {e}"
-            self.output_signal.emit(error_message)
+            UwU.output_signal.emit(error_message)
 
-    def get_input(self, prompt):
-        self.request_input.emit(prompt)
+    def get_input(UwU, prompt):
+        UwU.request_input.emit(prompt)
         # Wait until input is received
-        while not self.input_received and self._is_running:
+        while not UwU.input_received and UwU._is_running:
             time.sleep(0.01)  # Sleep for a short time to prevent busy waiting
-        if not self._is_running:
+        if not UwU._is_running:
             raise Exception("Interpreter execution was stopped.")
-        self.input_received = False
-        return self.input_value
+        UwU.input_received = False
+        return UwU.input_value
 
-    def provide_input(self, value):
-        self.input_value = value
-        self.input_received = True
+    def provide_input(UwU, value):
+        UwU.input_value = value
+        UwU.input_received = True
 
-    def stop(self):
-        self._is_running = False
+    def stop(UwU):
+        UwU._is_running = False
